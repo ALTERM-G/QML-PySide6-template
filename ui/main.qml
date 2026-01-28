@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Window
-import "."
+import Components
 
 Window {
     id: window

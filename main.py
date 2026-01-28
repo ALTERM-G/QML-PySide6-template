@@ -21,7 +21,7 @@ def main():
         os.path.dirname(os.path.abspath(__file__)), "."
     )
     engine = QQmlApplicationEngine()
-    engine.addImportPath(qml_modules_path)
+    engine.addImportPath(os.path.join(qml_modules_path, "ui"))
 
     def load_qml(engine, filename, context_name, callback=None):
         path = os.path.join(
