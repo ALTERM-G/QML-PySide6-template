@@ -3,8 +3,8 @@ import QtQuick.Controls
 
 SpinBox {
     id: spinBox
-    width: Metrics.spinBoxWidth
-    height: Metrics.controlHeight
+    width: LayoutMetrics.spinBoxWidth
+    height: LayoutMetrics.controlHeight
     stepSize: 10
     from: 0
     to: 1000
@@ -44,21 +44,21 @@ SpinBox {
 
     background: Rectangle {
         anchors.fill: parent
-        radius: Metrics.radiusM
+        radius: LayoutMetrics.radiusM
         color: Theme.backgroundColor
         border.color: Theme.borderColor
-        border.width: Metrics.borderThick
+        border.width: LayoutMetrics.borderThick
     }
 
     up.indicator: Rectangle {
         x: spinBox.width - width
         height: spinBox.height / 2
-        width: Metrics.iconSizeL
+        width: LayoutMetrics.iconSizeL
         color: Theme.backgroundColor
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: Metrics.marginS
-        anchors.rightMargin: Metrics.marginS
+        anchors.topMargin: LayoutMetrics.marginS
+        anchors.rightMargin: LayoutMetrics.marginS
 
         Text {
             text: "▴"
@@ -77,13 +77,13 @@ SpinBox {
     }
 
     down.indicator: Rectangle {
-        width: Metrics.iconSizeL
+        width: LayoutMetrics.iconSizeL
         height: spinBox.height / 2
         color: Theme.backgroundColor
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.bottomMargin: Metrics.marginS
-        anchors.rightMargin: Metrics.marginS
+        anchors.bottomMargin: LayoutMetrics.marginS
+        anchors.rightMargin: LayoutMetrics.marginS
 
         Text {
             text: "▾"

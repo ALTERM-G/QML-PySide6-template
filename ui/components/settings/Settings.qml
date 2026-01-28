@@ -1,22 +1,25 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../popups"
+import "../indicators"
+import "../controls"
+
 
 Item {
     id: settingsMenu
-    width: Metrics.iconButtonSize
-    height: Metrics.iconButtonSize
+    width: LayoutMetrics.iconButtonSize
+    height: LayoutMetrics.iconButtonSize
     property bool isPopupOpen: settingsPopup.opened
-    onIsPopupOpenChanged: controller.set_shortcuts_enabled(!isPopupOpen)
 
     IconButton {
         id: settingsButton
         anchors.centerIn: parent
         iconPath: SVGLibrary.settings
-        buttonWidth: Metrics.iconButtonSize
-        buttonHeight: Metrics.iconButtonSize
+        buttonWidth: LayoutMetrics.iconButtonSize
+        buttonHeight: LayoutMetrics.iconButtonSize
 
-        CustomToolTip {
+        ToolTip {
             text: "Settings"
             visible: settingsButton.hovered
             delay: 600
@@ -27,47 +30,39 @@ Item {
         }
     }
 
-    CustomPopup {
+    Popup {
         id: settingsPopup
         width: AppConfig.appRectWidth
         height: AppConfig.appRectHeight
         x: parent.width / 2 - width / 2
         y: parent.height / 2 - height / 2
 
-        background: AppRect {
+        background: Rectangle {
             anchors.fill: parent
 
             IconButton {
                 anchors.top: parent.top
-                anchors.topMargin: Metrics.spacingL
+                anchors.topMargin: LayoutMetrics.spacingL
                 anchors.left: parent.left
-                anchors.leftMargin: Metrics.spacingL
+                anchors.leftMargin: LayoutMetrics.spacingL
                 iconPath: SVGLibrary.back
                 onPressed: {settingsPopup.close()}
             }
 
             ColumnLayout {
                 anchors.top: parent.top
-                anchors.topMargin: Metrics.spacingL
+                anchors.topMargin: LayoutMetrics.spacingL
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                CustomText {
+                Label {
                     text: "Settings"
                     Layout.alignment: Qt.AlignHCenter
                 }
 
-                CustomText {
-                    text: "Themes"
-                    style_2: true
-                    Layout.fillWidth: true
-                    Layout.leftMargin: Metrics.marginXL
-                    Layout.topMargin: Metrics.marginL
-                }
-
-                CustomComboBox {
+                ComboBox {
                     id: themeComboBox
-                    Layout.topMargin: Metrics.marginXS
-                    Layout.preferredHeight: Metrics.controlHeight
+                    Layout.topMargin: LayoutMetrics.marginXS
+                    Layout.preferredHeight: LayoutMetrics.controlHeight
                     model: ["Carbon Amber", "Catppuccin Mocha", "Dracula", "Everforest", "Monokai","Github Dark", "Gruvbox", "Vanilla Light"]
                     onCurrentTextChanged: {
                         if (initialized) {
@@ -89,36 +84,6 @@ Item {
                             }
                         }
                     }
-                }
-
-                CustomText {
-                    text: "Run Shortcut"
-                    style_2: true
-                    Layout.fillWidth: true
-                    Layout.leftMargin: Metrics.marginXL
-                    Layout.topMargin: Metrics.marginL
-                }
-
-                CustomShortcutEditor {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: Metrics.marginXS
-                    shortcutType: "run"
-                    allowLonelyLetters: false
-                }
-
-                CustomText {
-                    text: "Stop shortcut"
-                    style_2: true
-                    Layout.fillWidth: true
-                    Layout.leftMargin: Metrics.marginXL
-                    Layout.topMargin: Metrics.marginL
-                }
-
-                CustomShortcutEditor {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: Metrics.marginXS
-                    shortcutType: "stop"
-                    allowLonelyLetters: false
                 }
             }
         }

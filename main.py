@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QFontDatabase, QGuiApplication, QIcon
@@ -12,9 +12,16 @@ from app_name.backend.controller import Controller
 _qml_objects = []
 _data_object = None
 
+
 def main():
     app = QGuiApplication(sys.argv)
+
+    # ---------------- Components module -----------------
+    qml_modules_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "."
+    )
     engine = QQmlApplicationEngine()
+    engine.addImportPath(qml_modules_path)
 
     def load_qml(engine, filename, context_name, callback=None):
         path = os.path.join(
@@ -41,7 +48,9 @@ def main():
         return None
 
     # ---------------- Fonts ----------------
-    assets_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ressources")
+    assets_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "ressources", "assets"
+    )
     font_dir = os.path.join(assets_path, "fonts")
     if os.path.exists(font_dir):
         for font_filename in os.listdir(font_dir):
@@ -54,7 +63,9 @@ def main():
     base_path = os.path.dirname(os.path.abspath(__file__))
     icon_path = os.path.join(base_path, "ressources", "icons")
     QIcon.setThemeSearchPaths([icon_path])
-    app.setWindowIcon(QIcon(os.path.join(base_path, "ressources/assets/icons/icon.svg")))
+    app.setWindowIcon(
+        QIcon(os.path.join(base_path, "ressources/assets/icons/icon.svg"))
+    )
 
     # ---------------- Create Controller ----------------
     controller = Controller()
@@ -62,11 +73,12 @@ def main():
 
     # ---------------- Load QML files ----------------
     qml_singletons = [
-        ("AppConfig", "ui/AppConfig.qml", None),
-        ("Metrics", "ui/Metrics.qml", None),
-        ("SVGLibrary", "ui/SVGLibrary.qml", None),
-        ("Typography", "ui/Typography.qml", None),
-        ("Theme", "ui/Theme.qml", lambda obj: obj.initializeTheme()),
+        ("AppConfig", "style/AppConfig.qml", None),
+        ("ASCIIart", "style/ASCIIart.qml", None),
+        ("LayoutMetrics", "style/LayoutMetrics.qml", None),
+        ("SVGLibrary", "style/SVGLibrary.qml", None),
+        ("Typography", "style/Typography.qml", None),
+        ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),
     ]
     qml_objects = {}
 

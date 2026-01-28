@@ -3,11 +3,11 @@ import QtQuick
 Rectangle {
     id: root
     color: Theme.backgroundColor
-    implicitHeight: Metrics.controlHeightCompact
-    implicitWidth: Metrics.comboBoxWidth
+    implicitHeight: LayoutMetrics.controlHeightCompact
+    implicitWidth: LayoutMetrics.comboBoxWidth
     border.color: Theme.borderColor
-    border.width: Metrics.borderNormal
-    radius: Metrics.radiusM
+    border.width: LayoutMetrics.borderNormal
+    radius: LayoutMetrics.radiusM
     property var tabData: []
     property alias currentIndex: listView.currentIndex
 
@@ -15,7 +15,7 @@ Rectangle {
         id: listView
         anchors.fill: parent
         spacing: 0
-        anchors.margins: Metrics.spacingXS
+        anchors.margins: LayoutMetrics.spacingXS
         currentIndex: 0
         interactive: false
         orientation: Qt.Horizontal
@@ -28,15 +28,15 @@ Rectangle {
             height: listView.height
 
             Row {
-                spacing: Metrics.spacingS
+                spacing: LayoutMetrics.spacingS
                 anchors.centerIn: parent
 
                 SVGObject {
                     id: tabIcon
                     path: tabData[index].icon
                     color: listView.currentIndex === index ? Theme.borderColor : Theme.textColor
-                    width: Metrics.iconSizeS
-                    height: Metrics.iconSizeS
+                    width: LayoutMetrics.iconSizeS
+                    height: LayoutMetrics.iconSizeS
 
                     Behavior on color {
                         ColorAnimation { duration: 150; easing.type: Easing.InOutQuad }
@@ -77,7 +77,7 @@ Rectangle {
                 anchors.fill: parent
                 anchors.margins: 0
                 color: Theme.themeColor
-                radius: Metrics.radiusM
+                radius: LayoutMetrics.radiusM
             }
         }
     }

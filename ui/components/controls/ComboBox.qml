@@ -3,10 +3,10 @@ import QtQuick.Controls
 
 ComboBox {
     id: control
-    width: Metrics.comboBoxWidth
-    height: Metrics.controlHeight
+    width: LayoutMetrics.comboBoxWidth
+    height: LayoutMetrics.controlHeight
     hoverEnabled: true
-    property int optionHeight: Metrics.controlHeightCompact
+    property int optionHeight: LayoutMetrics.controlHeightCompact
     property int popupPadding: 6
 
     contentItem: Text {
@@ -28,15 +28,15 @@ ComboBox {
         color: contentItem.color
         font.pixelSize: Typography.iconFontSize
         anchors.right: parent.right
-        anchors.rightMargin: Metrics.marginM
+        anchors.rightMargin: LayoutMetrics.marginM
         anchors.verticalCenter: parent.verticalCenter
     }
 
     background: Rectangle {
         anchors.fill: parent
-        radius: Metrics.radiusM
+        radius: LayoutMetrics.radiusM
         border.color: Theme.borderColor
-        border.width: Metrics.borderThick
+        border.width: LayoutMetrics.borderThick
         color: mouseArea.containsMouse
                ? Theme.hoverBackgroundColor
                : Theme.backgroundColor
@@ -62,10 +62,10 @@ ComboBox {
         rightPadding: 0
 
         background: Rectangle {
-            radius: Metrics.radiusM
+            radius: LayoutMetrics.radiusM
             color: Theme.backgroundColor
             border.color: Theme.borderColor
-            border.width: Metrics.borderThick
+            border.width: LayoutMetrics.borderThick
         }
 
         Column {
@@ -79,7 +79,7 @@ ComboBox {
                 delegate: Rectangle {
                     width: parent.width
                     height: control.optionHeight
-                    radius: Metrics.radiusM
+                    radius: LayoutMetrics.radiusM
                     color: hovered
                            ? Theme.hoverBackgroundColor
                            : "transparent"

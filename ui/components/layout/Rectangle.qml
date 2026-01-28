@@ -2,8 +2,8 @@ import QtQuick
 
 Rectangle {
     id: root
-    radius: Metrics.radiusM
+    radius: LayoutMetrics.radiusM
     color: Theme.backgroundColor
     border.color: Theme.dividerColor
-    border.width: Metrics.borderNormal
+    border.width: LayoutMetrics.borderNormal
 }

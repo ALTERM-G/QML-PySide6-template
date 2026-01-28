@@ -2,11 +2,11 @@ import QtQuick
 
 Rectangle {
     id: convertButton
-    width: Metrics.buttonWidth
-    height: Metrics.controlHeight
-    radius: Metrics.radiusM
+    width: LayoutMetrics.buttonWidth
+    height: LayoutMetrics.controlHeight
+    radius: LayoutMetrics.radiusM
     border.color: Theme.borderColor
-    border.width: Metrics.borderThick
+    border.width: LayoutMetrics.borderThick
     color: mouseArea.containsMouse ? Theme.hoverBackgroundColor : Theme.backgroundColor
     signal pressed
     property string buttonText
@@ -20,15 +20,15 @@ Rectangle {
 
     Row {
         anchors.centerIn: parent
-        spacing: Metrics.spacingS
+        spacing: LayoutMetrics.spacingS
 
         SVGObject {
             id: buttonIcon
             anchors.verticalCenter: parent.verticalCenter
             path: convertButton.iconPath
             visible: convertButton.iconPath !== ""
-            width: Metrics.iconSizeS
-            height: Metrics.iconSizeS
+            width: LayoutMetrics.iconSizeS
+            height: LayoutMetrics.iconSizeS
             color: mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor
         }
 

@@ -5,7 +5,7 @@ import json
 class Controller(QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._my_property = "Hello from Python!"
+        self._my_property = "Hello my friend!"
         self._theme_path = Path(__file__).parent.parent / "ressources" / "runtime" / "CurrentTheme.json"
         self._theme_last_modified = 0
 

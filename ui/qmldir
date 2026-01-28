@@ -1,0 +1,15 @@
+module Components
+IconButton 1.0 components/controls/IconButton.qml
+Button 1.0 components/controls/Button.qml
+ComboBox 1.0 components/controls/ComboBox.qml
+SpinBox 1.0 components/controls/SpinBox.qml
+TabBar 1.0 components/controls/TabBar.qml
+Popup 1.0 components/popups/Popup.qml
+ToolTip 1.0 components/popups/ToolTip.qml
+TopBar 1.0 components/layout/TopBar.qml
+Rectangle 1.0 components/layout/Rectangle.qml
+CustomShortcutEditor 1.0 components/settings/CustomShortcutEditor.qml
+Settings 1.0 components/settings/Settings.qml
+SVGObject 1.0 components/indicators/SVGObject.qml
+Label 1.0 components/indicators/Label.qml
+Title 1.0 components/indicators/Title.qml

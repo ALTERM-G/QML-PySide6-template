@@ -5,10 +5,10 @@ ToolTip {
     id: customToolTip
 
     background: Rectangle {
-        radius: Metrics.radiusM
+        radius: LayoutMetrics.radiusM
         color: Theme.backgroundColor
         border.color: Theme.borderColor
-        border.width: Metrics.borderSmall
+        border.width: LayoutMetrics.borderSmall
     }
 
     contentItem: Text {
@@ -16,7 +16,7 @@ ToolTip {
         color: Theme.textColor
         font.family: Typography.fontBold
         font.pointSize: 10
-        padding: Metrics.spacingXS
+        padding: LayoutMetrics.spacingXS
     }
 
     enter: Transition {

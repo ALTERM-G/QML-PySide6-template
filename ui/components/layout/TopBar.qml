@@ -1,46 +1,33 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 Rectangle {
-    id: background
-    anchors.fill: parent
-    color: Theme.appBackgroundColor
-    default property alias content: contentItem.data
+    id: topBar
+    implicitHeight: AppConfig.topBarHeight
+    Layout.fillWidth: true
+    color: Theme.topBarColor
 
     Rectangle {
-        id: topBar
-        height: AppConfig.topBarHeight
-        color: Theme.topBarColor
-        anchors.top: parent.top
+        id: divider
+        height: AppConfig.dividerThickness
+        color: Theme.dividerColor
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.bottom: parent.bottom
+    }
 
-        Rectangle {
-            id: divider
-            height: AppConfig.dividerThickness
-            color: Theme.dividerColor
-            width: parent.width
-            anchors.bottom: parent.bottom
-        }
+    Text {
+        id: title_ASCII
+        color: Theme.themeColor
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: LayoutMetrics.md
 
-        Text {
-            id: title_ASCII
-            color: Theme.themeColor
-            anchors.left: topBar.left
-            anchors.verticalCenter: topBar.verticalCenter
-            anchors.leftMargin: Metrics.marginM
-            height: topBar.height
-            text: ASCIIart.text
-            font.pointSize: 4
-            font.family: Typography.fontRegular
-            wrapMode: Text.NoWrap
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        Item {
-            id: contentItem
-            anchors.fill: parent
-        }
+        text: ASCIIart.text
+        font.pointSize: 4
+        font.family: Typography.fontRegular
+        wrapMode: Text.NoWrap
+        verticalAlignment: Text.AlignVCenter
     }
 }

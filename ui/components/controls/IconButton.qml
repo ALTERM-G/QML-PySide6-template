@@ -1,11 +1,12 @@
 import QtQuick
 import QtQuick.Controls
+import "../indicators"
 
 Rectangle {
     id: iconButton
     property string iconPath: ""
-    property real buttonWidth: Metrics.iconSizeM
-    property real buttonHeight: Metrics.iconSizeM
+    property real buttonWidth: LayoutMetrics.iconSizeM
+    property real buttonHeight: LayoutMetrics.iconSizeM
     width: buttonWidth
     height: buttonHeight
     color: "transparent"

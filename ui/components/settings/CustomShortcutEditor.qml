@@ -3,11 +3,11 @@ import QtQuick.Controls
 
 Rectangle {
     id: root
-    width: Metrics.comboBoxWidth
-    height: Metrics.controlHeight
-    radius: Metrics.radiusM
+    width: LayoutMetrics.comboBoxWidth
+    height: LayoutMetrics.controlHeight
+    radius: LayoutMetrics.radiusM
     focus: true
-    border.width: Metrics.borderThick
+    border.width: LayoutMetrics.borderThick
     color: recording ? Theme.themeColor : Theme.backgroundColor
     border.color: Theme.borderColor
 
