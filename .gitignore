@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Runtime / user files
+resources/runtime/
+
+# Virtual environments
+venv/
+env/
+*.env
+
+# Qt / QML generated files
+*.qmlc
+*.rcc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

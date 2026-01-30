@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import sys
 
@@ -96,6 +97,15 @@ def main():
     exit_code = app.exec()
     sys.exit(exit_code)
 
+=======
+import sys
+from pathlib import Path
+
+project_root = Path(__file__).resolve().parent
+sys.path.insert(0, str(project_root / "src"))
+
+from app_name.main import main
+>>>>>>> 9164856 (Refactor)
 
 if __name__ == "__main__":
     main()
