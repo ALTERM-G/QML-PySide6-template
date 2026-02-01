@@ -1,0 +1,2 @@
+[console_scripts]
+qml-app = main:main

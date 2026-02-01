@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/app_name/__init__.py
+src/app_name/backend/__init__.py
+src/app_name/backend/controller.py
+src/app_name/backend/logic/__init__.py
+src/app_name/backend/viewmodels/__init__.py
+src/app_name/backend/viewmodels/main_vm.py
+src/app_name/backend/viewmodels/settings_vm.py
+src/app_name/backend/workers/__init__.py
+src/qml_pyside6_template.egg-info/PKG-INFO
+src/qml_pyside6_template.egg-info/SOURCES.txt
+src/qml_pyside6_template.egg-info/dependency_links.txt
+src/qml_pyside6_template.egg-info/entry_points.txt
+src/qml_pyside6_template.egg-info/requires.txt
+src/qml_pyside6_template.egg-info/top_level.txt
