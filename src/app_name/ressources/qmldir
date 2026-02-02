@@ -1,0 +1,6 @@
+singleton ASCIIart 1.0 style/ASCIIart.qml
+singleton LayoutMetrics 1.0 style/LayoutMetrics.qml
+singleton Metrics 1.0 style/Metrics.qml
+singleton Typography 1.0 style/Typography.qml
+singleton Theme 1.0 style/Theme.qml
+singleton SVGLibrary 1.0 style/SVGLibrary.qml
