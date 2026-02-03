@@ -7,7 +7,7 @@ TabBar 1.0 controls/TabBar.qml
 Popup 1.0 popups/Popup.qml
 ToolTip 1.0 popups/ToolTip.qml
 TopBar 1.0 layout/TopBar.qml
-Rect 1.0 layout/Rect.qml
+Surface 1.0 layout/Surface.qml
 ShortcutEditor 1.0 settings/ShortcutEditor.qml
 Settings 1.0 settings/Settings.qml
 SVGObject 1.0 indicators/SVGObject.qml

@@ -24,7 +24,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: LayoutMetrics.spacing.md
         text: ASCIIart.text
-        font.pointSize: 4
+        font.pointSize: ASCIIart.fontSize
         font.family: Typography.fontRegular
         wrapMode: Text.NoWrap
         verticalAlignment: Text.AlignVCenter

@@ -15,7 +15,7 @@ SpinBox {
 
     contentItem: TextInput {
         text: spinBox.value.toString()
-        font.pixelSize: 18
+        font.pixelSize: Typography.h4
         font.family: Typography.fontBold
         color: Theme.textColor
         horizontalAlignment: Text.AlignHCenter
@@ -65,7 +65,7 @@ SpinBox {
             text: "▴"
             anchors.centerIn: parent
             color: upMouseArea.containsMouse ? Theme.themeColor : Theme.textColor
-            font.pixelSize: Typography.bigFontSize
+            font.pixelSize: Typography.h5
         }
 
         MouseArea {
@@ -90,7 +90,7 @@ SpinBox {
             text: "▾"
             anchors.centerIn: parent
             color: downMouseArea.containsMouse ? Theme.themeColor : Theme.textColor
-            font.pixelSize: Typography.bigFontSize
+            font.pixelSize: Typography.h5
         }
 
         MouseArea {

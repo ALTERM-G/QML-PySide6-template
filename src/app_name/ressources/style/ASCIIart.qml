@@ -2,6 +2,7 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    readonly property int fontSize: 4
     readonly property string text:
 
    "████████╗███████╗███╗   ███╗██████╗ ██╗      █████╗ ████████╗███████╗\n" +

@@ -3,14 +3,15 @@ import QtQuick
 
 QtObject {
     property var window
-    readonly property real w: window ? window.width : 1280
-    readonly property real h: window ? window.height : 720
+    property real w: window ? window.width : 1280
+    property real h: window ? window.height : 720
 
     function bindToWindow(win) {
         window = win
     }
 
-    readonly property real unit: Math.min(w, h) / 100
+    property real unit: Math.min(w, h) / 100
+
 
     //--- Spacing ---
     readonly property QtObject spacing: QtObject {

@@ -12,7 +12,7 @@ ComboBox {
     contentItem: Text {
         text: control.displayText !== "" ? control.displayText : "Select"
         anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: Typography.hugeFontSize
+        font.pixelSize: Typography.h4
         font.family: Typography.fontBold
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -26,7 +26,7 @@ ComboBox {
     indicator: Text {
         text: "▾"
         color: contentItem.color
-        font.pixelSize: Typography.iconFontSize
+        font.pixelSize: Typography.h1
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
@@ -54,6 +54,12 @@ ComboBox {
     popup: Popup {
         width: control.width
         implicitHeight: control.count * control.optionHeight + control.popupPadding * 2
+
+        onOpened: {
+            if (control.count === 0) {
+                control.popup.close()
+            }
+        }
 
         padding: 0
         topPadding: 0
@@ -101,7 +107,7 @@ ComboBox {
                     Text {
                         anchors.fill: parent
                         text: control.textRole ? model[control.textRole] : modelData
-                        font.pixelSize: Typography.hugeFontSize
+                        font.pixelSize: Typography.h4
                         font.family: Typography.fontBold
                         color: hovered ? Theme.hoverTextColor : Theme.textColor
                         horizontalAlignment: Text.AlignHCenter

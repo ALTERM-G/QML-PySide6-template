@@ -32,7 +32,8 @@ Window {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        Rect {
+
+        Surface {
             id: showcase
             anchors.centerIn: parent
             width: parent.width * 0.8

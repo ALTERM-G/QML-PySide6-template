@@ -30,7 +30,7 @@ Item {
         x: parent.width / 2 - width / 2
         y: parent.height / 2 - height / 2
 
-        background: Rect {
+        background: Surface {
             anchors.fill: parent
 
             IconButton {

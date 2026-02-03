@@ -13,8 +13,6 @@ _data_object = None
 
 def main():
     app = QGuiApplication(sys.argv)
-
-    # Get the src directory path
     src_path = Path(__file__).parent / "src" / "app_name"
 
     # ---------------- Components module -----------------

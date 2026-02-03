@@ -49,7 +49,7 @@ Rectangle {
                     text: tabData[index].name
                     color: listView.currentIndex === index ? Theme.borderColor : Theme.textColor
                     font.underline: false
-                    pointSize: Typography.smallFontSize
+                    pointSize: Typography.h6
                     font.bold: listView.currentIndex === index
 
                     Behavior on color {

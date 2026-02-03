@@ -35,7 +35,7 @@ Rectangle {
 
         Text {
             text: convertButton.buttonText
-            font.pixelSize: 18
+            font.pixelSize: Typography.h4
             font.family: Typography.fontBold
             color: mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor
             anchors.verticalCenter: parent.verticalCenter
