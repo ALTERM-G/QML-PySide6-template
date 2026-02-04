@@ -44,31 +44,7 @@ Window {
 
             Title {
                 text: "Have Fun !"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: Metrics.spacing.sm
-            }
-            
-            Title {
-                text: "Have Fun !"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: Metrics.spacing.sm
-            }
-
-            Grid {
-                rows: 3
-                columns: 2
-                spacing: Metrics.spacing.sm
                 anchors.centerIn: parent
-
-                Button {}
-
-                ComboBox {}
-
-                SpinBox {}
-
-                TabBar {}
             }
         }
     }
