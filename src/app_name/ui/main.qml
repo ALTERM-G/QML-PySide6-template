@@ -8,7 +8,10 @@ Window {
     color: Theme.backgroundColor
     width: 1280
     height: 720
-    Component.onCompleted: LayoutMetrics.bindToWindow(window)
+    Component.onCompleted: {
+        LayoutMetrics.bindToWindow(window)
+        Typography.setWindow(window)
+    }
     title: "QML-PySide6 Template"
 
     TopBar {
@@ -39,6 +42,13 @@ Window {
             width: parent.width * 0.8
             height: parent.height * 0.8
 
+            Title {
+                text: "Have Fun !"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: Metrics.spacing.sm
+            }
+            
             Title {
                 text: "Have Fun !"
                 anchors.horizontalCenter: parent.horizontalCenter
