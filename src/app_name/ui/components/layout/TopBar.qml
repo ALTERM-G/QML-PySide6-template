@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 Rectangle {
     id: topBar
-    implicitHeight: 75
+    implicitHeight: LayoutMetrics.size.topBarHeight
     Layout.fillWidth: true
     color: Theme.topBarColor
 
@@ -18,15 +18,14 @@ Rectangle {
     }
 
     Text {
-        id: title_ASCII
+        id: app_title
         color: Theme.themeColor
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: LayoutMetrics.spacing.md
-        text: ASCIIart.text
-        font.pointSize: ASCIIart.fontSize
-        font.family: Typography.fontRegular
-        wrapMode: Text.NoWrap
+        text: UiData.titles.appName
+        font.pointSize: Typography.h3
+        font.family: Typography.fontBold
         verticalAlignment: Text.AlignVCenter
     }
 }

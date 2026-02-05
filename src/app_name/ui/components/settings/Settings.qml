@@ -13,7 +13,7 @@ Item {
         iconPath: SVGLibrary.settings
 
         ToolTip {
-            text: "Settings"
+            text: UiData.titles.settings
             visible: settingsButton.hovered
             delay: 600
         }
@@ -25,10 +25,10 @@ Item {
 
     Popup {
         id: settingsPopup
-        width: LayoutMetrics.unit * 80
-        height: LayoutMetrics.unit * 60
-        x: parent.width / 2 - width / 2
-        y: parent.height / 2 - height / 2
+        width: LayoutMetrics.window.width * 0.8
+        height: (LayoutMetrics.window.height - LayoutMetrics.size.topBarHeight) * 0.8
+        x: (LayoutMetrics.window.width - width) / 2
+        y: LayoutMetrics.size.topBarHeight + (LayoutMetrics.window.height - LayoutMetrics.size.topBarHeight - height) / 2
 
         background: Surface {
             anchors.fill: parent
@@ -39,8 +39,6 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: LayoutMetrics.spacing.xl
                 iconPath: SVGLibrary.back
-                buttonWidth: Metrics.size.iconS * 1.5
-                buttonHeight: Metrics.size.iconS * 1.5
                 onPressed: {settingsPopup.close()}
             }
 

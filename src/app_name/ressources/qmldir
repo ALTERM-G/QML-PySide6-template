@@ -1,4 +1,4 @@
-singleton ASCIIart 1.0 style/ASCIIart.qml
+singleton UiData 1.0 data/UIData.qml
 singleton LayoutMetrics 1.0 style/LayoutMetrics.qml
 singleton Metrics 1.0 style/Metrics.qml
 singleton Typography 1.0 style/Typography.qml

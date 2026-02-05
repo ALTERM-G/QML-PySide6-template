@@ -5,8 +5,8 @@ import components
 Rectangle {
     id: iconButton
     property string iconPath: ""
-    property real buttonWidth: Metrics.size.iconButton
-    property real buttonHeight: Metrics.size.iconButton
+    property real buttonWidth: LayoutMetrics.size.iconL
+    property real buttonHeight: LayoutMetrics.size.iconL
     width: buttonWidth
     height: buttonHeight
     color: "transparent"

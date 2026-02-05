@@ -78,11 +78,11 @@ def main():
 
     # ---------------- Load QML files ----------------
     qml_singletons = [
-        ("ASCIIart", "style/ASCIIart.qml", None),
         ("LayoutMetrics", "style/LayoutMetrics.qml", None),
         ("Metrics", "style/Metrics.qml", None),
         ("SVGLibrary", "style/SVGLibrary.qml", None),
         ("Typography", "style/Typography.qml", None),
+        ("UiData", "data/UiData.qml", None),
         ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),
     ]
     qml_objects = {}
