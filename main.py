@@ -75,6 +75,8 @@ def main():
     # ---------------- Create Controller ----------------
     controller = Controller()
     engine.rootContext().setContextProperty("controller", controller)
+    engine.rootContext().setContextProperty("mainVM", controller.mainVM)
+    engine.rootContext().setContextProperty("settingsVM", controller.settingsVM)
 
     # ---------------- Load QML files ----------------
     qml_singletons = [

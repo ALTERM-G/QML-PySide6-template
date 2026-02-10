@@ -52,15 +52,30 @@ ComboBox {
     }
 
     popup: Popup {
+        id: dropdownPopup
         width: control.width
         implicitHeight: control.count * control.optionHeight + control.popupPadding * 2
+
+        y: control.height
+        opacity: 0.0
+        height: 0
+
+        Behavior on height { NumberAnimation { duration: 200; easing.type: Easing.OutQuad } }
+        Behavior on opacity { NumberAnimation { duration: 200 } }
 
         onOpened: {
             if (control.count === 0) {
                 control.popup.close()
+                return
             }
+            height = implicitHeight
+            opacity = 1
         }
 
+        onClosed: {
+            height = 0
+            opacity = 0
+        }
         padding: 0
         topPadding: 0
         bottomPadding: 0

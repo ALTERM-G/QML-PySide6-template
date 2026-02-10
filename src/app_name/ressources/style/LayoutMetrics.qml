@@ -12,10 +12,6 @@ QtObject {
 
     property real unit: Math.min(w, h) / 100
 
-    function round(value) {
-        return Math.round(value)
-    }
-
     //--- Spacing ---
     readonly property QtObject spacing: QtObject {
         readonly property real xxs: unit * 0.25
@@ -52,8 +48,8 @@ QtObject {
 
     //--- Borders ---
     readonly property QtObject border: QtObject {
-        readonly property real s: round(unit * 0.125)
-        readonly property real m: round(unit * 0.25)
-        readonly property real l: round(unit * 0.375)
+        readonly property real s: unit * 0.125
+        readonly property real m: unit * 0.25
+        readonly property real l: unit * 0.375
     }
 }

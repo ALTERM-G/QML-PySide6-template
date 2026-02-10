@@ -1,15 +1,28 @@
-from PySide6.QtCore import QObject, Property, Slot
+from PySide6.QtCore import QObject, Property, Signal, Slot
 from pathlib import Path
 import json
+from .viewmodels import MainVM, SettingsVM
+
 
 class Controller(QObject):
+    myPropertyChanged = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self._my_property = "Hello my friend!"
-        self._theme_path = Path(__file__).parent.parent / "ressources" / "runtime" / "CurrentTheme.json"
+        self._theme_path = (
+            Path(__file__).parent.parent
+            / "ressources"
+            / "runtime"
+            / "CurrentTheme.json"
+        )
         self._theme_last_modified = 0
 
-    @Property(str)
+        # Initialize view models
+        self._main_vm = MainVM(self)
+        self._settings_vm = SettingsVM(self)
+
+    @Property(str, notify=myPropertyChanged)
     def myProperty(self):
         return self._my_property
 
@@ -53,3 +66,12 @@ class Controller(QObject):
     @Slot(result=str)
     def get_current_theme(self):
         return self._load_theme()
+
+    # View Model Properties
+    @Property(QObject, constant=True)
+    def mainVM(self):
+        return self._main_vm
+
+    @Property(QObject, constant=True)
+    def settingsVM(self):
+        return self._settings_vm
