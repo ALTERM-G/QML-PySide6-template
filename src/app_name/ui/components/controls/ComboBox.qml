@@ -24,12 +24,22 @@ ComboBox {
     }
 
     indicator: Text {
+        id: arrow
         text: "▾"
         color: contentItem.color
         font.pixelSize: Typography.h1
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
+        transformOrigin: Item.Center
+        rotation: control.popup.opened ? 180 : 0
+
+        Behavior on rotation {
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.OutQuad
+            }
+        }
     }
 
     background: Rectangle {
@@ -53,28 +63,26 @@ ComboBox {
 
     popup: Popup {
         id: dropdownPopup
-        width: control.width
+        property int horizontalMargin: 8
+        width: control.width - horizontalMargin * 2
         implicitHeight: control.count * control.optionHeight + control.popupPadding * 2
 
-        y: control.height
-        opacity: 0.0
-        height: 0
+        x: horizontalMargin
+        y: control.height - LayoutMetrics.border.m
+        clip: true
 
-        Behavior on height { NumberAnimation { duration: 200; easing.type: Easing.OutQuad } }
-        Behavior on opacity { NumberAnimation { duration: 200 } }
-
-        onOpened: {
-            if (control.count === 0) {
-                control.popup.close()
-                return
+        enter: Transition {
+            ParallelAnimation {
+                NumberAnimation { property: "height"; from: 0; to: dropdownPopup.implicitHeight; duration: 150; easing.type: Easing.OutQuad }
+                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 150 }
             }
-            height = implicitHeight
-            opacity = 1
         }
 
-        onClosed: {
-            height = 0
-            opacity = 0
+        exit: Transition {
+            ParallelAnimation {
+                NumberAnimation { property: "height"; from: dropdownPopup.implicitHeight; to: 0; duration: 150; easing.type: Easing.InQuad }
+                NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 150 }
+            }
         }
         padding: 0
         topPadding: 0
@@ -83,7 +91,12 @@ ComboBox {
         rightPadding: 0
 
         background: Rectangle {
-            radius: LayoutMetrics.radius.m
+            anchors.fill: parent
+            bottomLeftRadius: LayoutMetrics.radius.m
+            bottomRightRadius: LayoutMetrics.radius.m
+            topLeftRadius: 0
+            topRightRadius: 0
+
             color: Theme.backgroundColor
             border.color: Theme.borderColor
             border.width: LayoutMetrics.border.l

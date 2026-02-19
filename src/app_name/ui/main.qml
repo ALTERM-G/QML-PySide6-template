@@ -42,6 +42,7 @@ Window {
             height: parent.height * 0.8
 
             Title {
+                id: title
                 text: "Have Fun !"
                 anchors.centerIn: parent
             }
