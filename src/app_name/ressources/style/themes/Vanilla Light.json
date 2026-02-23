@@ -1,0 +1,14 @@
+{
+    "name": "Vanilla Light",
+    "colors": {
+        "themeColor": "#E78C02",
+        "appBackgroundColor": "#FDF6E3",
+        "topBarColor": "#F5EDE0",
+        "backgroundColor": "#FFFFFF",
+        "hoverBackgroundColor": "#E6D7B9",
+        "borderColor": "#D6C8AD",
+        "textColor": "#2A2A2A",
+        "hoverTextColor": "#FFFFFF",
+        "dividerColor": "#CFCFCF"
+    }
+}

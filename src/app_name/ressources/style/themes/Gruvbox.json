@@ -1,0 +1,14 @@
+{
+    "name": "Gruvbox",
+    "colors": {
+        "themeColor": "#FB4934",
+        "appBackgroundColor": "#282828",
+        "topBarColor": "#1D2021",
+        "backgroundColor": "#282828",
+        "hoverBackgroundColor": "#FABD2F",
+        "borderColor": "#3C3836",
+        "textColor": "#EBDBB2",
+        "hoverTextColor": "#282828",
+        "dividerColor": "#3C3836"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "Github Dark",
+    "colors": {
+        "themeColor": "#2F81F7",
+        "appBackgroundColor": "#0D1117",
+        "topBarColor": "#161B22",
+        "backgroundColor": "#0D1117",
+        "hoverBackgroundColor": "#3FB950",
+        "borderColor": "#30363D",
+        "textColor": "#C9D1D9",
+        "hoverTextColor": "#0D1117",
+        "dividerColor": "#30363D"
+    }
+}

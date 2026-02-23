@@ -1,0 +1,14 @@
+{
+    "name": "Dracula",
+    "colors": {
+        "themeColor": "#BD93F9",
+        "appBackgroundColor": "#282A36",
+        "topBarColor": "#21222C",
+        "backgroundColor": "#282A36",
+        "hoverBackgroundColor": "#50FA7B",
+        "borderColor": "#44475A",
+        "textColor": "#F8F8F2",
+        "hoverTextColor": "#282A36",
+        "dividerColor": "#44475A"
+    }
+}

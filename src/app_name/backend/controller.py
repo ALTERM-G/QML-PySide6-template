@@ -16,11 +16,32 @@ class Controller(QObject):
             / "runtime"
             / "CurrentTheme.json"
         )
+        self._themes_path = (
+            Path(__file__).parent.parent / "ressources" / "style" / "themes"
+        )
         self._theme_last_modified = 0
 
-        # Initialize view models
         self._main_vm = MainVM(self)
         self._settings_vm = SettingsVM(self)
+
+        self._load_all_themes()
+
+    def _load_all_themes(self):
+        self._base_config = {}
+        self._theme_colors = {}
+
+        base_path = self._themes_path / "base.json"
+        if base_path.exists():
+            with open(base_path) as f:
+                self._base_config = json.load(f)
+
+        for theme_file in self._themes_path.glob("*.json"):
+            if theme_file.stem == "base":
+                continue
+            with open(theme_file) as f:
+                data = json.load(f)
+                if "colors" in data:
+                    self._theme_colors[theme_file.stem] = data["colors"]
 
     @Property(str, notify=myPropertyChanged)
     def myProperty(self):
@@ -66,6 +87,14 @@ class Controller(QObject):
     @Slot(result=str)
     def get_current_theme(self):
         return self._load_theme()
+
+    @Slot(result=dict)
+    def get_base_config(self):
+        return self._base_config
+
+    @Slot(result=dict)
+    def get_theme_colors(self):
+        return self._theme_colors
 
     # View Model Properties
     @Property(QObject, constant=True)

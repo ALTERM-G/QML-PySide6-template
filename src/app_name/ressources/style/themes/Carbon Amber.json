@@ -1,0 +1,14 @@
+{
+    "name": "Carbon Amber",
+    "colors": {
+        "themeColor": "#E78C02",
+        "appBackgroundColor": "#101010",
+        "topBarColor": "#060606",
+        "backgroundColor": "#181818",
+        "hoverBackgroundColor": "#B4B4B4",
+        "borderColor": "#2B2B2B",
+        "textColor": "#B4B4B4",
+        "hoverTextColor": "#2A2A2A",
+        "dividerColor": "#333333"
+    }
+}

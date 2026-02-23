@@ -1,0 +1,14 @@
+{
+    "name": "Monokai",
+    "colors": {
+        "themeColor": "#A6E22E",
+        "appBackgroundColor": "#272822",
+        "topBarColor": "#1E1C1C",
+        "backgroundColor": "#272822",
+        "hoverBackgroundColor": "#F92672",
+        "borderColor": "#3A3A3A",
+        "textColor": "#F8F8F2",
+        "hoverTextColor": "#272822",
+        "dividerColor": "#3A3A3A"
+    }
+}

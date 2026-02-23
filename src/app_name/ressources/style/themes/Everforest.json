@@ -1,0 +1,14 @@
+{
+    "name": "Everforest",
+    "colors": {
+        "themeColor": "#8DA101",
+        "appBackgroundColor": "#2B3339",
+        "topBarColor": "#232B2F",
+        "backgroundColor": "#2B3339",
+        "hoverBackgroundColor": "#A7C080",
+        "borderColor": "#3B4349",
+        "textColor": "#D3C6AA",
+        "hoverTextColor": "#2B3339",
+        "dividerColor": "#3B4349"
+    }
+}

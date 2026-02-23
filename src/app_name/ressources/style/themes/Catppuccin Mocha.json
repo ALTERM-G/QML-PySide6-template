@@ -1,0 +1,14 @@
+{
+    "name": "Catppuccin Mocha",
+    "colors": {
+        "themeColor": "#F5C2E7",
+        "appBackgroundColor": "#1E1E2E",
+        "topBarColor": "#181825",
+        "backgroundColor": "#1E1E2E",
+        "hoverBackgroundColor": "#F2CDCD",
+        "borderColor": "#313244",
+        "textColor": "#C6D0F5",
+        "hoverTextColor": "#1E1E2E",
+        "dividerColor": "#313244"
+    }
+}

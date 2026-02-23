@@ -1,0 +1,14 @@
+{
+    "fonts": {
+        "regular": "JetBrainsMonoNLApp",
+        "bold": "JetBrainsMonoApp"
+    },
+    "fontSizes": {
+        "icon": 24,
+        "title": 24,
+        "huge": 18,
+        "big": 16,
+        "normal": 14,
+        "small": 11
+    }
+}
