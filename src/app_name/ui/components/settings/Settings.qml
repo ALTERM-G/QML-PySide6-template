@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 import components
 
 Item {
@@ -42,29 +41,30 @@ Item {
                 onPressed: {settingsPopup.close()}
             }
 
-            ColumnLayout {
+            Title {
+                id: title
+                text: "Settings"
                 anchors.top: parent.top
-                anchors.topMargin: LayoutMetrics.spacing.lg
+                anchors.topMargin: LayoutMetrics.spacing.xl
                 anchors.horizontalCenter: parent.horizontalCenter
+            }
 
-                Title {
-                    text: "Settings"
-                    Layout.alignment: Qt.AlignHCenter
-                }
+            Column {
+                anchors.top: title.bottom
+                anchors.topMargin: LayoutMetrics.spacing.xl
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: LayoutMetrics.spacing.md
 
                 ComboBox {
                     id: themeComboBox
-                    Layout.topMargin: LayoutMetrics.spacing.xl
-                    height: LayoutMetrics.size.controlHeight * 1.2
-                    implicitHeight: height
-                    Layout.preferredWidth: LayoutMetrics.size.comboBoxWidth
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.topMargin: LayoutMetrics.spacing.xxl
                     model: Theme.themeNames
                     onCurrentTextChanged: {
                         if (initialized) {
                             Theme.setTheme(currentText)
                         }
                     }
-
                     property bool initialized: false
 
                     Connections {
@@ -78,6 +78,14 @@ Item {
                             }
                         }
                     }
+                }
+
+                Slider {
+                    id: themeSlider
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    value: 50
+                    from: 0
+                    to: 100
                 }
             }
         }

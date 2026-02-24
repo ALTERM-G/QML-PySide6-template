@@ -3,6 +3,7 @@ IconButton 1.0 controls/IconButton.qml
 Button 1.0 controls/Button.qml
 ComboBox 1.0 controls/ComboBox.qml
 SpinBox 1.0 controls/SpinBox.qml
+Slider 1.0 controls/Slider.qml
 TabBar 1.0 controls/TabBar.qml
 Popup 1.0 popups/Popup.qml
 ToolTip 1.0 popups/ToolTip.qml

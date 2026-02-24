@@ -26,10 +26,11 @@ QtObject {
     //--- Sizes ---
     readonly property QtObject size: QtObject {
         readonly property real topBarHeight: unit * 7
-        readonly property real controlHeight: unit * 4
-        readonly property real controlHeightCompact: unit * 3.5
+        readonly property real controlHeight: unit * 2.5
+        readonly property real controlHeightCompact: unit * 2
         readonly property real buttonWidth: unit * 15
         readonly property real comboBoxWidth: unit * 40
+        readonly property real sliderWidth: unit * 20
         readonly property real spinBoxWidth: unit * 10
 
         readonly property real iconS: unit * 2

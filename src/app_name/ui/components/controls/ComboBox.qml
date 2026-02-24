@@ -65,7 +65,7 @@ ComboBox {
         id: dropdownPopup
         property int horizontalMargin: 8
         width: control.width - horizontalMargin * 2
-        implicitHeight: control.count * control.optionHeight + control.popupPadding * 2
+        implicitHeight: control.count * control.optionHeight * 1.4 + control.popupPadding * 2
 
         x: horizontalMargin
         y: control.height - LayoutMetrics.border.m
@@ -112,7 +112,7 @@ ComboBox {
 
                 delegate: Rectangle {
                     width: parent.width
-                    height: control.optionHeight
+                    height: control.optionHeight * 1.4
                     radius: LayoutMetrics.radius.m
                     color: hovered
                            ? Theme.hoverBackgroundColor
