@@ -10,7 +10,8 @@ QtObject {
         window = win
     }
 
-    property real unit: Math.min(w, h) / 100
+    property real scaleFactor: 1.0
+    property real unit: (Math.min(w, h) / 100) * scaleFactor
 
     //--- Spacing ---
     readonly property QtObject spacing: QtObject {
@@ -30,7 +31,7 @@ QtObject {
         readonly property real controlHeightCompact: unit * 2
         readonly property real buttonWidth: unit * 15
         readonly property real comboBoxWidth: unit * 40
-        readonly property real sliderWidth: unit * 20
+        readonly property real sliderWidth: unit * 25
         readonly property real spinBoxWidth: unit * 10
 
         readonly property real iconS: unit * 2

@@ -55,39 +55,65 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: LayoutMetrics.spacing.md
 
-                ComboBox {
-                    id: themeComboBox
+                Column {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.topMargin: LayoutMetrics.spacing.xxl
-                    model: Theme.themeNames
-                    onCurrentTextChanged: {
-                        if (initialized) {
-                            Theme.setTheme(currentText)
-                        }
-                    }
-                    property bool initialized: false
+                    spacing: LayoutMetrics.spacing.xxs
 
-                    Connections {
-                        target: settingsPopup
-                        function onOpened() {
-                            var currentThemeIndex = themeComboBox.model.indexOf(Theme.currentTheme)
-                            if (currentThemeIndex !== -1) {
-                                themeComboBox.initialized = false
-                                themeComboBox.currentIndex = currentThemeIndex
-                                themeComboBox.initialized = true
+                    Label {
+                        text: "Theme"
+                        style_2: true
+                    }
+
+                    ComboBox {
+                        id: themeComboBox
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.topMargin: LayoutMetrics.spacing.xxl
+                        model: Theme.themeNames
+                        onCurrentTextChanged: {
+                            if (initialized) {
+                                Theme.setTheme(currentText)
+                            }
+                        }
+                        property bool initialized: false
+
+                        Connections {
+                            target: settingsPopup
+                            function onOpened() {
+                                var currentThemeIndex = themeComboBox.model.indexOf(Theme.currentTheme)
+                                if (currentThemeIndex !== -1) {
+                                    themeComboBox.initialized = false
+                                    themeComboBox.currentIndex = currentThemeIndex
+                                    themeComboBox.initialized = true
+                                }
                             }
                         }
                     }
                 }
 
-                Slider {
-                    id: themeSlider
+                Column {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    value: 50
-                    from: 0
-                    to: 100
+                    spacing: LayoutMetrics.spacing.xxs
+
+                    Label {
+                        text: "Scale"
+                        style_2: true
+                    }
+
+                    Slider {
+                        id: themeSlider
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        value: 50
+                        from: 0
+                        to: 100
+                        onValueChanged: {
+                            var factor = 0.5 + (value / 100)
+                            LayoutMetrics.scaleFactor = factor
+                            Typography.scaleFactor = factor
+                            Metrics.scaleFactor = factor
+                        }
+                    }
                 }
-            }
+           }
         }
     }
 }

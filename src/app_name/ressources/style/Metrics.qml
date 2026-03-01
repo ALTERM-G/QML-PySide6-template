@@ -4,44 +4,47 @@ import QtQuick
 QtObject {
     id: metrics
 
+    property real scaleFactor: 1.0
+    readonly property real baseUnit: 8
+
     //--- Spacing ---
     readonly property QtObject spacing: QtObject {
-        readonly property real xxs: 8
-        readonly property real xs: 16
-        readonly property real sm: 24
-        readonly property real md: 32
-        readonly property real lg: 40
-        readonly property real xl: 48
-        readonly property real xxl: 64
+        readonly property real xxs: baseUnit * 1 * scaleFactor
+        readonly property real xs: baseUnit * 2 * scaleFactor
+        readonly property real sm: baseUnit * 3 * scaleFactor
+        readonly property real md: baseUnit * 4 * scaleFactor
+        readonly property real lg: baseUnit * 5 * scaleFactor
+        readonly property real xl: baseUnit * 6 * scaleFactor
+        readonly property real xxl: baseUnit * 8 * scaleFactor
     }
 
     //--- Sizes ---
     readonly property QtObject size: QtObject {
-        readonly property real controlHeight: 48
-        readonly property real controlHeightCompact: 42
-        readonly property real buttonWidth: 180
-        readonly property real comboBoxWidth: 480
-        readonly property real spinBoxWidth: 120
+        readonly property real controlHeight: baseUnit * 6 * scaleFactor
+        readonly property real controlHeightCompact: baseUnit * 5.25 * scaleFactor
+        readonly property real buttonWidth: baseUnit * 22.5 * scaleFactor
+        readonly property real comboBoxWidth: baseUnit * 60 * scaleFactor
+        readonly property real spinBoxWidth: baseUnit * 15 * scaleFactor
 
-        readonly property real iconButton: 48
-        readonly property real iconS: 24
-        readonly property real iconM: 36
-        readonly property real iconL: 48
+        readonly property real iconButton: baseUnit * 6 * scaleFactor
+        readonly property real iconS: baseUnit * 3 * scaleFactor
+        readonly property real iconM: baseUnit * 4.5 * scaleFactor
+        readonly property real iconL: baseUnit * 6 * scaleFactor
 
-        readonly property real sidebarWidth: 220
+        readonly property real sidebarWidth: Math.max(220, 220 * scaleFactor)
     }
 
     //--- Radius ---
     readonly property QtObject radius: QtObject {
-        readonly property real s: 4
-        readonly property real m: 8
-        readonly property real xl: 16
+        readonly property real s: baseUnit * 0.5 * scaleFactor
+        readonly property real m: baseUnit * 1 * scaleFactor
+        readonly property real xl: baseUnit * 2 * scaleFactor
     }
 
     //--- Borders ---
     readonly property QtObject border: QtObject {
-        readonly property real s: 1
-        readonly property real m: 2
-        readonly property real l: 3
+        readonly property real s: baseUnit * 0.125 * scaleFactor
+        readonly property real m: baseUnit * 0.25 * scaleFactor
+        readonly property real l: baseUnit * 0.375 * scaleFactor
     }
 }

@@ -8,10 +8,22 @@ Slider {
     implicitWidth: LayoutMetrics.size.sliderWidth
     implicitHeight: LayoutMetrics.size.controlHeight
 
+    property bool discrete: false
+    property real step: 1
+    stepSize: discrete ? step : 0
+    snapMode: Slider.SnapAlways
+
     property color _trackColor: Theme.borderColor
     property color _progressColor: Theme.themeColor
     property color _handleColor: Theme.textColor
     property color _handleHoverColor: Theme.themeColor
+
+    onValueChanged: {
+        if (discrete && step > 0) {
+            var snapped = Math.round((value - from) / step) * step + from;
+            if (snapped !== value) value = snapped;
+        }
+    }
 
     background: Rectangle {
         x: LayoutMetrics.spacing.xs
@@ -33,10 +45,10 @@ Slider {
     handle: Rectangle {
         x: LayoutMetrics.spacing.xs + control.position * (parent.width - LayoutMetrics.spacing.xs * 2) - width / 2
         y: parent.height / 2 - height / 2
-        width: control.hovered ? LayoutMetrics.size.iconS : LayoutMetrics.size.iconS - 4
-        height: control.hovered ? LayoutMetrics.size.iconS : LayoutMetrics.size.iconS - 4
+        width: (control.hovered || control.pressed) ? LayoutMetrics.size.iconS : LayoutMetrics.size.iconS - 4
+        height: (control.hovered || control.pressed) ? LayoutMetrics.size.iconS : LayoutMetrics.size.iconS - 4
         radius: width / 2
-        color: control.hovered ? _handleHoverColor : _handleColor
+        color: (control.hovered || control.pressed) ? _handleHoverColor : _handleColor
         opacity: control.enabled ? 1.0 : 0.3
 
         Behavior on width { NumberAnimation { duration: 50 } }
