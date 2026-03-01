@@ -20,7 +20,7 @@ def main():
     engine.addImportPath(str(src_path / "ui"))
 
     def load_qml(engine, filename, context_name, callback=None):
-        path = src_path / "ressources" / filename
+        path = src_path / "resources" / filename
         if path.exists():
             component = QQmlComponent(engine, QUrl.fromLocalFile(str(path)))
             obj = component.create()
@@ -42,7 +42,7 @@ def main():
         return None
 
     # ---------------- Fonts ----------------
-    assets_path = src_path / "ressources" / "assets"
+    assets_path = src_path / "resources" / "assets"
     font_dir = assets_path / "fonts"
     loaded_fonts = {}
 
@@ -66,10 +66,10 @@ def main():
         app.setFont(QFont(loaded_fonts[main_regular_font_file]))
 
     # ---------------- Icons ----------------
-    icon_path = src_path / "ressources" / "icons"
+    icon_path = src_path / "resources" / "icons"
     QIcon.setThemeSearchPaths([str(icon_path)])
     app.setWindowIcon(
-        QIcon(str(src_path / "ressources" / "assets" / "icons" / "icon.svg"))
+        QIcon(str(src_path / "resources" / "assets" / "icons" / "icon.svg"))
     )
 
     # ---------------- Create Controller ----------------

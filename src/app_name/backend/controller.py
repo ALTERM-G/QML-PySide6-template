@@ -12,12 +12,12 @@ class Controller(QObject):
         self._my_property = "Hello my friend!"
         self._theme_path = (
             Path(__file__).parent.parent
-            / "ressources"
+            / "resources"
             / "runtime"
             / "CurrentTheme.json"
         )
         self._themes_path = (
-            Path(__file__).parent.parent / "ressources" / "style" / "themes"
+            Path(__file__).parent.parent / "resources" / "style" / "themes"
         )
         self._theme_last_modified = 0
 
