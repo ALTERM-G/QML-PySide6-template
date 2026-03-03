@@ -8,6 +8,9 @@ TabBar 1.0 controls/TabBar.qml
 Popup 1.0 popups/Popup.qml
 ToolTip 1.0 popups/ToolTip.qml
 TopBar 1.0 layout/TopBar.qml
+SideBar 1.0 layout/SideBar.qml
+SideBarItem 1.0 layout/SideBarItem.qml
+SideBarToggle 1.0 layout/SideBarToggle.qml
 Surface 1.0 layout/Surface.qml
 ShortcutEditor 1.0 settings/ShortcutEditor.qml
 Settings 1.0 settings/Settings.qml

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import components
 
 Rectangle {
     id: topBar
@@ -17,12 +18,23 @@ Rectangle {
         anchors.bottom: parent.bottom
     }
 
+    IconButton {
+        id: leftSidebarButton
+        iconPath: SVGLibrary.leftSidebar
+        anchors.left: parent.left
+        anchors.leftMargin: LayoutMetrics.spacing.md
+        anchors.verticalCenter: parent.verticalCenter
+        onPressed: topBar.sidebarToggleClicked()
+    }
+
+    signal sidebarToggleClicked()
+
     Text {
         id: app_title
         color: Theme.themeColor
-        anchors.left: parent.left
+        anchors.left: leftSidebarButton.left
+        anchors.leftMargin: LayoutMetrics.spacing.xxl * 1.5
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: LayoutMetrics.spacing.md
         text: UiData.titles.appName
         font.pointSize: Typography.h3
         font.family: Typography.fontBold

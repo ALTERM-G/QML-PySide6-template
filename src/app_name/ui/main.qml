@@ -19,6 +19,7 @@ Window {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
+        onSidebarToggleClicked: sidebar.toggle()
 
         Settings {
             id: settings
@@ -26,6 +27,14 @@ Window {
             anchors.rightMargin: Metrics.spacing.xl
             anchors.verticalCenter: parent.verticalCenter
         }
+    }
+
+    SideBar {
+        id: sidebar
+        anchors.top: topBar.bottom
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        z: 100
     }
 
     Rectangle {
