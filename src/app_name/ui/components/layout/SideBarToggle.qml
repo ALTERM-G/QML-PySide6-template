@@ -3,9 +3,7 @@ import components
 
 Rectangle {
     id: root
-
     property bool collapsed: false
-
     signal toggled()
 
     width: LayoutMetrics.size.iconButton

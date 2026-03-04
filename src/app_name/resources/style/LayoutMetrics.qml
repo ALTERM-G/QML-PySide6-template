@@ -27,6 +27,7 @@ QtObject {
     //--- Sizes ---
     readonly property QtObject size: QtObject {
         readonly property real topBarHeight: unit * 7
+        readonly property real sideBarWidth: unit * 50
         readonly property real controlHeight: unit * 2.5
         readonly property real controlHeightCompact: unit * 2
         readonly property real buttonWidth: unit * 15
@@ -37,8 +38,6 @@ QtObject {
         readonly property real iconS: unit * 2
         readonly property real iconM: unit * 3
         readonly property real iconL: unit * 4
-
-        readonly property real sidebarWidth: Math.max(220, w * 0.18)
     }
 
     //--- Radius ---

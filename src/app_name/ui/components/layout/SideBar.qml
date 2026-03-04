@@ -9,7 +9,7 @@ Rectangle {
     property bool collapsed: false
     property bool expanded: false
     property int currentIndex: -1
-    property real customWidth: LayoutMetrics.size.sidebarWidth
+    property real customWidth: LayoutMetrics.size.sideBarWidth
 
     signal navigationClicked(int index)
 
@@ -37,7 +37,7 @@ Rectangle {
     clip: true
     focus: true
 
-    Keys.onEscapePressed: onEscapePressed(event)
+    Keys.onEscapePressed: (event) => onEscapePressed(event)
 
     Rectangle {
         width: LayoutMetrics.border.m
@@ -62,7 +62,7 @@ Rectangle {
 
     Rectangle {
         id: resizeHandle
-        width: 6
+        width: LayoutMetrics.spacing.md
         height: parent.height
         color: "transparent"
         anchors.right: parent.right
@@ -84,8 +84,8 @@ Rectangle {
                 if (pressed) {
                     var delta = mouseX - startX
                     var newWidth = startWidth + delta
-                    var minWidth = LayoutMetrics.size.sidebarWidth * 0.5
-                    var maxWidth = (sidebar.parent ? sidebar.parent.width : 400) * 0.4
+                    var minWidth = LayoutMetrics.size.sideBarWidth * 0.5
+                    var maxWidth = (sidebar.parent ? sidebar.parent.width : LayoutMetrics.size.sideBarWidth) * 0.4
                     var clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth))
                     sidebar.customWidth = clampedWidth
                     sidebar.width = clampedWidth
@@ -96,7 +96,7 @@ Rectangle {
 
     Behavior on width {
         NumberAnimation {
-            duration: 250
+            duration: 200
             easing.type: Easing.OutCubic
         }
     }
