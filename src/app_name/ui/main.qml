@@ -8,52 +8,65 @@ Window {
     color: Theme.backgroundColor
     width: 1280
     height: 720
+    title: "QML-PySide6 Template"
     Component.onCompleted: {
         LayoutMetrics.bindToWindow(window)
         Typography.setWindow(window)
     }
-    title: "QML-PySide6 Template"
 
-    TopBar {
-        id: topBar
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        onSidebarToggleClicked: sidebar.toggle()
+    Item {
+        id: root
+        focus: true
+        anchors.fill: parent
 
-        Settings {
-            id: settings
-            anchors.right: parent.right
-            anchors.rightMargin: Metrics.spacing.xl
-            anchors.verticalCenter: parent.verticalCenter
+        Keys.onEscapePressed: function(event) {
+            if (sidebar.expanded) {
+                sidebar.expanded = false
+                event.accepted = true
+            }
         }
-    }
 
-    SideBar {
-        id: sidebar
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        z: 100
-    }
+        TopBar {
+            id: topBar
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            onSidebarToggleClicked: sidebar.toggle()
 
-    Rectangle {
-        id: contentArea
-        color: Theme.backgroundColor
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+            Settings {
+                id: settings
+                anchors.right: parent.right
+                anchors.rightMargin: Metrics.spacing.xl
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
 
-        Surface {
-            anchors.centerIn: parent
-            width: parent.width * 0.8
-            height: parent.height * 0.8
+        SideBar {
+            id: sidebar
+            anchors.top: topBar.bottom
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            z: 100
+        }
 
-            Title {
-                id: title
-                text: "Have Fun !"
+        Rectangle {
+            id: contentArea
+            color: Theme.backgroundColor
+            anchors.top: topBar.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            Surface {
                 anchors.centerIn: parent
+                width: parent.width * 0.8
+                height: parent.height * 0.8
+
+                Title {
+                    id: title
+                    text: "Have Fun !"
+                    anchors.centerIn: parent
+                }
             }
         }
     }

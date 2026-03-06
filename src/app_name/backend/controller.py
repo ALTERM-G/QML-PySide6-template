@@ -11,10 +11,10 @@ class Controller(QObject):
         super().__init__(parent)
         self._my_property = "Hello my friend!"
         self._theme_path = (
-            Path(__file__).parent.parent
-            / "resources"
-            / "runtime"
-            / "CurrentTheme.json"
+            Path(__file__).parent.parent / "resources" / "runtime" / "CurrentTheme.json"
+        )
+        self._settings_path = (
+            Path(__file__).parent.parent / "resources" / "runtime" / "Settings.json"
         )
         self._themes_path = (
             Path(__file__).parent.parent / "resources" / "style" / "themes"
@@ -95,6 +95,32 @@ class Controller(QObject):
     @Slot(result=dict)
     def get_theme_colors(self):
         return self._theme_colors
+
+    # -------------- Settings (Scale) --------------
+
+    def _load_settings(self):
+        try:
+            if self._settings_path.exists():
+                with open(self._settings_path) as f:
+                    return json.load(f)
+        except Exception as e:
+            print(f"Error loading settings: {e}")
+        return {"scaleFactor": 1.0}
+
+    @Slot(float)
+    def save_scale_factor(self, factor):
+        try:
+            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
+            settings = self._load_settings()
+            settings["scaleFactor"] = factor
+            with open(self._settings_path, "w") as f:
+                json.dump(settings, f, indent=2)
+        except Exception as e:
+            print(f"Error saving scale factor: {e}")
+
+    @Slot(result=float)
+    def get_scale_factor(self):
+        return self._load_settings().get("scaleFactor", 1.0)
 
     # View Model Properties
     @Property(QObject, constant=True)

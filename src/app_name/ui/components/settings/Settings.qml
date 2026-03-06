@@ -100,16 +100,29 @@ Item {
                     }
 
                     Slider {
-                        id: themeSlider
+                        id: scaleSlider
                         anchors.horizontalCenter: parent.horizontalCenter
-                        value: 50
                         from: 0
                         to: 100
                         onValueChanged: {
-                            var factor = 0.5 + (value / 100)
-                            LayoutMetrics.scaleFactor = factor
-                            Typography.scaleFactor = factor
-                            Metrics.scaleFactor = factor
+                            if (initialized) {
+                                var factor = 0.5 + (value / 100)
+                                LayoutMetrics.scaleFactor = factor
+                                Typography.scaleFactor = factor
+                                Metrics.scaleFactor = factor
+                                controller.save_scale_factor(factor)
+                            }
+                        }
+                        property bool initialized: false
+
+                        Connections {
+                            target: settingsPopup
+                            function onOpened() {
+                                var savedFactor = controller.get_scale_factor()
+                                scaleSlider.initialized = false
+                                scaleSlider.value = (savedFactor - 0.5) * 100
+                                scaleSlider.initialized = true
+                            }
                         }
                     }
                 }

@@ -35,4 +35,12 @@ QtObject {
     function setWindow(win) {
         windowRef = win
     }
+
+    function setScaleFactor(factor) {
+        scaleFactor = factor
+    }
+
+    function initialize(factor) {
+        scaleFactor = factor
+    }
 }

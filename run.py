@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QUrl
+from PySide6.QtCore import QUrl, QTimer
 from PySide6.QtGui import QFont, QFontDatabase, QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
 from app_name.backend.controller import Controller
@@ -78,12 +78,27 @@ def main():
     engine.rootContext().setContextProperty("mainVM", controller.mainVM)
     engine.rootContext().setContextProperty("settingsVM", controller.settingsVM)
 
+    # ---------------- Load scale factor ----------------
+    scale_factor = controller.get_scale_factor()
+
     # ---------------- Load QML files ----------------
     qml_singletons = [
-        ("LayoutMetrics", "style/LayoutMetrics.qml", None),
-        ("Metrics", "style/Metrics.qml", None),
+        (
+            "LayoutMetrics",
+            "style/LayoutMetrics.qml",
+            lambda obj: obj.setScaleFactor(scale_factor),
+        ),
+        (
+            "Metrics",
+            "style/Metrics.qml",
+            lambda obj: obj.setScaleFactor(scale_factor),
+        ),
         ("SVGLibrary", "style/SVGLibrary.qml", None),
-        ("Typography", "style/Typography.qml", None),
+        (
+            "Typography",
+            "style/Typography.qml",
+            lambda obj: obj.setScaleFactor(scale_factor),
+        ),
         ("UiData", "data/UiData.qml", None),
         ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),
     ]

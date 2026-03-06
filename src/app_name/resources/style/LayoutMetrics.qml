@@ -10,47 +10,60 @@ QtObject {
         window = win
     }
 
+    function initialize(factor) {
+        scaleFactor = factor
+    }
+
     property real scaleFactor: 1.0
     property real unit: (Math.min(w, h) / 100) * scaleFactor
+    property real sideBarWidthOverride: -1
+
+    function setScaleFactor(factor) {
+        scaleFactor = factor
+    }
+
+    onWChanged: sideBarWidthOverride = -1
+    onHChanged: sideBarWidthOverride = -1
+    onScaleFactorChanged: sideBarWidthOverride = -1
 
     //--- Spacing ---
-    readonly property QtObject spacing: QtObject {
-        readonly property real xxs: unit * 0.25
-        readonly property real xs: unit * 0.5
-        readonly property real sm: unit
-        readonly property real md: unit * 1.5
-        readonly property real lg: unit * 2
-        readonly property real xl: unit * 3
-        readonly property real xxl: unit * 4
+    property QtObject spacing: QtObject {
+        property real xxs: unit * 0.25
+        property real xs: unit * 0.5
+        property real sm: unit
+        property real md: unit * 1.5
+        property real lg: unit * 2
+        property real xl: unit * 3
+        property real xxl: unit * 4
     }
 
     //--- Sizes ---
-    readonly property QtObject size: QtObject {
-        readonly property real topBarHeight: unit * 7
-        readonly property real sideBarWidth: unit * 50
-        readonly property real controlHeight: unit * 2.5
-        readonly property real controlHeightCompact: unit * 2
-        readonly property real buttonWidth: unit * 15
-        readonly property real comboBoxWidth: unit * 40
-        readonly property real sliderWidth: unit * 25
-        readonly property real spinBoxWidth: unit * 10
+    property QtObject size: QtObject {
+        property real topBarHeight: unit * 7
+        property real sideBarWidth: sideBarWidthOverride > 0 ? sideBarWidthOverride : unit * 50
+        property real controlHeight: unit * 2.5
+        property real controlHeightCompact: unit * 2
+        property real buttonWidth: unit * 15
+        property real comboBoxWidth: unit * 40
+        property real sliderWidth: unit * 25
+        property real spinBoxWidth: unit * 10
 
-        readonly property real iconS: unit * 2
-        readonly property real iconM: unit * 3
-        readonly property real iconL: unit * 4
+        property real iconS: unit * 2
+        property real iconM: unit * 3
+        property real iconL: unit * 4
     }
 
     //--- Radius ---
-    readonly property QtObject radius: QtObject {
-        readonly property real s: unit * 0.5
-        readonly property real m: unit
-        readonly property real xl: unit * 2
+    property QtObject radius: QtObject {
+        property real s: unit * 0.5
+        property real m: unit
+        property real xl: unit * 2
     }
 
     //--- Borders ---
-    readonly property QtObject border: QtObject {
-        readonly property real s: unit * 0.125
-        readonly property real m: unit * 0.25
-        readonly property real l: unit * 0.375
+    property QtObject border: QtObject {
+        property real s: unit * 0.125
+        property real m: unit * 0.25
+        property real l: unit * 0.375
     }
 }

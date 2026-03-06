@@ -9,17 +9,11 @@ Rectangle {
     property bool collapsed: false
     property bool expanded: false
     property int currentIndex: -1
-    property real customWidth: LayoutMetrics.size.sideBarWidth
 
     signal navigationClicked(int index)
 
     function toggle() {
         expanded = !expanded
-    }
-
-    function onEscapePressed(event) {
-        expanded = false
-        event.accepted = true
     }
 
     function getIconUrl(iconName) {
@@ -31,13 +25,17 @@ Rectangle {
         }
     }
 
-    width: !expanded ? 0 : (collapsed ? LayoutMetrics.spacing.xxl * 2.5 : customWidth)
+    width: !expanded ? 0 : (collapsed ? LayoutMetrics.spacing.xxl * 2.5 : LayoutMetrics.size.sideBarWidth)
     height: parent.height
     color: Theme.backgroundColor
     clip: true
-    focus: true
 
-    Keys.onEscapePressed: (event) => onEscapePressed(event)
+    Behavior on width {
+        NumberAnimation {
+            duration: 150
+            easing.type: Easing.OutCubic
+        }
+    }
 
     Rectangle {
         width: LayoutMetrics.border.m
@@ -58,47 +56,6 @@ Rectangle {
         height: parent.height
         color: Theme.dividerColor
         anchors.left: parent.left
-    }
-
-    Rectangle {
-        id: resizeHandle
-        width: LayoutMetrics.spacing.md
-        height: parent.height
-        color: "transparent"
-        anchors.right: parent.right
-        anchors.top: parent.top
-
-        MouseArea {
-            id: resizeArea
-            anchors.fill: parent
-            cursorShape: Qt.SizeHorCursor
-            property real startX: 0
-            property real startWidth: 0
-
-            onPressed: {
-                startX = mouseX
-                startWidth = sidebar.customWidth
-            }
-
-            onMouseXChanged: {
-                if (pressed) {
-                    var delta = mouseX - startX
-                    var newWidth = startWidth + delta
-                    var minWidth = LayoutMetrics.size.sideBarWidth * 0.5
-                    var maxWidth = (sidebar.parent ? sidebar.parent.width : LayoutMetrics.size.sideBarWidth) * 0.4
-                    var clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth))
-                    sidebar.customWidth = clampedWidth
-                    sidebar.width = clampedWidth
-                }
-            }
-        }
-    }
-
-    Behavior on width {
-        NumberAnimation {
-            duration: 200
-            easing.type: Easing.OutCubic
-        }
     }
 
     Column {
