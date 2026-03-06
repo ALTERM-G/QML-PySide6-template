@@ -109,10 +109,21 @@ def main():
 
     # ---------------- Load main.qml -----------------
     main_qml = src_path / "ui" / "main.qml"
-    engine.load(QUrl.fromLocalFile(str(main_qml)))
+
+    if not main_qml.exists():
+        print(f"Error: main.qml not found at {main_qml}", file=sys.stderr)
+        sys.exit(-1)
+
+    try:
+        engine.load(QUrl.fromLocalFile(str(main_qml)))
+    except Exception as e:
+        print(f"Error loading QML: {e}", file=sys.stderr)
+        sys.exit(-1)
 
     if not engine.rootObjects():
+        print(f"Error: Failed to load main.qml", file=sys.stderr)
         sys.exit(-1)
+
     exit_code = app.exec()
     sys.exit(exit_code)
 

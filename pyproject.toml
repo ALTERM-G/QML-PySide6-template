@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-qml-app = "main:main"
+qml-app = "run:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

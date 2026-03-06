@@ -21,6 +21,8 @@ Rectangle {
     IconButton {
         id: leftSidebarButton
         iconPath: SVGLibrary.leftSidebar
+        buttonWidth: LayoutMetrics.size.iconL * 0.9
+        buttonHeight: LayoutMetrics.size.iconL * 0.9
         anchors.left: parent.left
         anchors.leftMargin: LayoutMetrics.spacing.md
         anchors.verticalCenter: parent.verticalCenter

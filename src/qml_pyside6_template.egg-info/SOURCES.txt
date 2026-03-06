@@ -5,6 +5,7 @@ src/app_name/backend/__init__.py
 src/app_name/backend/controller.py
 src/app_name/backend/logic/__init__.py
 src/app_name/backend/viewmodels/__init__.py
+src/app_name/backend/viewmodels/base_vm.py
 src/app_name/backend/viewmodels/main_vm.py
 src/app_name/backend/viewmodels/settings_vm.py
 src/app_name/backend/workers/__init__.py
