@@ -4,10 +4,8 @@ import QtQuick.Controls
 SpinBox {
     id: spinBox
     width: LayoutMetrics.size.spinBoxWidth
-    height: LayoutMetrics.size.controlHeight
+    height: LayoutMetrics.size.controlHeightHuge
     stepSize: 10
-    from: 0
-    to: 1000
 
     function setFrom(newFrom) { spinBox.from = newFrom }
     function setTo(newTo) { spinBox.to = newTo }
