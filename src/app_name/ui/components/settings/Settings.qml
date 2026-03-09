@@ -30,12 +30,47 @@ Item {
         x: (LayoutMetrics.window.width - width) / 2
         y: LayoutMetrics.size.topBarHeight + (LayoutMetrics.window.height - LayoutMetrics.size.topBarHeight - height) / 2
 
+        Shortcut {
+            sequence: "Ctrl+Tab"
+            enabled: settingsPopup.opened
+            onActivated: tabBar.currentIndex = (tabBar.currentIndex + 1) % tabBar.tabData.length
+        }
+
         background: Surface {
             anchors.fill: parent
 
+            IconButton {
+                anchors.top: parent.top
+                anchors.topMargin: LayoutMetrics.spacing.xl
+                anchors.left: parent.left
+                anchors.leftMargin: LayoutMetrics.spacing.xl
+                iconPath: SVGLibrary.back
+                onPressed: { settingsPopup.close() }
+            }
+
+            Title {
+                id: title
+                text: "Settings"
+                anchors.top: parent.top
+                anchors.topMargin: LayoutMetrics.spacing.xl
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            TabBar {
+                id: tabBar
+                anchors.top: title.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.topMargin: LayoutMetrics.spacing.xxl * 1.5
+                tabData: ["General", "Appearance", "Advanced"]
+            }
+
             ScrollView {
-                anchors.fill: parent
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: tabBar.bottom
+                anchors.bottom: parent.bottom
                 contentHeight: scrollContent.height
+                clip: true
                 ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
                 Item {
@@ -43,27 +78,18 @@ Item {
                     width: parent.width
                     height: contentColumn.implicitHeight + title.height + LayoutMetrics.spacing.xl * 3
 
-                    IconButton {
+                    Rectangle {
                         anchors.top: parent.top
-                        anchors.topMargin: LayoutMetrics.spacing.xl
-                        anchors.left: parent.left
-                        anchors.leftMargin: LayoutMetrics.spacing.xl
-                        iconPath: SVGLibrary.back
-                        onPressed: { settingsPopup.close() }
-                    }
-
-                    Title {
-                        id: title
-                        text: "Settings"
-                        anchors.top: parent.top
-                        anchors.topMargin: LayoutMetrics.spacing.xl
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.topMargin: LayoutMetrics.spacing.md
+                        width: parent.width
+                        height: LayoutMetrics.spacing.xxs
+                        color: Theme.dividerColor
                     }
 
                     Column {
                         id: contentColumn
-                        anchors.top: title.bottom
-                        anchors.topMargin: LayoutMetrics.spacing.xl
+                        anchors.top: parent.top
+                        anchors.topMargin: LayoutMetrics.spacing.xxl
                         anchors.horizontalCenter: parent.horizontalCenter
                         spacing: LayoutMetrics.spacing.md
 
@@ -181,7 +207,7 @@ Item {
                                     to: 200
                                     value: scaleRow.scaleValue
 
-                                    onValueModified: {
+                                    onValueChanged: {
                                         if (scaleRow.scaleValue !== value) {
                                             scaleRow.scaleValue = value
                                             slider.value = value

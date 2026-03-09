@@ -30,6 +30,7 @@ QtObject {
     property int h4: round(1.2)
     property int h5: round(1.1)
     property int h6: round(1.0)
+    property int body: round(0.9)
     property int caption: round(0.7)
 
     function setWindow(win) {

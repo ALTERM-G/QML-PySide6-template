@@ -48,10 +48,12 @@ QtObject {
         property real comboBoxWidth: unit * 40
         property real sliderWidth: unit * 25
         property real spinBoxWidth: unit * 10
+        property real tabBarWidth: unit * 50
 
         property real iconS: unit * 2
         property real iconM: unit * 3
         property real iconL: unit * 4
+        property real iconXl: unit * 5
     }
 
     //--- Radius ---

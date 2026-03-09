@@ -11,7 +11,7 @@ Rectangle {
 
     Rectangle {
         id: divider
-        height: 2
+        height: LayoutMetrics.spacing.xxs
         color: Theme.dividerColor
         anchors.left: parent.left
         anchors.right: parent.right

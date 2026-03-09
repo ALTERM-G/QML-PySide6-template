@@ -4,8 +4,8 @@ import components
 Rectangle {
     id: root
     color: Theme.backgroundColor
-    implicitHeight: LayoutMetrics.size.controlHeightCompact
-    implicitWidth: LayoutMetrics.size.comboBoxWidth
+    implicitHeight: LayoutMetrics.size.controlHeightHuge
+    implicitWidth: LayoutMetrics.size.tabBarWidth
     border.color: Theme.borderColor
     border.width: LayoutMetrics.border.m
     radius: LayoutMetrics.radius.m
@@ -32,24 +32,11 @@ Rectangle {
                 spacing: LayoutMetrics.spacing.sm
                 anchors.centerIn: parent
 
-                SVGObject {
-                    id: tabIcon
-                    path: tabData[index].icon
-                    color: listView.currentIndex === index ? Theme.borderColor : Theme.textColor
-                    width: LayoutMetrics.size.iconS
-                    height: LayoutMetrics.size.iconS
-
-                    Behavior on color {
-                        ColorAnimation { duration: 150; easing.type: Easing.InOutQuad }
-                    }
-                }
-
                 Label {
                     id: tabText
-                    text: tabData[index].name
+                    text: typeof tabData[index] === "string" ? tabData[index] : (tabData[index] && tabData[index].name !== undefined ? tabData[index].name : "")
                     color: listView.currentIndex === index ? Theme.borderColor : Theme.textColor
-                    font.underline: false
-                    pointSize: Typography.h6
+                    pointSize: Typography.body
                     font.bold: listView.currentIndex === index
 
                     Behavior on color {
