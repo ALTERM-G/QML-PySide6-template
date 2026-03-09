@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import components
 
 SpinBox {
     id: spinBox
@@ -51,19 +52,20 @@ SpinBox {
 
     up.indicator: Rectangle {
         x: spinBox.width - width
-        height: spinBox.height / 2
-        width: LayoutMetrics.size.iconL
+        height: spinBox.height / 4
+        width: LayoutMetrics.size.iconS
         color: Theme.backgroundColor
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.topMargin: LayoutMetrics.spacing.sm
         anchors.rightMargin: LayoutMetrics.spacing.sm
 
-        Text {
-            text: "▴"
+        SVGObject {
+            path: SVGLibrary.chevronUp
             anchors.centerIn: parent
             color: upMouseArea.containsMouse ? Theme.themeColor : Theme.textColor
-            font.pixelSize: Typography.h5
+            width: LayoutMetrics.size.iconS
+            height: LayoutMetrics.size.iconS
         }
 
         MouseArea {
@@ -76,19 +78,20 @@ SpinBox {
     }
 
     down.indicator: Rectangle {
-        width: LayoutMetrics.size.iconL
-        height: spinBox.height / 2
+        width: LayoutMetrics.size.iconS
+        height: spinBox.height / 4
         color: Theme.backgroundColor
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.bottomMargin: LayoutMetrics.spacing.sm
         anchors.rightMargin: LayoutMetrics.spacing.sm
 
-        Text {
-            text: "▾"
+        SVGObject {
+            path: SVGLibrary.chevronDown
             anchors.centerIn: parent
             color: downMouseArea.containsMouse ? Theme.themeColor : Theme.textColor
-            font.pixelSize: Typography.h5
+            width: LayoutMetrics.size.iconS
+            height: LayoutMetrics.size.iconS
         }
 
         MouseArea {

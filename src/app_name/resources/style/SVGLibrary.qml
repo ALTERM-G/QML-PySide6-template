@@ -7,6 +7,9 @@ QtObject {
     readonly property url leftSidebar: Qt.resolvedUrl("../assets/icons/navigation/left_sidebar.svg")
     readonly property url home: Qt.resolvedUrl("../assets/icons/navigation/home.svg")
     readonly property url info: Qt.resolvedUrl("../assets/icons/navigation/info.svg")
+    readonly property url dropDown: Qt.resolvedUrl("../assets/icons/navigation/drop_down.svg")
     readonly property url chevronLeft: Qt.resolvedUrl("../assets/icons/navigation/chevron_left.svg")
     readonly property url chevronRight: Qt.resolvedUrl("../assets/icons/navigation/chevron_right.svg")
+    readonly property url chevronUp: Qt.resolvedUrl("../assets/icons/navigation/chevron_up.svg")
+    readonly property url chevronDown: Qt.resolvedUrl("../assets/icons/navigation/chevron_down.svg")
 }

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import components as Components
 
 ComboBox {
     id: control
@@ -23,11 +24,10 @@ ComboBox {
         Behavior on color { ColorAnimation { duration: 150 } }
     }
 
-    indicator: Text {
+    indicator: Components.SVGObject {
         id: arrow
-        text: "▾"
+        path: SVGLibrary.dropDown
         color: contentItem.color
-        font.pixelSize: Typography.h1
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
@@ -41,6 +41,7 @@ ComboBox {
             }
         }
     }
+
 
     background: Rectangle {
         anchors.fill: parent
@@ -57,19 +58,34 @@ ComboBox {
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-            onClicked: control.open()
+            onClicked: {
+                if (control.count - (control.currentIndex >= 0 ? 1 : 0) > 0)
+                    control.open()
+            }
         }
     }
 
     popup: Popup {
         id: dropdownPopup
         property int horizontalMargin: 8
+        property int excludedIndex: control.currentIndex
+        readonly property real delegateHeight: control.optionHeight * 1.4
+        readonly property int visibleOptionCount: Math.max(
+            0,
+            control.count - (excludedIndex >= 0 ? 1 : 0)
+        )
+
         width: control.width - horizontalMargin * 2
-        implicitHeight: control.count * control.optionHeight * 1.4 + control.popupPadding * 2
+        implicitHeight: visibleOptionCount * delegateHeight + control.popupPadding * 2
 
         x: horizontalMargin
         y: control.height - LayoutMetrics.border.m
         clip: true
+
+        onVisibleChanged: {
+            if (visible)
+                excludedIndex = control.currentIndex
+        }
 
         enter: Transition {
             ParallelAnimation {
@@ -111,8 +127,10 @@ ComboBox {
                 model: control.model
 
                 delegate: Rectangle {
+                    visible: index !== dropdownPopup.excludedIndex
+                    enabled: visible
                     width: parent.width
-                    height: control.optionHeight * 1.4
+                    height: visible ? dropdownPopup.delegateHeight : 0
                     radius: LayoutMetrics.radius.m
                     color: hovered
                            ? Theme.hoverBackgroundColor
