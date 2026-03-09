@@ -41,13 +41,13 @@ QtObject {
     property QtObject size: QtObject {
         property real topBarHeight: unit * 7
         property real sideBarWidth: sideBarWidthOverride > 0 ? sideBarWidthOverride : unit * 50
-        property real controlHeightHuge: unit * 3.5
+        property real controlHeightHuge: unit * 4.5
         property real controlHeight: unit * 2.5
         property real controlHeightCompact: unit * 2
         property real buttonWidth: unit * 15
         property real comboBoxWidth: unit * 40
         property real sliderWidth: unit * 25
-        property real spinBoxWidth: unit * 15
+        property real spinBoxWidth: unit * 10
 
         property real iconS: unit * 2
         property real iconM: unit * 3

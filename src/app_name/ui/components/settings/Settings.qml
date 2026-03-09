@@ -133,59 +133,60 @@ Item {
                             }
 
                             Row {
-                                anchors.horizontalCenter: parent.horizontalCenter
+                                id: scaleRow
                                 spacing: LayoutMetrics.spacing.md
+                                property int scaleValue: 100
+                                property bool initialized: false
+
+                                function applyScale() {
+                                    var factor = 0.5 + scaleValue / 200
+                                    LayoutMetrics.scaleFactor = factor
+                                    Typography.scaleFactor = factor
+                                    Metrics.scaleFactor = factor
+                                    controller.save_scale_factor(factor)
+                                }
+
+                                Connections {
+                                    target: settingsPopup
+                                    function onOpened() {
+                                        var savedFactor = controller.get_scale_factor()
+                                        scaleRow.initialized = false
+                                        scaleRow.scaleValue = Math.round((savedFactor - 0.5) * 200)
+                                        slider.value = scaleRow.scaleValue
+                                        spin.value = scaleRow.scaleValue
+                                        scaleRow.initialized = true
+                                    }
+                                }
 
                                 Slider {
-                                    id: scaleSlider
+                                    id: slider
                                     from: 0
                                     to: 200
+                                    value: scaleRow.scaleValue
 
-                                    onValueChanged: {
-                                        if (initialized) {
-                                            var factor = 0.5 + (value / 200)
-                                            LayoutMetrics.scaleFactor = factor
-                                            Typography.scaleFactor = factor
-                                            Metrics.scaleFactor = factor
-                                            controller.save_scale_factor(factor)
-                                        }
-                                    }
-
-                                    property bool initialized: false
-
-                                    Connections {
-                                        target: settingsPopup
-                                        function onOpened() {
-                                            var savedFactor = controller.get_scale_factor()
-                                            scaleSlider.initialized = false
-                                            scaleSlider.value = (savedFactor - 0.5) * 100
-                                            scaleSlider.initialized = true
+                                    onMoved: {
+                                        var newValue = Math.round(value)
+                                        if (scaleRow.scaleValue !== newValue) {
+                                            scaleRow.scaleValue = newValue
+                                            spin.value = newValue
+                                            if (scaleRow.initialized)
+                                                scaleRow.applyScale()
                                         }
                                     }
                                 }
 
                                 SpinBox {
-                                    id: spinBox
+                                    id: spin
                                     from: 0
                                     to: 200
-                                    onValueChanged: {
-                                        if (initialized) {
-                                            var factor = 0.5 + (value / 200)
-                                            LayoutMetrics.scaleFactor = factor
-                                            Typography.scaleFactor = factor
-                                            Metrics.scaleFactor = factor
-                                            controller.save_scale_factor(factor)
-                                        }
-                                    }
-                                    property bool initialized: false
+                                    value: scaleRow.scaleValue
 
-                                    Connections {
-                                        target: settingsPopup
-                                        function onOpened() {
-                                            var savedFactor = controller.get_scale_factor()
-                                            spinBox.initialized = false
-                                            spinBox.value = (savedFactor - 0.5) * 100
-                                            spinBox.initialized = true
+                                    onValueModified: {
+                                        if (scaleRow.scaleValue !== value) {
+                                            scaleRow.scaleValue = value
+                                            slider.value = value
+                                            if (scaleRow.initialized)
+                                                scaleRow.applyScale()
                                         }
                                     }
                                 }

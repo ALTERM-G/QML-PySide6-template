@@ -27,6 +27,12 @@ Rectangle {
         anchors.leftMargin: LayoutMetrics.spacing.md
         anchors.verticalCenter: parent.verticalCenter
         onPressed: topBar.sidebarToggleClicked()
+
+        ToolTip {
+            text: UiData.titles.sideBar
+            visible: leftSidebarButton.hovered
+            delay: 600
+        }
     }
 
     signal sidebarToggleClicked()

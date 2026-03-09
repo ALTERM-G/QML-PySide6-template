@@ -5,5 +5,6 @@ QtObject {
     readonly property var titles: ({
         appName: "Template_",
         settings: "Settings",
+        sideBar: "Side Bar"
     })
 }

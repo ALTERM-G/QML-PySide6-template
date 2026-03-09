@@ -122,7 +122,7 @@ class Controller(QObject):
     def get_scale_factor(self):
         return self._load_settings().get("scaleFactor", 1.0)
 
-    # View Model Properties
+    # View Model
     @Property(QObject, constant=True)
     def mainVM(self):
         return self._main_vm
