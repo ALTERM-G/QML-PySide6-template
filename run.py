@@ -47,7 +47,7 @@ def main():
     loaded_fonts = {}
 
     if font_dir.exists():
-        for font_path in font_dir.glob("*.ttf"):
+        for font_path in font_dir.rglob("*.ttf"):
             font_id = QFontDatabase.addApplicationFont(str(font_path))
             if font_id == -1:
                 print(f"Failed to load font '{font_path.name}'", file=sys.stderr)

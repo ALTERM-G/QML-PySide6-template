@@ -44,19 +44,7 @@ Rectangle {
         anchors.right: parent.right
     }
 
-    Rectangle {
-        height: LayoutMetrics.border.m
-        width: parent.width
-        color: Theme.dividerColor
-        anchors.bottom: parent.bottom
-    }
 
-    Rectangle {
-        width: LayoutMetrics.border.m
-        height: parent.height
-        color: Theme.dividerColor
-        anchors.left: parent.left
-    }
 
     Column {
         anchors.fill: parent
