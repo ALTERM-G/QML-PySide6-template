@@ -1,0 +1,21 @@
+{
+    "language": "Italiano",
+    "titles": {
+        "appName": "Modello_",
+        "settings": "Impostazioni",
+        "sideBar": "Barra laterale"
+    },
+    "tabs": {
+        "general": "Generale",
+        "appearance": "Aspetto",
+        "advanced": "Avanzate"
+    },
+    "greeting": "Divertiti!",
+    "labels": {
+        "theme": "Tema",
+        "font": "Carattere",
+        "scale": "Scala",
+        "language": "Lingua"
+    },
+    "languages": ["Inglese", "Francese", "Tedesco", "Spagnolo", "Italiano"]
+}

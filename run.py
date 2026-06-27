@@ -6,9 +6,11 @@ from PySide6.QtCore import QUrl, QTimer
 from PySide6.QtGui import QFont, QFontDatabase, QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
 from app_name.backend.controller import Controller
+from app_name.backend.language_manager import LanguageManager
 
 _qml_objects = []
 _data_object = None
+_language_manager = None
 
 
 def main():
@@ -77,6 +79,11 @@ def main():
     engine.rootContext().setContextProperty("controller", controller)
     engine.rootContext().setContextProperty("mainVM", controller.mainVM)
     engine.rootContext().setContextProperty("settingsVM", controller.settingsVM)
+
+    # ---------------- Language ----------------
+    global _language_manager
+    _language_manager = LanguageManager(controller)
+    engine.rootContext().setContextProperty("Lang", _language_manager)
 
     # ---------------- Load scale factor ----------------
     scale_factor = controller.get_scale_factor()

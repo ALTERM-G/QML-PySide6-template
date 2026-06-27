@@ -1,0 +1,21 @@
+{
+    "language": "Français",
+    "titles": {
+        "appName": "Modèle_",
+        "settings": "Paramètres",
+        "sideBar": "Barre latérale"
+    },
+    "tabs": {
+        "general": "Général",
+        "appearance": "Apparence",
+        "advanced": "Avancé"
+    },
+    "greeting": "Amusez-vous bien !",
+    "labels": {
+        "theme": "Thème",
+        "font": "Police",
+        "scale": "Échelle",
+        "language": "Langue"
+    },
+    "languages": ["Anglais", "Français", "Espagnol", "Allemand"]
+}

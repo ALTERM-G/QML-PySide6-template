@@ -29,7 +29,7 @@ Rectangle {
         onPressed: topBar.sidebarToggleClicked()
 
         ToolTip {
-            text: UiData.titles.sideBar
+            text: Lang.titles.sideBar
             visible: leftSidebarButton.hovered
             delay: 600
         }
@@ -43,7 +43,7 @@ Rectangle {
         anchors.left: leftSidebarButton.left
         anchors.leftMargin: LayoutMetrics.spacing.xxl * 1.5
         anchors.verticalCenter: parent.verticalCenter
-        text: UiData.titles.appName
+        text: Lang.titles.appName
         font.pointSize: Typography.h3
         font.family: Typography.fontBold
         verticalAlignment: Text.AlignVCenter

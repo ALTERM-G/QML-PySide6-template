@@ -146,7 +146,7 @@ ComboBox {
                         onExited: parent.hovered = false
                         onClicked: {
                             control.currentIndex = index
-                            control.popup.close()
+                            dropdownPopup.close()
                         }
                     }
 

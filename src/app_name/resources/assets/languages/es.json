@@ -1,0 +1,21 @@
+{
+    "language": "Español",
+    "titles": {
+        "appName": "Plantilla_",
+        "settings": "Ajustes",
+        "sideBar": "Barra lateral"
+    },
+    "tabs": {
+        "general": "General",
+        "appearance": "Apariencia",
+        "advanced": "Avanzado"
+    },
+    "greeting": "¡Diviértete!",
+    "labels": {
+        "theme": "Tema",
+        "font": "Fuente",
+        "scale": "Escala",
+        "language": "Idioma"
+    },
+    "languages": ["Inglés", "Francés", "Alemán", "Español", "Italiano"]
+}

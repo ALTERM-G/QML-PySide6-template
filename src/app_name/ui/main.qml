@@ -12,7 +12,7 @@ Window {
         LayoutMetrics.bindToWindow(window)
         Typography.setWindow(window)
     }
-    title: "QML-PySide6 Template"
+    title: Lang.titles.appName + " - " + Lang.titles.settings
 
     TopBar {
         id: topBar
@@ -37,6 +37,19 @@ Window {
         z: 100
     }
 
+    MouseArea {
+        anchors.top: topBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        enabled: sidebar.expanded && sidebar.autoCollapse
+        propagateComposedEvents: true
+        onPressed: function (mouse) {
+            sidebar.expanded = false
+            mouse.accepted = false
+        }
+    }
+
     Rectangle {
         id: contentArea
         color: Theme.backgroundColor
@@ -52,7 +65,7 @@ Window {
 
             Title {
                 id: title
-                text: "Have Fun !"
+                text: Lang.greeting
                 anchors.centerIn: parent
             }
         }

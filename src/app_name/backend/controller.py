@@ -24,7 +24,15 @@ class Controller(QObject):
         self._main_vm = MainVM(self)
         self._settings_vm = SettingsVM(self)
 
+        self._current_language = self.get_language()
         self._load_all_themes()
+
+    _language_files = ["en.json", "fr.json", "de.json", "es.json", "it.json"]
+    _languages_path = (
+        Path(__file__).parent.parent / "resources" / "assets" / "languages"
+    )
+
+    languageChanged = Signal()
 
     def _load_all_themes(self):
         self._base_config = {}
@@ -121,6 +129,39 @@ class Controller(QObject):
     @Slot(result=float)
     def get_scale_factor(self):
         return self._load_settings().get("scaleFactor", 1.0)
+
+    # -------------- Language --------------
+
+    @Slot(int)
+    def save_language(self, index):
+        try:
+            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
+            settings = self._load_settings()
+            settings["language"] = index
+            with open(self._settings_path, "w") as f:
+                json.dump(settings, f, indent=2)
+            self._current_language = index
+            self.languageChanged.emit()
+        except Exception as e:
+            print(f"Error saving language: {e}")
+
+    @Slot(result=int)
+    def get_language(self):
+        idx = self._load_settings().get("language", 0)
+        return idx if 0 <= idx < len(self._language_files) else 0
+
+    @Slot(result=dict)
+    def get_language_data(self):
+        try:
+            idx = self.get_language()
+            if 0 <= idx < len(self._language_files):
+                path = self._languages_path / self._language_files[idx]
+                if path.exists():
+                    with open(path) as f:
+                        return json.load(f)
+        except Exception as e:
+            print(f"Error loading language: {e}")
+        return {}
 
     # View Model
     @Property(QObject, constant=True)

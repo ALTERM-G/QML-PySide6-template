@@ -9,6 +9,7 @@ Rectangle {
     property bool collapsed: false
     property bool expanded: false
     property bool resizing: false
+    property bool autoCollapse: true
     property int currentIndex: -1
     property real resizeRatio: 1.0
     property real resizableWidth: LayoutMetrics.size.sideBarWidth * resizeRatio

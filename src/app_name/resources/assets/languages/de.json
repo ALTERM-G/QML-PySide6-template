@@ -1,0 +1,21 @@
+{
+    "language": "Deutsch",
+    "titles": {
+        "appName": "Vorlage_",
+        "settings": "Einstellungen",
+        "sideBar": "Seitenleiste"
+    },
+    "tabs": {
+        "general": "Allgemein",
+        "appearance": "Erscheinungsbild",
+        "advanced": "Erweitert"
+    },
+    "greeting": "Viel Spaß!",
+    "labels": {
+        "theme": "Thema",
+        "font": "Schriftart",
+        "scale": "Skalierung",
+        "language": "Sprache"
+    },
+    "languages": ["Englisch", "Französisch", "Spanisch", "Deutsch"]
+}

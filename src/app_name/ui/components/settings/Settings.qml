@@ -13,7 +13,7 @@ Item {
         iconPath: SVGLibrary.settings
 
         ToolTip {
-            text: UiData.titles.settings
+            text: Lang.titles.settings
             visible: settingsButton.hovered
             delay: 600
         }
@@ -50,7 +50,7 @@ Item {
 
             Title {
                 id: title
-                text: "Settings"
+                text: Lang.titles.settings
                 anchors.top: parent.top
                 anchors.topMargin: LayoutMetrics.spacing.xl
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -61,7 +61,7 @@ Item {
                 anchors.top: title.top
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.topMargin: LayoutMetrics.spacing.xxl * 1.5
-                tabData: ["General", "Appearance", "Advanced"]
+                tabData: [Lang.tabs.general, Lang.tabs.appearance, Lang.tabs.advanced]
             }
 
             ScrollView {
@@ -85,134 +85,173 @@ Item {
                         height: LayoutMetrics.spacing.xxs
                         color: Theme.dividerColor
                     }
-
                     Column {
                         id: contentColumn
                         anchors.top: parent.top
                         anchors.topMargin: LayoutMetrics.spacing.xxl
                         anchors.horizontalCenter: parent.horizontalCenter
-                        spacing: LayoutMetrics.spacing.md
+                        spacing: LayoutMetrics.spacing.lg
 
+                        // ---- General Tab ----
                         Column {
-                            id: theme
+                            visible: tabBar.currentIndex === 0
                             anchors.horizontalCenter: parent.horizontalCenter
-                            spacing: LayoutMetrics.spacing.xxs
+                            spacing: LayoutMetrics.spacing.md
 
-                            Label {
-                                text: "Theme"
-                                style_2: true
-                            }
+                            Label { text: Lang.labels.language; style_2: true }
 
                             ComboBox {
-                                id: themeComboBox
+                                id: languageCombo
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.topMargin: LayoutMetrics.spacing.xxl
-                                model: Theme.themeNames
+                                model: ["English", "Français", "Deutsch", "Español", "Italiano"]
 
-                                onCurrentTextChanged: {
+                                property bool initialized: false
+
+                                onCurrentIndexChanged: {
                                     if (initialized) {
-                                        Theme.setTheme(currentText)
+                                        controller.save_language(currentIndex)
                                     }
                                 }
-
-                                property bool initialized: false
 
                                 Connections {
                                     target: settingsPopup
                                     function onOpened() {
-                                        var currentThemeIndex = themeComboBox.model.indexOf(Theme.currentTheme)
-                                        if (currentThemeIndex !== -1) {
-                                            themeComboBox.initialized = false
-                                            themeComboBox.currentIndex = currentThemeIndex
-                                            themeComboBox.initialized = true
-                                        }
+                                        languageCombo.initialized = false
+                                        languageCombo.currentIndex = controller.get_language()
+                                        languageCombo.initialized = true
                                     }
                                 }
                             }
                         }
 
+                        // ---- Appearance Tab ----
                         Column {
-                            id: font
+                            visible: tabBar.currentIndex === 1
                             anchors.horizontalCenter: parent.horizontalCenter
-                            spacing: LayoutMetrics.spacing.xxs
+                            spacing: LayoutMetrics.spacing.md
 
-                            Label {
-                                text: "Font"
-                                style_2: true
-                            }
-
-                            ComboBox {
-                                model: ["JetBrains Mono", "Roboto", "Times New Roman"]
+                            Column {
+                                id: theme
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.topMargin: LayoutMetrics.spacing.xxl
-                            }
-                        }
+                                spacing: LayoutMetrics.spacing.xxs
 
-                        Column {
-                            id: scale
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            spacing: LayoutMetrics.spacing.xxs
-
-                            Label {
-                                text: "Scale"
-                                style_2: true
-                            }
-
-                            Row {
-                                id: scaleRow
-                                spacing: LayoutMetrics.spacing.md
-                                property int scaleValue: 100
-                                property bool initialized: false
-
-                                function applyScale() {
-                                    var factor = 0.5 + scaleValue / 200
-                                    LayoutMetrics.scaleFactor = factor
-                                    Typography.scaleFactor = factor
-                                    Metrics.scaleFactor = factor
-                                    controller.save_scale_factor(factor)
+                                Label {
+                                    text: Lang.labels.theme
+                                    style_2: true
                                 }
 
-                                Connections {
-                                    target: settingsPopup
-                                    function onOpened() {
-                                        var savedFactor = controller.get_scale_factor()
-                                        scaleRow.initialized = false
-                                        scaleRow.scaleValue = Math.round((savedFactor - 0.5) * 200)
-                                        slider.value = scaleRow.scaleValue
-                                        spin.value = scaleRow.scaleValue
-                                        scaleRow.initialized = true
+                                ComboBox {
+                                    id: themeComboBox
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.topMargin: LayoutMetrics.spacing.xxl
+
+                                    model: Theme.themeNames
+
+                                    onCurrentTextChanged: {
+                                        if (initialized) {
+                                            Theme.setTheme(currentText)
+                                        }
                                     }
-                                }
 
-                                Slider {
-                                    id: slider
-                                    from: 0
-                                    to: 200
-                                    value: scaleRow.scaleValue
+                                    property bool initialized: false
 
-                                    onMoved: {
-                                        var newValue = Math.round(value)
-                                        if (scaleRow.scaleValue !== newValue) {
-                                            scaleRow.scaleValue = newValue
-                                            spin.value = newValue
-                                            if (scaleRow.initialized)
-                                                scaleRow.applyScale()
+                                    Connections {
+                                        target: settingsPopup
+                                        function onOpened() {
+                                            var currentThemeIndex = themeComboBox.model.indexOf(Theme.currentTheme)
+                                            if (currentThemeIndex !== -1) {
+                                                themeComboBox.initialized = false
+                                                themeComboBox.currentIndex = currentThemeIndex
+                                                themeComboBox.initialized = true
+                                            }
                                         }
                                     }
                                 }
+                            }
 
-                                SpinBox {
-                                    id: spin
-                                    from: 0
-                                    to: 200
-                                    value: scaleRow.scaleValue
+                            Column {
+                                id: font
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                spacing: LayoutMetrics.spacing.xxs
 
-                                    onValueChanged: {
-                                        if (scaleRow.scaleValue !== value) {
-                                            scaleRow.scaleValue = value
-                                            slider.value = value
-                                            if (scaleRow.initialized)
-                                                scaleRow.applyScale()
+                                Label {
+                                    text: Lang.labels.font
+                                    style_2: true
+                                }
+
+                                ComboBox {
+                                    model: ["JetBrains Mono", "Roboto", "Times New Roman"]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.topMargin: LayoutMetrics.spacing.xxl
+                                }
+                            }
+
+                            Column {
+                                id: scale
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                spacing: LayoutMetrics.spacing.xxs
+
+                                Label {
+                                    text: Lang.labels.scale
+                                    style_2: true
+                                }
+
+                                Row {
+                                    id: scaleRow
+                                    spacing: LayoutMetrics.spacing.md
+                                    property int scaleValue: 100
+                                    property bool initialized: false
+
+                                    function applyScale() {
+                                        var factor = 0.5 + scaleValue / 200
+                                        LayoutMetrics.scaleFactor = factor
+                                        Typography.scaleFactor = factor
+                                        Metrics.scaleFactor = factor
+                                        controller.save_scale_factor(factor)
+                                    }
+
+                                    Connections {
+                                        target: settingsPopup
+                                        function onOpened() {
+                                            var savedFactor = controller.get_scale_factor()
+                                            scaleRow.initialized = false
+                                            scaleRow.scaleValue = Math.round((savedFactor - 0.5) * 200)
+                                            slider.value = scaleRow.scaleValue
+                                            spin.value = scaleRow.scaleValue
+                                            scaleRow.initialized = true
+                                        }
+                                    }
+
+                                    Slider {
+                                        id: slider
+                                        from: 0
+                                        to: 200
+                                        value: scaleRow.scaleValue
+
+                                        onMoved: {
+                                            var newValue = Math.round(value)
+                                            if (scaleRow.scaleValue !== newValue) {
+                                                scaleRow.scaleValue = newValue
+                                                spin.value = newValue
+                                                if (scaleRow.initialized)
+                                                    scaleRow.applyScale()
+                                            }
+                                        }
+                                    }
+
+                                    SpinBox {
+                                        id: spin
+                                        from: 0
+                                        to: 200
+                                        value: scaleRow.scaleValue
+
+                                        onValueChanged: {
+                                            if (scaleRow.scaleValue !== value) {
+                                                scaleRow.scaleValue = value
+                                                slider.value = value
+                                                if (scaleRow.initialized)
+                                                    scaleRow.applyScale()
+                                            }
                                         }
                                     }
                                 }

@@ -1,0 +1,21 @@
+{
+    "language": "English",
+    "titles": {
+        "appName": "Template_",
+        "settings": "Settings",
+        "sideBar": "Side Bar"
+    },
+    "tabs": {
+        "general": "General",
+        "appearance": "Appearance",
+        "advanced": "Advanced"
+    },
+    "greeting": "Have Fun !",
+    "labels": {
+        "theme": "Theme",
+        "font": "Font",
+        "scale": "Scale",
+        "language": "Language"
+    },
+    "languages": ["English", "French", "Spanish", "German"]
+}
