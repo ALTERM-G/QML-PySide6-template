@@ -73,7 +73,7 @@ SpinBox {
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-            onClicked: spinBox.increase()
+            onClicked: spinBox.value = Math.min(spinBox.to, spinBox.value + spinBox.stepSize)
         }
     }
 
@@ -99,7 +99,7 @@ SpinBox {
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-            onClicked: spinBox.decrease()
+            onClicked: spinBox.value = Math.max(spinBox.from, spinBox.value - spinBox.stepSize)
         }
     }
 }
