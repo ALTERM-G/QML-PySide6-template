@@ -16,4 +16,5 @@ ShortcutEditor 1.0 settings/ShortcutEditor.qml
 Settings 1.0 settings/Settings.qml
 SVGObject 1.0 indicators/SVGObject.qml
 Label 1.0 indicators/Label.qml
+Switch 1.0 controls/Switch.qml
 Title 1.0 indicators/Title.qml

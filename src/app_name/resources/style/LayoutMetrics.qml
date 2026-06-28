@@ -15,16 +15,22 @@ QtObject {
     }
 
     property real scaleFactor: 1.0
-    property real unit: (Math.min(w, h) / 100) * scaleFactor
+    property bool isContinuous: true
+    property real unit: ((isContinuous ? Math.min(w, h) : 720) / 100) * scaleFactor
     property real sideBarWidthOverride: -1
 
     function setScaleFactor(factor) {
         scaleFactor = factor
     }
 
+    function setIsContinuous(value) {
+        isContinuous = value
+    }
+
     onWChanged: sideBarWidthOverride = -1
     onHChanged: sideBarWidthOverride = -1
     onScaleFactorChanged: sideBarWidthOverride = -1
+    onIsContinuousChanged: sideBarWidthOverride = -1
 
     //--- Spacing ---
     property QtObject spacing: QtObject {

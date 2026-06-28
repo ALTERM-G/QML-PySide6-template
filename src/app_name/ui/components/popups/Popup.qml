@@ -6,6 +6,7 @@ Popup {
     parent: Overlay.overlay
     modal: true
     focus: true
+    clip: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     transformOrigin: Item.Center
 

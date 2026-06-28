@@ -93,7 +93,10 @@ def main():
         (
             "LayoutMetrics",
             "style/LayoutMetrics.qml",
-            lambda obj: obj.setScaleFactor(scale_factor),
+            lambda obj: (
+                obj.setScaleFactor(scale_factor),
+                obj.setIsContinuous(controller.get_is_continuous()),
+            ),
         ),
         (
             "Metrics",
@@ -104,7 +107,10 @@ def main():
         (
             "Typography",
             "style/Typography.qml",
-            lambda obj: obj.setScaleFactor(scale_factor),
+            lambda obj: (
+                obj.setScaleFactor(scale_factor),
+                obj.setIsContinuous(controller.get_is_continuous()),
+            ),
         ),
         ("UiData", "data/UiData.qml", None),
         ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),

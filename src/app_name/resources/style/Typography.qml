@@ -16,7 +16,8 @@ QtObject {
 
     property var windowRef
     property real scaleFactor: 1.0
-    property real unit: (windowRef ? Math.min(windowRef.width, windowRef.height) / 100 : 7.2) * scaleFactor
+    property bool isContinuous: true
+    property real unit: (windowRef ? (isContinuous ? Math.min(windowRef.width, windowRef.height) / 100 : 7.2) : 7.2) * scaleFactor
 
     function round(value) {
         return Math.round(value * baseSize)
@@ -39,6 +40,10 @@ QtObject {
 
     function setScaleFactor(factor) {
         scaleFactor = factor
+    }
+
+    function setIsContinuous(value) {
+        isContinuous = value
     }
 
     function initialize(factor) {

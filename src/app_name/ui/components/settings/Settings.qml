@@ -122,6 +122,32 @@ Item {
                                     }
                                 }
                             }
+
+                            Label { text: "Responsive scaling"; style_2: true }
+
+                            Switch {
+                                id: responsiveSwitch
+                                property bool initialized: false
+
+                                onCheckedChanged: {
+                                    if (initialized) {
+                                        LayoutMetrics.isContinuous = checked
+                                        Typography.isContinuous = checked
+                                        controller.save_is_continuous(checked)
+                                    }
+                                }
+
+                                Connections {
+                                    target: settingsPopup
+                                    function onOpened() {
+                                        responsiveSwitch.initialized = false
+                                        responsiveSwitch.checked = controller.get_is_continuous()
+                                        LayoutMetrics.isContinuous = responsiveSwitch.checked
+                                        Typography.isContinuous = responsiveSwitch.checked
+                                        responsiveSwitch.initialized = true
+                                    }
+                                }
+                            }
                         }
 
                         // ---- Appearance Tab ----

@@ -130,6 +130,23 @@ class Controller(QObject):
     def get_scale_factor(self):
         return self._load_settings().get("scaleFactor", 1.0)
 
+    # -------------- Scaling Mode --------------
+
+    @Slot(bool)
+    def save_is_continuous(self, value):
+        try:
+            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
+            settings = self._load_settings()
+            settings["isContinuous"] = value
+            with open(self._settings_path, "w") as f:
+                json.dump(settings, f, indent=2)
+        except Exception as e:
+            print(f"Error saving isContinuous: {e}")
+
+    @Slot(result=bool)
+    def get_is_continuous(self):
+        return self._load_settings().get("isContinuous", True)
+
     # -------------- Language --------------
 
     @Slot(int)

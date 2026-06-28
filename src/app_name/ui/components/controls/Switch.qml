@@ -5,14 +5,21 @@ Switch {
     id: control
 
     indicator: Rectangle {
-        implicitWidth: LayoutMetrics.size.controlHeight
-        implicitHeight: LayoutMetrics.size.controlHeight / 2
+        implicitWidth: LayoutMetrics.size.controlHeight * 1.3
+        implicitHeight: LayoutMetrics.size.controlHeight * 0.65
         x: control.leftPadding
         y: parent.height / 2 - height / 2
         radius: height / 2
         color: control.checked ? Theme.themeColor : Theme.borderColor
         border.color: Theme.borderColor
         border.width: control.checked ? 0 : 1
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            acceptedButtons: Qt.NoButton
+        }
 
         Rectangle {
             x: control.checked ? parent.width - width : 0

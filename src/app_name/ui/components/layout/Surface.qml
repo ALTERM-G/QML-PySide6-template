@@ -6,4 +6,5 @@ Rectangle {
     color: Theme.backgroundColor
     border.color: Theme.dividerColor
     border.width: LayoutMetrics.border.m
+    clip: true
 }
