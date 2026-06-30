@@ -19,8 +19,8 @@ QtObject {
         }
     }
 
-    readonly property string fontRegular: baseConfig.fonts ? baseConfig.fonts.regular : "JetBrainsMonoNLApp"
-    readonly property string fontBold: baseConfig.fonts ? baseConfig.fonts.bold : "JetBrainsMonoApp"
+    readonly property string fontRegular: baseConfig.fonts ? baseConfig.fonts.regular : "JetBrains Mono NL"
+    readonly property string fontBold: baseConfig.fonts ? baseConfig.fonts.bold : "JetBrains Mono"
 
     readonly property int iconFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.icon : 24
     readonly property int titleFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.title : 24

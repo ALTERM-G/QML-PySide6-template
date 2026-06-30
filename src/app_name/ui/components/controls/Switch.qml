@@ -5,8 +5,8 @@ Switch {
     id: control
 
     indicator: Rectangle {
-        implicitWidth: LayoutMetrics.size.controlHeight * 1.3
-        implicitHeight: LayoutMetrics.size.controlHeight * 0.65
+        implicitWidth: LayoutMetrics.size.controlHeight * 1.9
+        implicitHeight: LayoutMetrics.size.controlHeight * 1.1
         x: control.leftPadding
         y: parent.height / 2 - height / 2
         radius: height / 2
@@ -26,15 +26,15 @@ Switch {
             width: parent.height
             height: parent.height
             radius: width / 2
-            color: control.down ? Theme.hoverTextColor : Theme.textColor
+            color: control.down ? Theme.hoverBackgroundColor : Theme.textColor
             border.color: Theme.borderColor
             border.width: control.checked ? (control.down ? 1 : 0) : 1
-            
+
             Behavior on x {
                 NumberAnimation { duration: 100 }
             }
         }
-        
+
         Behavior on color {
             ColorAnimation { duration: 150 }
         }

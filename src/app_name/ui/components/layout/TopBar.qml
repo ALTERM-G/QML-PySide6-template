@@ -46,6 +46,7 @@ Rectangle {
         text: Lang.titles.appName
         font.pointSize: Typography.h3
         font.family: Typography.fontBold
+        font.weight: Font.Bold
         verticalAlignment: Text.AlignVCenter
     }
 }

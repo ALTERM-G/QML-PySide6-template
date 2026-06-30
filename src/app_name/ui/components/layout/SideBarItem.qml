@@ -41,6 +41,7 @@ Rectangle {
             text: root.itemText
             font.pixelSize: Typography.h4
             font.family: Typography.fontBold
+            font.weight: Font.Bold
             color: isActive ? Theme.hoverTextColor : Theme.textColor
 
             Behavior on color {

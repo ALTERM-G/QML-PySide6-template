@@ -16,6 +16,7 @@ SpinBox {
         text: spinBox.value.toString()
         font.pixelSize: Typography.h4
         font.family: Typography.fontBold
+        font.weight: Font.Bold
         color: Theme.textColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter

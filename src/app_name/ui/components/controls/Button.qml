@@ -60,6 +60,7 @@ Rectangle {
             text: root.buttonText
             font.pixelSize: Typography.h4
             font.family: Typography.fontBold
+            font.weight: Font.Bold
             color: mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor
 
             Behavior on color {

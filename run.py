@@ -63,9 +63,26 @@ def main():
             print(f"Loaded font '{font_path.name}' with family '{family_name}'")
 
     engine.rootContext().setContextProperty("LoadedFonts", loaded_fonts)
-    main_regular_font_file = "JetBrainsMonoNL-Regular-App.ttf"
-    if main_regular_font_file in loaded_fonts:
-        app.setFont(QFont(loaded_fonts[main_regular_font_file]))
+
+    font_family = "sans-serif"
+    all_loaded_families = set(loaded_fonts.values())
+    if all_loaded_families:
+        font_family = list(all_loaded_families)[0]
+    font_config_path = font_dir / "fonts.json" if font_dir.exists() else None
+    if font_config_path and font_config_path.exists():
+        import json
+        try:
+            with open(font_config_path) as f:
+                cfg = json.load(f)
+            preferred = cfg.get("defaultFamily", "")
+            if preferred in all_loaded_families:
+                font_family = preferred
+        except Exception:
+            pass
+
+    if font_family != "sans-serif":
+        app.setFont(QFont(font_family))
+    engine.rootContext().setContextProperty("FontFamily", font_family)
 
     # ---------------- Icons ----------------
     icon_path = src_path / "resources" / "icons"

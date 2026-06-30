@@ -15,6 +15,7 @@ ToolTip {
         text: customToolTip.text
         color: Theme.textColor
         font.family: Typography.fontBold
+        font.weight: Font.Bold
         font.pointSize: Typography.h6
         padding: LayoutMetrics.spacing.xs
     }

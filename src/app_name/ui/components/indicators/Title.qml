@@ -7,5 +7,6 @@ Text {
     property color textColor: Theme.themeColor
     font.pointSize: pointSize
     font.family: Typography.fontBold
+    font.weight: Font.Bold
     color: textColor
 }

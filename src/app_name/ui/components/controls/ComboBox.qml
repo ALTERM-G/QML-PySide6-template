@@ -15,6 +15,7 @@ ComboBox {
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: Typography.h4
         font.family: Typography.fontBold
+        font.weight: Font.Bold
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: mouseArea.containsMouse
@@ -155,6 +156,7 @@ ComboBox {
                         text: control.textRole ? model[control.textRole] : modelData
                         font.pixelSize: Typography.h4
                         font.family: Typography.fontBold
+                        font.weight: Font.Bold
                         color: hovered ? Theme.hoverTextColor : Theme.textColor
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter

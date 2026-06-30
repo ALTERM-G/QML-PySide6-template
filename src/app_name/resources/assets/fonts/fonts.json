@@ -1,0 +1,7 @@
+{
+    "//": "Drop .ttf files in any subfolder under fonts/ and they're loaded automatically.",
+    "//": "Set 'defaultFamily' to the font family name you want to use (must match a loaded font).",
+    "//": "If not set, the first loaded font family will be used.",
+    "//": "Bold text uses font.weight: Font.Bold, so the family must have Bold weight.",
+    "defaultFamily": "JetBrains Mono"
+}

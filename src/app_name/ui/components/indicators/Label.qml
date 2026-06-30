@@ -8,5 +8,6 @@ Text {
     property color textColor: style_2 ? Theme.borderColor : Theme.textColor
     font.pointSize: pointSize
     font.family: Typography.fontBold
+    font.weight: Font.Bold
     color: textColor
 }

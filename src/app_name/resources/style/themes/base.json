@@ -1,7 +1,7 @@
 {
     "fonts": {
-        "regular": "JetBrainsMonoNLApp",
-        "bold": "JetBrainsMonoApp"
+        "regular": "JetBrains Mono NL",
+        "bold": "JetBrains Mono"
     },
     "fontSizes": {
         "icon": 24,

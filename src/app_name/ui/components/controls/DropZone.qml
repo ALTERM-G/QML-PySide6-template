@@ -97,6 +97,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             width: dropzone.width - 40
             font.family: Typography.fontBold
+            font.weight: Font.Bold
             font.pixelSize: Typography.h1
             color: Theme.textColor
             wrapMode: Text.Wrap
@@ -111,6 +112,7 @@ Rectangle {
             width: dropzone.width - 40
             color: Theme.themeColor
             font.family: Typography.fontBold
+            font.weight: Font.Bold
             font.pixelSize: Typography.h5
             visible: dropzone.errorMessage !== ""
             text: dropzone.errorMessage
@@ -124,6 +126,7 @@ Rectangle {
             width: dropzone.width - 40
             color: Theme.successTextColor
             font.family: Typography.fontBold
+            font.weight: Font.Bold
             font.pixelSize: Typography.h5
             visible: dropzone.successMessage !== ""
             text: dropzone.successMessage
