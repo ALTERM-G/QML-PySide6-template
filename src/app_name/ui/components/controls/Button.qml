@@ -4,22 +4,21 @@ import components
 Rectangle {
     id: root
 
-    // ---------------- Properties ----------------
     property string buttonText
     property string iconPath: ""
     property bool run: false
+    property bool primary: false
+    property real heightMultiplier: 1.0
 
     signal pressed()
 
-    // ---------------- Geometry & Style ----------------
     width: LayoutMetrics.size.buttonWidth
-    height: LayoutMetrics.size.controlHeight
+    height: LayoutMetrics.size.controlHeight * heightMultiplier
     radius: LayoutMetrics.radius.m
-    border.color: Theme.borderColor
+    border.color: primary ? Theme.themeColor : Theme.borderColor
     border.width: LayoutMetrics.border.l
-    color: mouseArea.containsMouse ? Theme.hoverBackgroundColor : Theme.backgroundColor
+    color: primary ? Theme.themeColor : (mouseArea.containsMouse ? Theme.hoverBackgroundColor : Theme.backgroundColor)
 
-    // ---------------- Behavior ----------------
     activeFocusOnTab: true
 
     Accessible.role: Accessible.Button
@@ -39,7 +38,6 @@ Rectangle {
         }
     }
 
-    // ---------------- Content ----------------
     Row {
         anchors.centerIn: parent
         spacing: LayoutMetrics.spacing.sm
@@ -51,7 +49,7 @@ Rectangle {
             height: LayoutMetrics.size.iconS
             visible: root.iconPath !== ""
             path: root.iconPath
-            color: mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor
+            color: primary ? Theme.hoverTextColor : (mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor)
         }
 
         Text {
@@ -61,7 +59,7 @@ Rectangle {
             font.pixelSize: Typography.h4
             font.family: Typography.fontBold
             font.weight: Font.Bold
-            color: mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor
+            color: primary ? Theme.hoverTextColor : (mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor)
 
             Behavior on color {
                 ColorAnimation {
@@ -71,7 +69,6 @@ Rectangle {
         }
     }
 
-    // ---------------- Interactions ----------------
     MouseArea {
         id: mouseArea
         anchors.fill: parent

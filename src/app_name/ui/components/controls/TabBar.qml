@@ -37,7 +37,7 @@ Rectangle {
                     text: typeof tabData[index] === "string" ? tabData[index] : (tabData[index] && tabData[index].name !== undefined ? tabData[index].name : "")
                     color: listView.currentIndex === index ? Theme.borderColor : Theme.textColor
                     pointSize: Typography.body
-                    font.bold: listView.currentIndex === index
+                    font.bold: true
 
                     Behavior on color {
                         ColorAnimation { duration: 150; easing.type: Easing.InOutQuad }

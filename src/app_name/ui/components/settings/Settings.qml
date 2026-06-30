@@ -7,6 +7,56 @@ Item {
     id: settingsMenu
     property bool isPopupOpen: settingsPopup.opened
 
+    property string appearancePendingTheme: Theme.currentTheme
+    property string appearanceCommittedTheme: Theme.currentTheme
+    property int appearancePendingScale: 100
+    property int appearanceCommittedScale: 100
+    property bool appearancePendingResponsive: true
+    property bool appearanceCommittedResponsive: true
+
+    function applyAppearanceChanges() {
+        Theme.setTheme(appearancePendingTheme)
+        var factor = 0.5 + appearancePendingScale / 200
+        LayoutMetrics.scaleFactor = factor
+        Typography.scaleFactor = factor
+        Metrics.scaleFactor = factor
+        controller.save_scale_factor(factor)
+        LayoutMetrics.isContinuous = appearancePendingResponsive
+        Typography.isContinuous = appearancePendingResponsive
+        controller.save_is_continuous(appearancePendingResponsive)
+        appearanceCommittedTheme = appearancePendingTheme
+        appearanceCommittedScale = appearancePendingScale
+        appearanceCommittedResponsive = appearancePendingResponsive
+    }
+
+    function cancelAppearanceChanges() {
+        appearancePendingTheme = appearanceCommittedTheme
+        appearancePendingScale = appearanceCommittedScale
+        appearancePendingResponsive = appearanceCommittedResponsive
+        themeComboBox.initialized = false
+        var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
+        if (idx !== -1) themeComboBox.currentIndex = idx
+        themeComboBox.initialized = true
+        scaleRow.initialized = false
+        scaleRow.scaleValue = appearanceCommittedScale
+        slider.value = scaleRow.scaleValue
+        spin.value = scaleRow.scaleValue
+        scaleRow.initialized = true
+        responsiveSwitch.initialized = false
+        responsiveSwitch.checked = appearanceCommittedResponsive
+        responsiveSwitch.initialized = true
+    }
+
+    function loadAppearance() {
+        appearanceCommittedTheme = Theme.currentTheme
+        appearancePendingTheme = appearanceCommittedTheme
+        var savedFactor = controller.get_scale_factor()
+        appearanceCommittedScale = Math.round((savedFactor - 0.5) * 200)
+        appearancePendingScale = appearanceCommittedScale
+        appearanceCommittedResponsive = controller.get_is_continuous()
+        appearancePendingResponsive = appearanceCommittedResponsive
+    }
+
     IconButton {
         id: settingsButton
         anchors.centerIn: parent
@@ -19,7 +69,12 @@ Item {
         }
 
         onPressed: {
-            settingsPopup.opened ? settingsPopup.close() : settingsPopup.open()
+            if (settingsPopup.opened) {
+                cancelAppearanceChanges()
+                settingsPopup.close()
+            } else {
+                settingsPopup.open()
+            }
         }
     }
 
@@ -45,7 +100,10 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: LayoutMetrics.spacing.xl
                 iconPath: SVGLibrary.back
-                onPressed: { settingsPopup.close() }
+                onPressed: {
+                    cancelAppearanceChanges()
+                    settingsPopup.close()
+                }
             }
 
             Title {
@@ -64,10 +122,20 @@ Item {
                 tabData: [Lang.tabs.general, Lang.tabs.appearance, Lang.tabs.advanced]
             }
 
+            Rectangle {
+                anchors.top: tabBar.bottom
+                anchors.topMargin: LayoutMetrics.spacing.md
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: LayoutMetrics.spacing.xxs
+                color: Theme.dividerColor
+            }
+
             ScrollView {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: tabBar.bottom
+                anchors.topMargin: LayoutMetrics.spacing.md + LayoutMetrics.spacing.xxs
                 anchors.bottom: parent.bottom
                 contentHeight: scrollContent.height
                 clip: true
@@ -76,15 +144,8 @@ Item {
                 Item {
                     id: scrollContent
                     width: parent.width
-                    height: contentColumn.implicitHeight + title.height + LayoutMetrics.spacing.xl * 3
+                    height: LayoutMetrics.spacing.xxl + contentColumn.implicitHeight + LayoutMetrics.spacing.xl * 3
 
-                    Rectangle {
-                        anchors.top: parent.top
-                        anchors.topMargin: LayoutMetrics.spacing.md
-                        width: parent.width
-                        height: LayoutMetrics.spacing.xxs
-                        color: Theme.dividerColor
-                    }
                     Column {
                         id: contentColumn
                         anchors.top: parent.top
@@ -122,32 +183,6 @@ Item {
                                     }
                                 }
                             }
-
-                            Label { text: "Responsive scaling"; style_2: true }
-
-                            Switch {
-                                id: responsiveSwitch
-                                property bool initialized: false
-
-                                onCheckedChanged: {
-                                    if (initialized) {
-                                        LayoutMetrics.isContinuous = checked
-                                        Typography.isContinuous = checked
-                                        controller.save_is_continuous(checked)
-                                    }
-                                }
-
-                                Connections {
-                                    target: settingsPopup
-                                    function onOpened() {
-                                        responsiveSwitch.initialized = false
-                                        responsiveSwitch.checked = controller.get_is_continuous()
-                                        LayoutMetrics.isContinuous = responsiveSwitch.checked
-                                        Typography.isContinuous = responsiveSwitch.checked
-                                        responsiveSwitch.initialized = true
-                                    }
-                                }
-                            }
                         }
 
                         // ---- Appearance Tab ----
@@ -172,24 +207,22 @@ Item {
                                     anchors.topMargin: LayoutMetrics.spacing.xxl
 
                                     model: Theme.themeNames
+                                    property bool initialized: false
 
                                     onCurrentTextChanged: {
                                         if (initialized) {
-                                            Theme.setTheme(currentText)
+                                            settingsMenu.appearancePendingTheme = currentText
                                         }
                                     }
-
-                                    property bool initialized: false
 
                                     Connections {
                                         target: settingsPopup
                                         function onOpened() {
-                                            var currentThemeIndex = themeComboBox.model.indexOf(Theme.currentTheme)
-                                            if (currentThemeIndex !== -1) {
-                                                themeComboBox.initialized = false
-                                                themeComboBox.currentIndex = currentThemeIndex
-                                                themeComboBox.initialized = true
-                                            }
+                                            loadAppearance()
+                                            themeComboBox.initialized = false
+                                            var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
+                                            if (idx !== -1) themeComboBox.currentIndex = idx
+                                            themeComboBox.initialized = true
                                         }
                                     }
                                 }
@@ -228,20 +261,12 @@ Item {
                                     property int scaleValue: 100
                                     property bool initialized: false
 
-                                    function applyScale() {
-                                        var factor = 0.5 + scaleValue / 200
-                                        LayoutMetrics.scaleFactor = factor
-                                        Typography.scaleFactor = factor
-                                        Metrics.scaleFactor = factor
-                                        controller.save_scale_factor(factor)
-                                    }
-
                                     Connections {
                                         target: settingsPopup
                                         function onOpened() {
-                                            var savedFactor = controller.get_scale_factor()
+                                            loadAppearance()
                                             scaleRow.initialized = false
-                                            scaleRow.scaleValue = Math.round((savedFactor - 0.5) * 200)
+                                            scaleRow.scaleValue = appearanceCommittedScale
                                             slider.value = scaleRow.scaleValue
                                             spin.value = scaleRow.scaleValue
                                             scaleRow.initialized = true
@@ -260,7 +285,7 @@ Item {
                                                 scaleRow.scaleValue = newValue
                                                 spin.value = newValue
                                                 if (scaleRow.initialized)
-                                                    scaleRow.applyScale()
+                                                    settingsMenu.appearancePendingScale = newValue
                                             }
                                         }
                                     }
@@ -276,10 +301,62 @@ Item {
                                                 scaleRow.scaleValue = value
                                                 slider.value = value
                                                 if (scaleRow.initialized)
-                                                    scaleRow.applyScale()
+                                                    settingsMenu.appearancePendingScale = value
                                             }
                                         }
                                     }
+                                }
+                            }
+
+                            Label {
+                                text: "Responsive scaling"
+                                style_2: true
+                            }
+
+                            Switch {
+                                id: responsiveSwitch
+                                property bool initialized: false
+
+                                onCheckedChanged: {
+                                    if (initialized) {
+                                        settingsMenu.appearancePendingResponsive = checked
+                                    }
+                                }
+
+                                Connections {
+                                    target: settingsPopup
+                                    function onOpened() {
+                                        responsiveSwitch.initialized = false
+                                        responsiveSwitch.checked = settingsMenu.appearanceCommittedResponsive
+                                        responsiveSwitch.initialized = true
+                                    }
+                                }
+                            }
+
+                            Row {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.topMargin: LayoutMetrics.spacing.xl
+                                spacing: LayoutMetrics.spacing.md
+
+                                Shortcut {
+                                    sequence: "Return"
+                                    enabled: tabBar.currentIndex === 1
+                                    onActivated: applyAppearanceChanges()
+                                }
+
+                                Button {
+                                    buttonText: "Apply"
+                                    primary: true
+                                    heightMultiplier: 1.3
+                                    width: LayoutMetrics.size.buttonWidth * 1.4
+                                    onPressed: applyAppearanceChanges()
+                                }
+
+                                Button {
+                                    buttonText: "Cancel"
+                                    heightMultiplier: 1.3
+                                    width: LayoutMetrics.size.buttonWidth * 1.4
+                                    onPressed: cancelAppearanceChanges()
                                 }
                             }
                         }
