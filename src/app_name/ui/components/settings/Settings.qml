@@ -292,27 +292,39 @@ Item {
                                 }
                             }
 
-                            Label {
-                                text: "Responsive scaling"
-                                style_2: true
-                            }
+                            Column {
+                                id: switches
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                spacing: LayoutMetrics.spacing.xxs
 
-                            Switch {
-                                id: responsiveSwitch
-                                property bool initialized: false
+                                Row {
+                                    spacing: LayoutMetrics.spacing.md
 
-                                onCheckedChanged: {
-                                    if (initialized) {
-                                        settingsMenu.appearancePendingResponsive = checked
+                                    Label {
+                                        text: "Responsive scaling"
+                                        style_2: true
+                                        anchors.verticalCenter: parent.verticalCenter
                                     }
-                                }
 
-                                Connections {
-                                    target: settingsPopup
-                                    function onOpened() {
-                                        responsiveSwitch.initialized = false
-                                        responsiveSwitch.checked = settingsMenu.appearanceCommittedResponsive
-                                        responsiveSwitch.initialized = true
+                                    Switch {
+                                        id: responsiveSwitch
+                                        property bool initialized: false
+
+                                        onCheckedChanged: {
+                                            if (initialized) {
+                                                settingsMenu.appearancePendingResponsive = checked
+                                            }
+                                        }
+
+                                        Connections {
+                                            target: settingsPopup
+                                            function onOpened() {
+                                                loadAppearance()
+                                                responsiveSwitch.initialized = false
+                                                responsiveSwitch.checked = settingsMenu.appearanceCommittedResponsive
+                                                responsiveSwitch.initialized = true
+                                            }
+                                        }
                                     }
                                 }
                             }
