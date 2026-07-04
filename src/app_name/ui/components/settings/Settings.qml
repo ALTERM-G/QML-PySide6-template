@@ -68,6 +68,8 @@ Item {
         height: (LayoutMetrics.window.height - LayoutMetrics.size.topBarHeight) * 0.8
         x: (LayoutMetrics.window.width - width) / 2
         y: LayoutMetrics.size.topBarHeight + (LayoutMetrics.window.height - LayoutMetrics.size.topBarHeight - height) / 2
+        padding: 0
+        background: Item {}
 
         Shortcut {
             sequence: "Ctrl+Tab"
@@ -75,7 +77,7 @@ Item {
             onActivated: tabBar.currentIndex = (tabBar.currentIndex + 1) % tabBar.tabData.length
         }
 
-        background: Surface {
+        Surface {
             anchors.fill: parent
 
             IconButton {

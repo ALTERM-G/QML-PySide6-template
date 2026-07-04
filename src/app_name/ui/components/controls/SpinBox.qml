@@ -7,6 +7,7 @@ SpinBox {
     width: LayoutMetrics.size.spinBoxWidth
     height: LayoutMetrics.size.controlHeightHuge
     stepSize: 10
+    wheelEnabled: false
 
     function setFrom(newFrom) { spinBox.from = newFrom }
     function setTo(newTo) { spinBox.to = newTo }
