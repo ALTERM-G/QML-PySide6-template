@@ -13,6 +13,7 @@ Item {
     property int appearanceCommittedScale: 100
     property bool appearancePendingResponsive: true
     property bool appearanceCommittedResponsive: true
+    property int languageCommittedIndex: 0
 
     function applyAppearanceChanges() {
         Theme.setTheme(appearancePendingTheme)
@@ -29,24 +30,6 @@ Item {
         appearanceCommittedResponsive = appearancePendingResponsive
     }
 
-    function cancelAppearanceChanges() {
-        appearancePendingTheme = appearanceCommittedTheme
-        appearancePendingScale = appearanceCommittedScale
-        appearancePendingResponsive = appearanceCommittedResponsive
-        themeComboBox.initialized = false
-        var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
-        if (idx !== -1) themeComboBox.currentIndex = idx
-        themeComboBox.initialized = true
-        scaleRow.initialized = false
-        scaleRow.scaleValue = appearanceCommittedScale
-        slider.value = scaleRow.scaleValue
-        spin.value = scaleRow.scaleValue
-        scaleRow.initialized = true
-        responsiveSwitch.initialized = false
-        responsiveSwitch.checked = appearanceCommittedResponsive
-        responsiveSwitch.initialized = true
-    }
-
     function loadAppearance() {
         appearanceCommittedTheme = Theme.currentTheme
         appearancePendingTheme = appearanceCommittedTheme
@@ -55,6 +38,7 @@ Item {
         appearancePendingScale = appearanceCommittedScale
         appearanceCommittedResponsive = controller.get_is_continuous()
         appearancePendingResponsive = appearanceCommittedResponsive
+        languageCommittedIndex = controller.get_language()
     }
 
     IconButton {
@@ -350,13 +334,6 @@ Item {
                                     heightMultiplier: 1.3
                                     width: LayoutMetrics.size.buttonWidth * 1.4
                                     onPressed: applyAppearanceChanges()
-                                }
-
-                                Button {
-                                    buttonText: "Cancel"
-                                    heightMultiplier: 1.3
-                                    width: LayoutMetrics.size.buttonWidth * 1.4
-                                    onPressed: cancelAppearanceChanges()
                                 }
                             }
                         }
