@@ -30,6 +30,35 @@ Item {
         appearanceCommittedResponsive = appearancePendingResponsive
     }
 
+    function cancelAppearanceChanges() {
+        appearancePendingTheme = appearanceCommittedTheme
+        appearancePendingScale = appearanceCommittedScale
+        appearancePendingResponsive = appearanceCommittedResponsive
+        themeComboBox.initialized = false
+        var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
+        if (idx !== -1) themeComboBox.currentIndex = idx
+        themeComboBox.initialized = true
+        scaleRow.initialized = false
+        scaleRow.scaleValue = appearanceCommittedScale
+        slider.value = scaleRow.scaleValue
+        spin.value = scaleRow.scaleValue
+        scaleRow.initialized = true
+        responsiveSwitch.initialized = false
+        responsiveSwitch.checked = appearanceCommittedResponsive
+        responsiveSwitch.initialized = true
+        languageCombo.initialized = false
+        languageCombo.currentIndex = languageCommittedIndex
+        controller.save_language(languageCommittedIndex)
+        languageCombo.initialized = true
+        Theme.setTheme(appearanceCommittedTheme)
+        var factor = 0.5 + appearanceCommittedScale / 200
+        LayoutMetrics.scaleFactor = factor
+        Typography.scaleFactor = factor
+        Metrics.scaleFactor = factor
+        LayoutMetrics.isContinuous = appearanceCommittedResponsive
+        Typography.isContinuous = appearanceCommittedResponsive
+    }
+
     function loadAppearance() {
         appearanceCommittedTheme = Theme.currentTheme
         appearancePendingTheme = appearanceCommittedTheme
