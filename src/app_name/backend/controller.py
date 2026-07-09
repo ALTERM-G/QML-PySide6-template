@@ -147,10 +147,24 @@ class Controller(QObject):
     def get_is_continuous(self):
         return self._load_settings().get("isContinuous", True)
 
-    # -------------- Language --------------
+    # -------------- Font Family --------------
 
-    @Slot(int)
-    def save_language(self, index):
+    @Slot(str)
+    def save_font_family(self, family):
+        try:
+            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
+            settings = self._load_settings()
+            settings["fontFamily"] = family
+            with open(self._settings_path, "w") as f:
+                json.dump(settings, f, indent=2)
+        except Exception as e:
+            print(f"Error saving font family: {e}")
+
+    @Slot(result=str)
+    def get_font_family(self):
+        return self._load_settings().get("fontFamily", "JetBrains Mono")
+
+    # -------------- Language --------------
         try:
             self._settings_path.parent.mkdir(parents=True, exist_ok=True)
             settings = self._load_settings()

@@ -13,6 +13,8 @@ Item {
     property int appearanceCommittedScale: 100
     property bool appearancePendingResponsive: true
     property bool appearanceCommittedResponsive: true
+    property string appearancePendingFont: Typography.fontFamily
+    property string appearanceCommittedFont: Typography.fontFamily
     property int languageCommittedIndex: 0
 
     function applyAppearanceChanges() {
@@ -25,15 +27,19 @@ Item {
         LayoutMetrics.isContinuous = appearancePendingResponsive
         Typography.isContinuous = appearancePendingResponsive
         controller.save_is_continuous(appearancePendingResponsive)
+        Typography.fontFamily = appearancePendingFont
+        controller.save_font_family(appearancePendingFont)
         appearanceCommittedTheme = appearancePendingTheme
         appearanceCommittedScale = appearancePendingScale
         appearanceCommittedResponsive = appearancePendingResponsive
+        appearanceCommittedFont = appearancePendingFont
     }
 
     function cancelAppearanceChanges() {
         appearancePendingTheme = appearanceCommittedTheme
         appearancePendingScale = appearanceCommittedScale
         appearancePendingResponsive = appearanceCommittedResponsive
+        appearancePendingFont = appearanceCommittedFont
         themeComboBox.initialized = false
         var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
         if (idx !== -1) themeComboBox.currentIndex = idx
@@ -46,6 +52,10 @@ Item {
         responsiveSwitch.initialized = false
         responsiveSwitch.checked = appearanceCommittedResponsive
         responsiveSwitch.initialized = true
+        fontComboBox.initialized = false
+        var fontIdx = fontComboBox.model.indexOf(appearanceCommittedFont)
+        if (fontIdx !== -1) fontComboBox.currentIndex = fontIdx
+        fontComboBox.initialized = true
         languageCombo.initialized = false
         languageCombo.currentIndex = languageCommittedIndex
         controller.save_language(languageCommittedIndex)
@@ -57,6 +67,7 @@ Item {
         Metrics.scaleFactor = factor
         LayoutMetrics.isContinuous = appearanceCommittedResponsive
         Typography.isContinuous = appearanceCommittedResponsive
+        Typography.fontFamily = appearanceCommittedFont
     }
 
     function loadAppearance() {
@@ -67,6 +78,8 @@ Item {
         appearancePendingScale = appearanceCommittedScale
         appearanceCommittedResponsive = controller.get_is_continuous()
         appearancePendingResponsive = appearanceCommittedResponsive
+        appearanceCommittedFont = Typography.fontFamily
+        appearancePendingFont = appearanceCommittedFont
         languageCommittedIndex = controller.get_language()
     }
 
@@ -254,9 +267,29 @@ Item {
                                 }
 
                                 ComboBox {
-                                    model: ["JetBrains Mono", "Roboto", "Times New Roman"]
+                                    id: fontComboBox
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.topMargin: LayoutMetrics.spacing.xxl
+
+                                    model: typeof FontFamilies !== "undefined" ? FontFamilies : ["Roboto", "sans-serif"]
+                                    property bool initialized: false
+
+                                    onCurrentTextChanged: {
+                                        if (initialized) {
+                                            settingsMenu.appearancePendingFont = currentText
+                                        }
+                                    }
+
+                                    Connections {
+                                        target: settingsPopup
+                                        function onOpened() {
+                                            loadAppearance()
+                                            fontComboBox.initialized = false
+                                            var idx = fontComboBox.model.indexOf(appearanceCommittedFont)
+                                            if (idx !== -1) fontComboBox.currentIndex = idx
+                                            fontComboBox.initialized = true
+                                        }
+                                    }
                                 }
                             }
 

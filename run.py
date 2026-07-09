@@ -64,8 +64,10 @@ def main():
 
     engine.rootContext().setContextProperty("LoadedFonts", loaded_fonts)
 
-    font_family = "sans-serif"
     all_loaded_families = set(loaded_fonts.values())
+    engine.rootContext().setContextProperty("FontFamilies", list(all_loaded_families))
+
+    font_family = "sans-serif"
     if all_loaded_families:
         font_family = list(all_loaded_families)[0]
     font_config_path = font_dir / "fonts.json" if font_dir.exists() else None
@@ -80,10 +82,6 @@ def main():
         except Exception:
             pass
 
-    if font_family != "sans-serif":
-        app.setFont(QFont(font_family))
-    engine.rootContext().setContextProperty("FontFamily", font_family)
-
     # ---------------- Icons ----------------
     icon_path = src_path / "resources" / "icons"
     QIcon.setThemeSearchPaths([str(icon_path)])
@@ -96,6 +94,14 @@ def main():
     engine.rootContext().setContextProperty("controller", controller)
     engine.rootContext().setContextProperty("mainVM", controller.mainVM)
     engine.rootContext().setContextProperty("settingsVM", controller.settingsVM)
+
+    saved_family = controller.get_font_family()
+    if saved_family and saved_family in all_loaded_families:
+        font_family = saved_family
+
+    if font_family != "sans-serif":
+        app.setFont(QFont(font_family))
+    engine.rootContext().setContextProperty("FontFamily", font_family)
 
     # ---------------- Language ----------------
     global _language_manager

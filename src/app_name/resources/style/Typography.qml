@@ -3,8 +3,9 @@ import QtQuick
 
 QtObject {
     // Fonts
-    readonly property string fontRegular: FontFamily || "sans-serif"
-    readonly property string fontBold: FontFamily || "sans-serif"
+    property string fontFamily: FontFamily || "sans-serif"
+    readonly property string fontRegular: fontFamily
+    readonly property string fontBold: fontFamily
 
     // Font sizes
     readonly property int iconFontSize: 24
