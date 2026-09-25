@@ -15,7 +15,20 @@
         "theme": "Tema",
         "font": "Carattere",
         "scale": "Scala",
-        "language": "Lingua"
+        "language": "Lingua",
+        "keyboard": "Tastiera",
+        "apply": "Applica",
+        "responsiveScaling": "Scala adattiva",
+        "advancedPlaceholder": "Aggiungi qui le impostazioni avanzate dell'app"
+    },
+    "shortcuts": {
+        "openSettings": "Apri impostazioni",
+        "toggleSidebar": "Attiva/disattiva barra laterale",
+        "zoomIn": "Ingrandisci",
+        "zoomOut": "Riduci",
+        "nextTab": "Scheda successiva",
+        "applyChanges": "Applica modifiche",
+        "closeSidebar": "Chiudi barra laterale"
     },
     "languages": ["Inglese", "Francese", "Tedesco", "Spagnolo", "Italiano"]
 }

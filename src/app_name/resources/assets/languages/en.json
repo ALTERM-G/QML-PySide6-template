@@ -15,7 +15,20 @@
         "theme": "Theme",
         "font": "Font",
         "scale": "Scale",
-        "language": "Language"
+        "language": "Language",
+        "keyboard": "Keyboard",
+        "apply": "Apply",
+        "responsiveScaling": "Responsive scaling",
+        "advancedPlaceholder": "Add your advanced app settings here"
     },
-    "languages": ["English", "French", "Spanish", "German"]
+    "shortcuts": {
+        "openSettings": "Open settings",
+        "toggleSidebar": "Toggle sidebar",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "nextTab": "Next tab",
+        "applyChanges": "Apply changes",
+        "closeSidebar": "Close sidebar"
+    },
+    "languages": ["English", "French", "Spanish", "German", "Italian"]
 }

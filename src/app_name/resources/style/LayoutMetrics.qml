@@ -55,6 +55,8 @@ QtObject {
         property real sliderWidth: unit * 25
         property real spinBoxWidth: unit * 10
         property real tabBarWidth: unit * 50
+        // Wide enough for the longest translated action name at h6 (~49 units)
+        property real shortcutLabelWidth: unit * 52
 
         property real iconS: unit * 2
         property real iconM: unit * 3

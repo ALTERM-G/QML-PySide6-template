@@ -136,6 +136,7 @@ def main():
             ),
         ),
         ("UiData", "data/UiData.qml", None),
+        ("Shortcuts", "data/Shortcuts.qml", None),
         ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),
     ]
     qml_objects = {}

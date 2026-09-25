@@ -9,21 +9,46 @@ Item {
 
     property string appearancePendingTheme: Theme.currentTheme
     property string appearanceCommittedTheme: Theme.currentTheme
-    property int appearancePendingScale: 100
-    property int appearanceCommittedScale: 100
+    property int appearanceCommittedScale: Math.round((controller.get_scale_factor() - 0.5) * 200)
+    property int appearancePendingScale: Math.round((controller.get_scale_factor() - 0.5) * 200)
     property bool appearancePendingResponsive: true
     property bool appearanceCommittedResponsive: true
     property string appearancePendingFont: Typography.fontFamily
     property string appearanceCommittedFont: Typography.fontFamily
     property int languageCommittedIndex: 0
 
-    function applyAppearanceChanges() {
-        Theme.setTheme(appearancePendingTheme)
-        var factor = 0.5 + appearancePendingScale / 200
+    readonly property int scaleMin: 0
+    readonly property int scaleMax: 200
+    readonly property int scaleStep: 10
+
+    function applyScale(scale) {
+        var factor = 0.5 + scale / 200
         LayoutMetrics.scaleFactor = factor
         Typography.scaleFactor = factor
         Metrics.scaleFactor = factor
         controller.save_scale_factor(factor)
+    }
+
+    function nudgeScale(direction) {
+        var base = settingsPopup.opened ? appearancePendingScale : appearanceCommittedScale
+        var next = Math.max(scaleMin, Math.min(scaleMax, base + direction * scaleStep))
+        if (next === appearancePendingScale && next === appearanceCommittedScale)
+            return
+        appearancePendingScale = next
+        appearanceCommittedScale = next
+        applyScale(next)
+        if (settingsPopup.opened) {
+            scaleRow.initialized = false
+            scaleRow.scaleValue = next
+            slider.value = next
+            spin.value = next
+            scaleRow.initialized = true
+        }
+    }
+
+    function applyAppearanceChanges() {
+        Theme.setTheme(appearancePendingTheme)
+        applyScale(appearancePendingScale)
         LayoutMetrics.isContinuous = appearancePendingResponsive
         Typography.isContinuous = appearancePendingResponsive
         controller.save_is_continuous(appearancePendingResponsive)
@@ -61,13 +86,19 @@ Item {
         controller.save_language(languageCommittedIndex)
         languageCombo.initialized = true
         Theme.setTheme(appearanceCommittedTheme)
-        var factor = 0.5 + appearanceCommittedScale / 200
-        LayoutMetrics.scaleFactor = factor
-        Typography.scaleFactor = factor
-        Metrics.scaleFactor = factor
+        applyScale(appearanceCommittedScale)
         LayoutMetrics.isContinuous = appearanceCommittedResponsive
         Typography.isContinuous = appearanceCommittedResponsive
         Typography.fontFamily = appearanceCommittedFont
+    }
+
+    function toggleSettings() {
+        if (settingsPopup.opened) {
+            cancelAppearanceChanges()
+            settingsPopup.close()
+        } else {
+            settingsPopup.open()
+        }
     }
 
     function loadAppearance() {
@@ -94,14 +125,7 @@ Item {
             delay: 600
         }
 
-        onPressed: {
-            if (settingsPopup.opened) {
-                cancelAppearanceChanges()
-                settingsPopup.close()
-            } else {
-                settingsPopup.open()
-            }
-        }
+        onPressed: settingsMenu.toggleSettings()
     }
 
     Popup {
@@ -114,7 +138,7 @@ Item {
         background: Item {}
 
         Shortcut {
-            sequence: "Ctrl+Tab"
+            sequence: Shortcuts.nextTab
             enabled: settingsPopup.opened
             onActivated: tabBar.currentIndex = (tabBar.currentIndex + 1) % tabBar.tabData.length
         }
@@ -144,9 +168,9 @@ Item {
 
             TabBar {
                 id: tabBar
-                anchors.top: title.top
+                anchors.top: title.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: LayoutMetrics.spacing.xxl * 1.5
+                anchors.topMargin: LayoutMetrics.spacing.lg
                 tabData: [Lang.tabs.general, Lang.tabs.appearance, Lang.tabs.advanced]
             }
 
@@ -365,7 +389,7 @@ Item {
                                     spacing: LayoutMetrics.spacing.md
 
                                     Label {
-                                        text: "Responsive scaling"
+                                        text: Lang.labels.responsiveScaling
                                         style_2: true
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
@@ -399,13 +423,13 @@ Item {
                                 spacing: LayoutMetrics.spacing.md
 
                                 Shortcut {
-                                    sequence: "Return"
+                                    sequence: Shortcuts.apply
                                     enabled: tabBar.currentIndex === 1
                                     onActivated: applyAppearanceChanges()
                                 }
 
                                 Button {
-                                    buttonText: "Apply"
+                                    buttonText: Lang.labels.apply
                                     primary: true
                                     heightMultiplier: 1.3
                                     width: LayoutMetrics.size.buttonWidth * 1.4
@@ -413,9 +437,71 @@ Item {
                                 }
                             }
                         }
+
+                        // ---- Advanced Tab ----
+                        Column {
+                            visible: tabBar.currentIndex === 2
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            spacing: LayoutMetrics.spacing.md
+
+                            Label {
+                                text: Lang.labels.keyboard
+                                style_2: true
+                            }
+
+                            Repeater {
+                                model: Shortcuts.list
+
+                                delegate: Row {
+                                    id: shortcutRow
+                                    required property var modelData
+                                    spacing: LayoutMetrics.spacing.lg
+
+                                    Label {
+                                        text: Lang.shortcuts[shortcutRow.modelData.action]
+                                        width: LayoutMetrics.size.shortcutLabelWidth
+                                        elide: Text.ElideRight
+                                    }
+
+                                    Label {
+                                        text: shortcutRow.modelData.sequence
+                                        style_2: true
+                                        font.family: Typography.fontRegular
+                                        font.weight: Font.Normal
+                                    }
+                                }
+                            }
+
+                            Label {
+                                text: Lang.labels.advancedPlaceholder
+                                style_2: true
+                                topPadding: LayoutMetrics.spacing.md
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    Shortcut {
+        sequence: Shortcuts.zoomIn
+        context: Qt.ApplicationShortcut
+        onActivated: settingsMenu.nudgeScale(1)
+    }
+    Shortcut {
+        sequence: Shortcuts.zoomInShifted
+        context: Qt.ApplicationShortcut
+        onActivated: settingsMenu.nudgeScale(1)
+    }
+    Shortcut {
+        sequence: Shortcuts.zoomOut
+        context: Qt.ApplicationShortcut
+        onActivated: settingsMenu.nudgeScale(-1)
+    }
+    Shortcut {
+        sequence: Shortcuts.openSettings
+        context: Qt.ApplicationShortcut
+        onActivated: settingsMenu.toggleSettings()
     }
 }

@@ -29,6 +29,10 @@ class LanguageManager(QObject):
     def labels(self):
         return self._data.get("labels", {})
 
+    @Property("QVariantMap", notify=dataChanged)
+    def shortcuts(self):
+        return self._data.get("shortcuts", {})
+
     @Property(str, notify=dataChanged)
     def greeting(self):
         return self._data.get("greeting", "Have Fun !")

@@ -15,7 +15,20 @@
         "theme": "Thema",
         "font": "Schriftart",
         "scale": "Skalierung",
-        "language": "Sprache"
+        "language": "Sprache",
+        "keyboard": "Tastatur",
+        "apply": "Übernehmen",
+        "responsiveScaling": "Anpassbare Skalierung",
+        "advancedPlaceholder": "Hier können erweiterte App-Einstellungen hinzugefügt werden"
     },
-    "languages": ["Englisch", "Französisch", "Spanisch", "Deutsch"]
+    "shortcuts": {
+        "openSettings": "Einstellungen öffnen",
+        "toggleSidebar": "Seitenleiste umschalten",
+        "zoomIn": "Vergrößern",
+        "zoomOut": "Verkleinern",
+        "nextTab": "Nächster Tab",
+        "applyChanges": "Änderungen übernehmen",
+        "closeSidebar": "Seitenleiste schließen"
+    },
+    "languages": ["Englisch", "Französisch", "Spanisch", "Deutsch", "Italienisch"]
 }

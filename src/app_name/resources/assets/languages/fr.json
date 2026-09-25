@@ -15,7 +15,20 @@
         "theme": "Thème",
         "font": "Police",
         "scale": "Échelle",
-        "language": "Langue"
+        "language": "Langue",
+        "keyboard": "Clavier",
+        "apply": "Appliquer",
+        "responsiveScaling": "Échelle adaptative",
+        "advancedPlaceholder": "Ajoutez ici vos paramètres avancés"
     },
-    "languages": ["Anglais", "Français", "Espagnol", "Allemand"]
+    "shortcuts": {
+        "openSettings": "Ouvrir les paramètres",
+        "toggleSidebar": "Basculer la barre latérale",
+        "zoomIn": "Zoom avant",
+        "zoomOut": "Zoom arrière",
+        "nextTab": "Onglet suivant",
+        "applyChanges": "Appliquer les modifications",
+        "closeSidebar": "Fermer la barre latérale"
+    },
+    "languages": ["Anglais", "Français", "Espagnol", "Allemand", "Italiano"]
 }

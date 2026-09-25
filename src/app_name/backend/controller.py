@@ -165,6 +165,9 @@ class Controller(QObject):
         return self._load_settings().get("fontFamily", "JetBrains Mono")
 
     # -------------- Language --------------
+
+    @Slot(int)
+    def save_language(self, index):
         try:
             self._settings_path.parent.mkdir(parents=True, exist_ok=True)
             settings = self._load_settings()

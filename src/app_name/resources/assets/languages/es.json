@@ -15,7 +15,20 @@
         "theme": "Tema",
         "font": "Fuente",
         "scale": "Escala",
-        "language": "Idioma"
+        "language": "Idioma",
+        "keyboard": "Teclado",
+        "apply": "Aplicar",
+        "responsiveScaling": "Escala adaptable",
+        "advancedPlaceholder": "Añade aquí los ajustes avanzados de la aplicación"
+    },
+    "shortcuts": {
+        "openSettings": "Abrir ajustes",
+        "toggleSidebar": "Alternar barra lateral",
+        "zoomIn": "Acercar",
+        "zoomOut": "Alejar",
+        "nextTab": "Pestaña siguiente",
+        "applyChanges": "Aplicar cambios",
+        "closeSidebar": "Cerrar barra lateral"
     },
     "languages": ["Inglés", "Francés", "Alemán", "Español", "Italiano"]
 }

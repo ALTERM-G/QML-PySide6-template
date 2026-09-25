@@ -12,7 +12,6 @@ SideBar 1.0 layout/SideBar.qml
 SideBarItem 1.0 layout/SideBarItem.qml
 SideBarToggle 1.0 layout/SideBarToggle.qml
 Surface 1.0 layout/Surface.qml
-ShortcutEditor 1.0 settings/ShortcutEditor.qml
 Settings 1.0 settings/Settings.qml
 SVGObject 1.0 indicators/SVGObject.qml
 Label 1.0 indicators/Label.qml
