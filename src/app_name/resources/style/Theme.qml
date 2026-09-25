@@ -8,44 +8,13 @@ QtObject {
     property SystemPalette sysPalette: SystemPalette {
         colorGroup: SystemPalette.Active
     }
-    property var baseConfig: ({})
     property var themeColors: ({})
     Component.onCompleted: loadThemes()
 
     function loadThemes() {
         if (controller) {
-            baseConfig = controller.get_base_config()
             themeColors = controller.get_theme_colors()
         }
-    }
-
-    readonly property string fontRegular: baseConfig.fonts ? baseConfig.fonts.regular : "JetBrains Mono NL"
-    readonly property string fontBold: baseConfig.fonts ? baseConfig.fonts.bold : "JetBrains Mono"
-
-    readonly property int iconFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.icon : 24
-    readonly property int titleFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.title : 24
-    readonly property int hugeFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.huge : 18
-    readonly property int bigFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.big : 16
-    readonly property int normalFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.normal : 14
-    readonly property int smallFontSize: baseConfig.fontSizes ? baseConfig.fontSizes.small : 11
-
-    property var windowRef
-    property real unit: windowRef ? Math.min(windowRef.width, windowRef.height) / 100 : 7.2
-
-    function round(value) {
-        return Math.round(value * baseSize)
-    }
-
-    property real baseSize: unit * 1.9
-    property int h1: round(1.7)
-    property int h2: round(1.5)
-    property int h3: round(1.35)
-    property int h4: round(1.2)
-    property int h5: round(1.1)
-    property int h6: round(1.0)
-
-    function setWindow(win) {
-        windowRef = win
     }
 
     function getColor(name) {

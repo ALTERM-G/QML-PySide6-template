@@ -49,18 +49,19 @@ def main():
     loaded_fonts = {}
 
     if font_dir.exists():
-        for font_path in font_dir.rglob("*.ttf"):
-            font_id = QFontDatabase.addApplicationFont(str(font_path))
-            if font_id == -1:
-                print(f"Failed to load font '{font_path.name}'", file=sys.stderr)
-                continue
-            families = QFontDatabase.applicationFontFamilies(font_id)
-            if not families:
-                print(f"No families found for font '{font_path.name}'", file=sys.stderr)
-                continue
-            family_name = families[0]
-            loaded_fonts[font_path.name] = family_name
-            print(f"Loaded font '{font_path.name}' with family '{family_name}'")
+        for pattern in ("*.ttf", "*.otf", "*.ttc"):
+            for font_path in sorted(font_dir.rglob(pattern)):
+                font_id = QFontDatabase.addApplicationFont(str(font_path))
+                if font_id == -1:
+                    print(f"Failed to load font '{font_path.name}'", file=sys.stderr)
+                    continue
+                families = QFontDatabase.applicationFontFamilies(font_id)
+                if not families:
+                    print(f"No families found for font '{font_path.name}'", file=sys.stderr)
+                    continue
+                family_name = families[0]
+                loaded_fonts[font_path.name] = family_name
+                print(f"Loaded font '{font_path.name}' with family '{family_name}'")
 
     engine.rootContext().setContextProperty("LoadedFonts", loaded_fonts)
 
@@ -121,11 +122,6 @@ def main():
                 obj.setIsContinuous(controller.get_is_continuous()),
             ),
         ),
-        (
-            "Metrics",
-            "style/Metrics.qml",
-            lambda obj: obj.setScaleFactor(scale_factor),
-        ),
         ("SVGLibrary", "style/SVGLibrary.qml", None),
         (
             "Typography",
@@ -135,7 +131,6 @@ def main():
                 obj.setIsContinuous(controller.get_is_continuous()),
             ),
         ),
-        ("UiData", "data/UiData.qml", None),
         ("Shortcuts", "data/Shortcuts.qml", None),
         ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),
     ]

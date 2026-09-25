@@ -25,7 +25,6 @@ Item {
         var factor = 0.5 + scale / 200
         LayoutMetrics.scaleFactor = factor
         Typography.scaleFactor = factor
-        Metrics.scaleFactor = factor
         controller.save_scale_factor(factor)
     }
 

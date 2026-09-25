@@ -24,7 +24,7 @@ Window {
         Settings {
             id: settings
             anchors.right: parent.right
-            anchors.rightMargin: Metrics.spacing.xl
+            anchors.rightMargin: LayoutMetrics.spacing.xxl * 1.5
             anchors.verticalCenter: parent.verticalCenter
         }
     }
