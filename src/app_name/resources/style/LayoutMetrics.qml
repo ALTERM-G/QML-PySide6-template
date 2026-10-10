@@ -33,10 +33,17 @@ QtObject {
         cornerRadiusFactor = factor
     }
 
+    property bool animationsEnabled: true
+
+    function setAnimationsEnabled(value) {
+        animationsEnabled = value
+    }
+
     onWChanged: sideBarWidthOverride = -1
     onHChanged: sideBarWidthOverride = -1
     onScaleFactorChanged: sideBarWidthOverride = -1
     onIsContinuousChanged: sideBarWidthOverride = -1
+    onAnimationsEnabledChanged: sideBarWidthOverride = -1
 
     //--- Spacing ---
     property QtObject spacing: QtObject {
@@ -63,6 +70,8 @@ QtObject {
         property real tabBarWidth: unit * 50
         // Wide enough for the longest translated action name at h6 (~49 units)
         property real shortcutLabelWidth: unit * 24
+        // Label column so stacked toggle rows keep their switches aligned
+        property real switchLabelWidth: unit * 18
         // Chord capture field in the keyboard editor
         property real shortcutControlWidth: unit * 18
 

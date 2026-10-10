@@ -33,6 +33,7 @@ Rectangle {
     }
 
     Behavior on color {
+        enabled: LayoutMetrics.animationsEnabled
         ColorAnimation {
             duration: 150
         }
@@ -62,6 +63,7 @@ Rectangle {
             color: primary ? Theme.hoverTextColor : (mouseArea.containsMouse ? Theme.hoverTextColor : Theme.textColor)
 
             Behavior on color {
+                enabled: LayoutMetrics.animationsEnabled
                 ColorAnimation {
                     duration: 150
                 }

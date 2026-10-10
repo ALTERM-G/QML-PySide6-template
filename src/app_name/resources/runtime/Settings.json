@@ -1,8 +1,9 @@
 {
-  "scaleFactor": 1.5,
+  "scaleFactor": 1.1099999999999999,
   "language": 0,
   "isContinuous": false,
   "fontFamily": "Nullify",
   "shortcuts": {},
-  "cornerRadius": 0.0
+  "cornerRadius": 0.0,
+  "animationsEnabled": false
 }

@@ -112,6 +112,7 @@ def main():
     # ---------------- Load scale factor ----------------
     scale_factor = controller.get_scale_factor()
     corner_radius = controller.get_corner_radius()
+    animations_enabled = controller.get_animations_enabled()
 
     # ---------------- Load QML files ----------------
     qml_singletons = [
@@ -122,6 +123,7 @@ def main():
                 obj.setScaleFactor(scale_factor),
                 obj.setIsContinuous(controller.get_is_continuous()),
                 obj.setCornerRadiusFactor(corner_radius),
+                obj.setAnimationsEnabled(animations_enabled),
             ),
         ),
         ("SVGLibrary", "style/SVGLibrary.qml", None),

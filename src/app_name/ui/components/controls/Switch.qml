@@ -31,11 +31,13 @@ Switch {
             border.width: control.checked ? (control.down ? 1 : 0) : 1
 
             Behavior on x {
+                enabled: LayoutMetrics.animationsEnabled
                 NumberAnimation { duration: 100 }
             }
         }
 
         Behavior on color {
+            enabled: LayoutMetrics.animationsEnabled
             ColorAnimation { duration: 150 }
         }
     }

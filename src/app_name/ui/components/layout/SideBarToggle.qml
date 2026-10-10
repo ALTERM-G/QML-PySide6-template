@@ -12,6 +12,7 @@ Rectangle {
     color: mouseArea.containsMouse ? Theme.hoverBackgroundColor : "transparent"
 
     Behavior on color {
+        enabled: LayoutMetrics.animationsEnabled
         ColorAnimation {
             duration: 150
         }

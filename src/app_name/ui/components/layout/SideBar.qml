@@ -35,7 +35,7 @@ Rectangle {
     clip: true
 
     Behavior on width {
-        enabled: !sidebar.resizing
+        enabled: !sidebar.resizing && LayoutMetrics.animationsEnabled
         NumberAnimation {
             duration: 150
             easing.type: Easing.OutCubic

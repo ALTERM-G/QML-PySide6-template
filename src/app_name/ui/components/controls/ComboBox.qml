@@ -22,7 +22,7 @@ ComboBox {
                ? Theme.hoverTextColor
                : Theme.textColor
 
-        Behavior on color { ColorAnimation { duration: 150 } }
+        Behavior on color { enabled: LayoutMetrics.animationsEnabled; ColorAnimation { duration: 150 } }
     }
 
     indicator: Components.SVGObject {
@@ -36,6 +36,7 @@ ComboBox {
         rotation: control.popup.opened ? 180 : 0
 
         Behavior on rotation {
+            enabled: LayoutMetrics.animationsEnabled
             NumberAnimation {
                 duration: 150
                 easing.type: Easing.OutQuad
@@ -52,7 +53,7 @@ ComboBox {
         color: mouseArea.containsMouse
                ? Theme.hoverBackgroundColor
                : Theme.backgroundColor
-        Behavior on color { ColorAnimation { duration: 150 } }
+        Behavior on color { enabled: LayoutMetrics.animationsEnabled; ColorAnimation { duration: 150 } }
 
         MouseArea {
             id: mouseArea
@@ -88,14 +89,35 @@ ComboBox {
                 excludedIndex = control.currentIndex
         }
 
-        enter: Transition {
+        enter: LayoutMetrics.animationsEnabled ? dropdownFadeEnter : dropdownInstantEnter
+        exit: LayoutMetrics.animationsEnabled ? dropdownFadeExit : dropdownInstantExit
+
+        Transition {
+            id: dropdownInstantEnter
+            ParallelAnimation {
+                NumberAnimation { property: "height"; from: 0; to: dropdownPopup.implicitHeight; duration: 0 }
+                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 0 }
+            }
+        }
+
+        Transition {
+            id: dropdownInstantExit
+            ParallelAnimation {
+                NumberAnimation { property: "height"; from: dropdownPopup.implicitHeight; to: 0; duration: 0 }
+                NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 0 }
+            }
+        }
+
+        Transition {
+            id: dropdownFadeEnter
             ParallelAnimation {
                 NumberAnimation { property: "height"; from: 0; to: dropdownPopup.implicitHeight; duration: 150; easing.type: Easing.OutQuad }
                 NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 150 }
             }
         }
 
-        exit: Transition {
+        Transition {
+            id: dropdownFadeExit
             ParallelAnimation {
                 NumberAnimation { property: "height"; from: dropdownPopup.implicitHeight; to: 0; duration: 150; easing.type: Easing.InQuad }
                 NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 150 }

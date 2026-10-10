@@ -20,7 +20,47 @@ ToolTip {
         padding: LayoutMetrics.spacing.xs
     }
 
-    enter: Transition {
+    enter: LayoutMetrics.animationsEnabled ? toolTipFadeEnter : toolTipInstantEnter
+    exit: LayoutMetrics.animationsEnabled ? toolTipFadeExit : toolTipInstantExit
+
+    Transition {
+        id: toolTipInstantEnter
+        ParallelAnimation {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 0
+            }
+            NumberAnimation {
+                property: "scale"
+                from: 0.8
+                to: 1
+                duration: 0
+            }
+        }
+    }
+
+    Transition {
+        id: toolTipInstantExit
+        ParallelAnimation {
+            NumberAnimation {
+                property: "opacity"
+                from: 1
+                to: 0
+                duration: 0
+            }
+            NumberAnimation {
+                property: "scale"
+                from: 1
+                to: 0.85
+                duration: 0
+            }
+        }
+    }
+
+    Transition {
+        id: toolTipFadeEnter
         ParallelAnimation {
             NumberAnimation {
                 property: "opacity"
@@ -39,7 +79,8 @@ ToolTip {
         }
     }
 
-    exit: Transition {
+    Transition {
+        id: toolTipFadeExit
         ParallelAnimation {
             NumberAnimation {
                 property: "opacity"

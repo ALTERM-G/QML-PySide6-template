@@ -1,9 +1,6 @@
 import QtQuick
 import components
 
-// Themed chord field: shows the current shortcut and captures a new one when
-// clicked. Styling mirrors Button.qml / ComboBox.qml so it sits naturally in
-// the settings panel.
 Rectangle {
     id: root
 
@@ -25,11 +22,13 @@ Rectangle {
     activeFocusOnTab: true
 
     Behavior on color {
+        enabled: LayoutMetrics.animationsEnabled
         ColorAnimation {
             duration: 150
         }
     }
     Behavior on border.color {
+        enabled: LayoutMetrics.animationsEnabled
         ColorAnimation {
             duration: 150
         }
@@ -53,13 +52,11 @@ Rectangle {
         Shortcuts.capturing = false
     }
 
-    // Losing focus (e.g. clicking elsewhere) abandons the capture.
     onActiveFocusChanged: {
         if (!activeFocus && recording)
             stopRecording()
     }
 
-    // Never leave the app in "capturing" state if this editor goes away.
     Component.onDestruction: {
         if (recording)
             Shortcuts.capturing = false
@@ -78,6 +75,7 @@ Rectangle {
         color: (root.hovered && !root.rejected) ? Theme.hoverTextColor : Theme.textColor
 
         Behavior on color {
+            enabled: LayoutMetrics.animationsEnabled
             ColorAnimation {
                 duration: 150
             }
@@ -95,8 +93,6 @@ Rectangle {
     Keys.onPressed: function (event) {
         if (!root.recording)
             return
-        // Consume everything so app-wide shortcuts and the popup's own
-        // Escape handling do not react while we are recording a chord.
         event.accepted = true
 
         if (event.key === Qt.Key_Escape) {
@@ -106,7 +102,7 @@ Rectangle {
 
         var sequence = root.sequenceFromEvent(event)
         if (sequence === "")
-            return // modifier-only or unknown key: keep recording
+            return
 
         root.stopRecording()
 
@@ -125,8 +121,6 @@ Rectangle {
             event.accepted = true
     }
 
-    // Builds a portable chord string ("Ctrl+Shift+K") from a key event.
-    // Returns "" for modifier-only presses so they don't end the capture.
     function sequenceFromEvent(event) {
         var parts = []
         if (event.modifiers & Qt.ControlModifier) parts.push("Ctrl")
@@ -145,9 +139,6 @@ Rectangle {
     function keyName(event) {
         var k = event.key
 
-        // Printable ASCII: letters, digits and punctuation. Deriving the name
-        // from the key code (rather than event.text) is what lets modifier
-        // combos like Ctrl+S be captured - QML leaves text empty there.
         if (k >= 0x21 && k <= 0x7e)
             return String.fromCharCode(k)
 
@@ -182,8 +173,6 @@ Rectangle {
         case Qt.Key_F12: return "F12"
         }
 
-        // Layout-dependent keys (e.g. accented characters) still arrive as text
-        // when no modifier is held.
         var text = event.text
         if (text && text.length === 1 && text.charCodeAt(0) > 0x20)
             return text.toUpperCase()

@@ -16,6 +16,7 @@ Rectangle {
     color: isActive ? Theme.themeColor : "transparent"
 
     Behavior on color {
+        enabled: LayoutMetrics.animationsEnabled
         ColorAnimation {
             duration: 150
         }
@@ -45,6 +46,7 @@ Rectangle {
             color: isActive ? Theme.hoverTextColor : Theme.textColor
 
             Behavior on color {
+                enabled: LayoutMetrics.animationsEnabled
                 ColorAnimation {
                     duration: 150
                 }

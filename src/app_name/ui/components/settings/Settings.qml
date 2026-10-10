@@ -16,6 +16,8 @@ import components
     property bool appearanceCommittedResponsive: true
     property int appearanceCommittedRadius: Math.round(controller.get_corner_radius() * 50)
     property int appearancePendingRadius: appearanceCommittedRadius
+    property bool appearanceCommittedAnimations: true
+    property bool appearancePendingAnimations: true
     property string appearancePendingFont: Typography.fontFamily
     property string appearanceCommittedFont: Typography.fontFamily
     property int languageCommittedIndex: 0
@@ -66,17 +68,21 @@ import components
         Typography.fontFamily = appearancePendingFont
         controller.save_font_family(appearancePendingFont)
         applyRadius(appearancePendingRadius)
+        LayoutMetrics.setAnimationsEnabled(appearancePendingAnimations)
+        controller.save_animations_enabled(appearancePendingAnimations)
         appearanceCommittedTheme = appearancePendingTheme
         appearanceCommittedScale = appearancePendingScale
         appearanceCommittedResponsive = appearancePendingResponsive
         appearanceCommittedFont = appearancePendingFont
         appearanceCommittedRadius = appearancePendingRadius
+        appearanceCommittedAnimations = appearancePendingAnimations
     }
 
     function cancelAppearanceChanges() {
         appearancePendingTheme = appearanceCommittedTheme
         appearancePendingScale = appearanceCommittedScale
         appearancePendingResponsive = appearanceCommittedResponsive
+        appearancePendingAnimations = appearanceCommittedAnimations
         appearancePendingFont = appearanceCommittedFont
         themeComboBox.initialized = false
         var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
@@ -96,6 +102,10 @@ import components
         responsiveSwitch.initialized = false
         responsiveSwitch.checked = appearanceCommittedResponsive
         responsiveSwitch.initialized = true
+        animationsSwitch.initialized = false
+        animationsSwitch.checked = appearanceCommittedAnimations
+        animationsSwitch.initialized = true
+        fontComboBox.initialized = false
         fontComboBox.initialized = false
         var fontIdx = fontComboBox.model.indexOf(appearanceCommittedFont)
         if (fontIdx !== -1) fontComboBox.currentIndex = fontIdx
@@ -128,6 +138,8 @@ import components
         appearancePendingScale = appearanceCommittedScale
         appearanceCommittedResponsive = controller.get_is_continuous()
         appearancePendingResponsive = appearanceCommittedResponsive
+        appearanceCommittedAnimations = controller.get_animations_enabled()
+        appearancePendingAnimations = appearanceCommittedAnimations
         appearanceCommittedFont = Typography.fontFamily
         appearancePendingFont = appearanceCommittedFont
         appearanceCommittedRadius = Math.round(controller.get_corner_radius() * 50)
@@ -158,6 +170,65 @@ import components
         padding: 0
         background: Item {}
         onClosed: Shortcuts.capturing = false
+
+        enter: LayoutMetrics.animationsEnabled ? settingsPopupFadeEnter : settingsPopupInstantEnter
+        exit: LayoutMetrics.animationsEnabled ? settingsPopupFadeExit : settingsPopupInstantExit
+
+        Transition {
+            id: settingsPopupInstantEnter
+            ParallelAnimation {
+                NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 0 }
+                NumberAnimation { property: "scale"; from: 0.95; to: 1; duration: 0 }
+            }
+        }
+
+        Transition {
+            id: settingsPopupInstantExit
+            ParallelAnimation {
+                NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 0 }
+                NumberAnimation { property: "scale"; from: 1; to: 0.95; duration: 0 }
+            }
+        }
+
+        Transition {
+            id: settingsPopupFadeEnter
+            ParallelAnimation {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    property: "scale"
+                    from: 0.95
+                    to: 1
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+
+        Transition {
+            id: settingsPopupFadeExit
+            ParallelAnimation {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 1
+                    to: 0
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    property: "scale"
+                    from: 1
+                    to: 0.95
+                    duration: 200
+                    easing.type: Easing.InQuad
+                }
+            }
+        }
 
         Shortcut {
             sequence: Shortcuts.primary("nextTab")
@@ -221,6 +292,9 @@ import components
                     width: scrollView.width
                            - (scrollView.ScrollBar.vertical.visible
                               ? scrollView.ScrollBar.vertical.width : 0)
+                    height: LayoutMetrics.spacing.xxl
+                            + contentColumn.height
+                            + LayoutMetrics.spacing.xl * 3
 
                     Column {
                         id: contentColumn
@@ -479,6 +553,7 @@ import components
                                     Label {
                                         text: Lang.labels.responsiveScaling
                                         style_2: true
+                                        width: LayoutMetrics.size.switchLabelWidth
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
 
@@ -499,6 +574,38 @@ import components
                                                 responsiveSwitch.initialized = false
                                                 responsiveSwitch.checked = settingsMenu.appearanceCommittedResponsive
                                                 responsiveSwitch.initialized = true
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Row {
+                                    spacing: LayoutMetrics.spacing.md
+
+                                    Label {
+                                        text: Lang.labels.animations
+                                        style_2: true
+                                        width: LayoutMetrics.size.switchLabelWidth
+                                        anchors.verticalCenter: parent.verticalCenter
+                                    }
+
+                                    Switch {
+                                        id: animationsSwitch
+                                        property bool initialized: false
+
+                                        onCheckedChanged: {
+                                            if (initialized) {
+                                                settingsMenu.appearancePendingAnimations = checked
+                                            }
+                                        }
+
+                                        Connections {
+                                            target: settingsPopup
+                                            function onOpened() {
+                                                loadAppearance()
+                                                animationsSwitch.initialized = false
+                                                animationsSwitch.checked = settingsMenu.appearanceCommittedAnimations
+                                                animationsSwitch.initialized = true
                                             }
                                         }
                                     }

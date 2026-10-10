@@ -96,6 +96,7 @@ Rectangle {
                     font.bold: true
 
                     Behavior on color {
+                        enabled: LayoutMetrics.animationsEnabled
                         ColorAnimation { duration: 150; easing.type: Easing.InOutQuad }
                     }
                 }
@@ -114,7 +115,7 @@ Rectangle {
             x: listView.currentItem ? listView.currentItem.x : 0
 
             Behavior on x {
-                enabled: !root.resizing
+                enabled: !root.resizing && LayoutMetrics.animationsEnabled
                 NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
             }
 

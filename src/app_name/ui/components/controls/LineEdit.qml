@@ -25,6 +25,7 @@ TextField {
         radius: LayoutMetrics.radius.m
 
         Behavior on border.color {
+            enabled: LayoutMetrics.animationsEnabled
             ColorAnimation {
                 duration: 150
             }

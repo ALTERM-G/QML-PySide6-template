@@ -33,12 +33,14 @@ Rectangle {
         color: mouseArea.containsMouse ? Theme.themeColor : Theme.textColor
 
         Behavior on color {
+            enabled: LayoutMetrics.animationsEnabled
             ColorAnimation { duration: 150 }
         }
     }
 
     scale: mouseArea.containsMouse ? 1.05 : 1.0
     Behavior on scale {
+        enabled: LayoutMetrics.animationsEnabled
         NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
     }
 }

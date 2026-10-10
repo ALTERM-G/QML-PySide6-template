@@ -147,6 +147,23 @@ class Controller(QObject):
     def get_corner_radius(self):
         return self._load_settings().get("cornerRadius", 1.0)
 
+    # -------------- Animations --------------
+
+    @Slot(bool)
+    def save_animations_enabled(self, value):
+        try:
+            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
+            settings = self._load_settings()
+            settings["animationsEnabled"] = bool(value)
+            with open(self._settings_path, "w") as f:
+                json.dump(settings, f, indent=2)
+        except Exception as e:
+            print(f"Error saving animationsEnabled: {e}")
+
+    @Slot(result=bool)
+    def get_animations_enabled(self):
+        return self._load_settings().get("animationsEnabled", True)
+
     # -------------- Scaling Mode --------------
 
     @Slot(bool)

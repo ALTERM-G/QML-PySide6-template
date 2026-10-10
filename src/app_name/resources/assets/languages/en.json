@@ -20,6 +20,7 @@
         "apply": "Apply",
         "responsiveScaling": "Responsive scaling",
         "cornerRadius": "Corner radius",
+        "animations": "Animations",
         "pressShortcut": "Press keys…",
         "shortcutInUse": "In use",
         "resetShortcut": "Reset",

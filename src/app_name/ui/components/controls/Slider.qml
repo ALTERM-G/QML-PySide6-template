@@ -51,8 +51,8 @@ Slider {
         color: (control.hovered || control.pressed) ? _handleHoverColor : _handleColor
         opacity: control.enabled ? 1.0 : 0.3
 
-        Behavior on width { NumberAnimation { duration: 50 } }
-        Behavior on height { NumberAnimation { duration: 50 } }
+        Behavior on width { enabled: LayoutMetrics.animationsEnabled; NumberAnimation { duration: 50 } }
+        Behavior on height { enabled: LayoutMetrics.animationsEnabled; NumberAnimation { duration: 50 } }
     }
 
     MouseArea {
