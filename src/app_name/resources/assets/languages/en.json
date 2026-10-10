@@ -19,7 +19,11 @@
         "keyboard": "Keyboard",
         "apply": "Apply",
         "responsiveScaling": "Responsive scaling",
-        "advancedPlaceholder": "Add your advanced app settings here"
+        "cornerRadius": "Corner radius",
+        "pressShortcut": "Press keys…",
+        "shortcutInUse": "In use",
+        "resetShortcut": "Reset",
+        "resetAllShortcuts": "Reset all"
     },
     "shortcuts": {
         "openSettings": "Open settings",

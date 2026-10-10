@@ -19,7 +19,11 @@
         "keyboard": "Teclado",
         "apply": "Aplicar",
         "responsiveScaling": "Escala adaptable",
-        "advancedPlaceholder": "Añade aquí los ajustes avanzados de la aplicación"
+        "cornerRadius": "Radio de esquinas",
+        "pressShortcut": "Pulsa las teclas…",
+        "shortcutInUse": "En uso",
+        "resetShortcut": "Restablecer",
+        "resetAllShortcuts": "Restablecer todo"
     },
     "shortcuts": {
         "openSettings": "Abrir ajustes",

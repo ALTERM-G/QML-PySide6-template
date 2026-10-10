@@ -111,6 +111,7 @@ def main():
 
     # ---------------- Load scale factor ----------------
     scale_factor = controller.get_scale_factor()
+    corner_radius = controller.get_corner_radius()
 
     # ---------------- Load QML files ----------------
     qml_singletons = [
@@ -120,6 +121,7 @@ def main():
             lambda obj: (
                 obj.setScaleFactor(scale_factor),
                 obj.setIsContinuous(controller.get_is_continuous()),
+                obj.setCornerRadiusFactor(corner_radius),
             ),
         ),
         ("SVGLibrary", "style/SVGLibrary.qml", None),
@@ -131,7 +133,7 @@ def main():
                 obj.setIsContinuous(controller.get_is_continuous()),
             ),
         ),
-        ("Shortcuts", "data/Shortcuts.qml", None),
+        ("Shortcuts", "data/Shortcuts.qml", lambda obj: obj.load(controller.get_shortcuts())),
         ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),
     ]
     qml_objects = {}

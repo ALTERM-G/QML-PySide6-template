@@ -4,6 +4,7 @@ import QtQuick
 QtObject {
     readonly property url back: Qt.resolvedUrl("../assets/icons/navigation/back.svg")
     readonly property url settings: Qt.resolvedUrl("../assets/icons/settings/settings.svg")
+    readonly property url reset: Qt.resolvedUrl("../assets/icons/settings/reset.svg")
     readonly property url leftSidebar: Qt.resolvedUrl("../assets/icons/navigation/left_sidebar.svg")
     readonly property url home: Qt.resolvedUrl("../assets/icons/navigation/home.svg")
     readonly property url info: Qt.resolvedUrl("../assets/icons/navigation/info.svg")

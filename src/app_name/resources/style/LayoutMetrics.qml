@@ -27,6 +27,12 @@ QtObject {
         isContinuous = value
     }
 
+    property real cornerRadiusFactor: 1.0
+
+    function setCornerRadiusFactor(factor) {
+        cornerRadiusFactor = factor
+    }
+
     onWChanged: sideBarWidthOverride = -1
     onHChanged: sideBarWidthOverride = -1
     onScaleFactorChanged: sideBarWidthOverride = -1
@@ -56,7 +62,9 @@ QtObject {
         property real spinBoxWidth: unit * 10
         property real tabBarWidth: unit * 50
         // Wide enough for the longest translated action name at h6 (~49 units)
-        property real shortcutLabelWidth: unit * 52
+        property real shortcutLabelWidth: unit * 24
+        // Chord capture field in the keyboard editor
+        property real shortcutControlWidth: unit * 18
 
         property real iconS: unit * 2
         property real iconM: unit * 3
@@ -66,9 +74,9 @@ QtObject {
 
     //--- Radius ---
     property QtObject radius: QtObject {
-        property real s: unit * 0.5
-        property real m: unit
-        property real xl: unit * 2
+        property real s: unit * 0.5 * cornerRadiusFactor
+        property real m: unit * cornerRadiusFactor
+        property real xl: unit * 2 * cornerRadiusFactor
     }
 
     //--- Borders ---

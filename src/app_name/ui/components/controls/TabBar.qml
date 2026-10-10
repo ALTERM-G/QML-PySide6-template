@@ -11,6 +11,11 @@ Rectangle {
     property var tabData: []
     property alias currentIndex: listView.currentIndex
 
+    // True for a short window while the bar is being resized (e.g. the user is
+    // changing the scale). The highlight snaps instead of sliding during this
+    // window, so it never lags behind and spills out of the bar.
+    property bool resizing: false
+
     readonly property real tabPadding: LayoutMetrics.spacing.xl
     readonly property real listMargin: LayoutMetrics.spacing.xs
     readonly property real widestLabel: {
@@ -29,6 +34,17 @@ Rectangle {
     height: LayoutMetrics.size.controlHeightHuge
     implicitWidth: totalWidth
     implicitHeight: height
+
+    onWidthChanged: {
+        resizing = true
+        resizeSettle.restart()
+    }
+
+    Timer {
+        id: resizeSettle
+        interval: 180
+        onTriggered: root.resizing = false
+    }
 
     function tabLabel(item) {
         return typeof item === "string" ? item : (item && item.name !== undefined ? item.name : "")
@@ -60,6 +76,7 @@ Rectangle {
         interactive: false
         orientation: Qt.Horizontal
         highlightFollowsCurrentItem: false
+        clip: true
         model: root.tabData.length
 
         delegate: Item {
@@ -97,6 +114,7 @@ Rectangle {
             x: listView.currentItem ? listView.currentItem.x : 0
 
             Behavior on x {
+                enabled: !root.resizing
                 NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
             }
 

@@ -3,9 +3,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import components
 
-Item {
-    id: settingsMenu
-    property bool isPopupOpen: settingsPopup.opened
+    Item {
+        id: settingsMenu
+        property bool isPopupOpen: settingsPopup.opened
+
 
     property string appearancePendingTheme: Theme.currentTheme
     property string appearanceCommittedTheme: Theme.currentTheme
@@ -13,6 +14,8 @@ Item {
     property int appearancePendingScale: Math.round((controller.get_scale_factor() - 0.5) * 200)
     property bool appearancePendingResponsive: true
     property bool appearanceCommittedResponsive: true
+    property int appearanceCommittedRadius: Math.round(controller.get_corner_radius() * 50)
+    property int appearancePendingRadius: appearanceCommittedRadius
     property string appearancePendingFont: Typography.fontFamily
     property string appearanceCommittedFont: Typography.fontFamily
     property int languageCommittedIndex: 0
@@ -20,6 +23,15 @@ Item {
     readonly property int scaleMin: 0
     readonly property int scaleMax: 200
     readonly property int scaleStep: 10
+
+    readonly property int radiusMin: 0
+    readonly property int radiusMax: 100
+
+    function applyRadius(radius) {
+        var factor = radius / 50
+        LayoutMetrics.setCornerRadiusFactor(factor)
+        controller.save_corner_radius(factor)
+    }
 
     function applyScale(scale) {
         var factor = 0.5 + scale / 200
@@ -53,10 +65,12 @@ Item {
         controller.save_is_continuous(appearancePendingResponsive)
         Typography.fontFamily = appearancePendingFont
         controller.save_font_family(appearancePendingFont)
+        applyRadius(appearancePendingRadius)
         appearanceCommittedTheme = appearancePendingTheme
         appearanceCommittedScale = appearancePendingScale
         appearanceCommittedResponsive = appearancePendingResponsive
         appearanceCommittedFont = appearancePendingFont
+        appearanceCommittedRadius = appearancePendingRadius
     }
 
     function cancelAppearanceChanges() {
@@ -73,6 +87,12 @@ Item {
         slider.value = scaleRow.scaleValue
         spin.value = scaleRow.scaleValue
         scaleRow.initialized = true
+        cornerRadiusRow.initialized = false
+        cornerRadiusRow.radiusValue = appearanceCommittedRadius
+        radiusSlider.value = cornerRadiusRow.radiusValue
+        radiusSpin.value = cornerRadiusRow.radiusValue
+        cornerRadiusRow.initialized = true
+        applyRadius(appearanceCommittedRadius)
         responsiveSwitch.initialized = false
         responsiveSwitch.checked = appearanceCommittedResponsive
         responsiveSwitch.initialized = true
@@ -110,6 +130,8 @@ Item {
         appearancePendingResponsive = appearanceCommittedResponsive
         appearanceCommittedFont = Typography.fontFamily
         appearancePendingFont = appearanceCommittedFont
+        appearanceCommittedRadius = Math.round(controller.get_corner_radius() * 50)
+        appearancePendingRadius = appearanceCommittedRadius
         languageCommittedIndex = controller.get_language()
     }
 
@@ -135,10 +157,11 @@ Item {
         y: LayoutMetrics.size.topBarHeight + (LayoutMetrics.window.height - LayoutMetrics.size.topBarHeight - height) / 2
         padding: 0
         background: Item {}
+        onClosed: Shortcuts.capturing = false
 
         Shortcut {
-            sequence: Shortcuts.nextTab
-            enabled: settingsPopup.opened
+            sequence: Shortcuts.primary("nextTab")
+            enabled: settingsPopup.opened && !Shortcuts.capturing
             onActivated: tabBar.currentIndex = (tabBar.currentIndex + 1) % tabBar.tabData.length
         }
 
@@ -183,6 +206,7 @@ Item {
             }
 
             ScrollView {
+                id: scrollView
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: tabBar.bottom
@@ -194,14 +218,16 @@ Item {
 
                 Item {
                     id: scrollContent
-                    width: parent.width
-                    height: LayoutMetrics.spacing.xxl + contentColumn.implicitHeight + LayoutMetrics.spacing.xl * 3
+                    width: scrollView.width
+                           - (scrollView.ScrollBar.vertical.visible
+                              ? scrollView.ScrollBar.vertical.width : 0)
 
                     Column {
                         id: contentColumn
+                        x: 0
+                        width: parent.width
                         anchors.top: parent.top
                         anchors.topMargin: LayoutMetrics.spacing.xxl
-                        anchors.horizontalCenter: parent.horizontalCenter
                         spacing: LayoutMetrics.spacing.lg
 
                         // ---- General Tab ----
@@ -380,6 +406,69 @@ Item {
                             }
 
                             Column {
+                                id: cornerRadius
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                spacing: LayoutMetrics.spacing.xxs
+
+                                Label {
+                                    text: Lang.labels.cornerRadius
+                                    style_2: true
+                                }
+
+                                Row {
+                                    id: cornerRadiusRow
+                                    spacing: LayoutMetrics.spacing.md
+                                    property int radiusValue: 50
+                                    property bool initialized: false
+
+                                    Connections {
+                                        target: settingsPopup
+                                        function onOpened() {
+                                            loadAppearance()
+                                            cornerRadiusRow.initialized = false
+                                            cornerRadiusRow.radiusValue = appearanceCommittedRadius
+                                            radiusSlider.value = cornerRadiusRow.radiusValue
+                                            radiusSpin.value = cornerRadiusRow.radiusValue
+                                            cornerRadiusRow.initialized = true
+                                        }
+                                    }
+
+                                    Slider {
+                                        id: radiusSlider
+                                        from: 0
+                                        to: 100
+                                        value: cornerRadiusRow.radiusValue
+
+                                        onMoved: {
+                                            var newValue = Math.round(value)
+                                            if (cornerRadiusRow.radiusValue !== newValue) {
+                                                cornerRadiusRow.radiusValue = newValue
+                                                radiusSpin.value = newValue
+                                                if (cornerRadiusRow.initialized)
+                                                    settingsMenu.appearancePendingRadius = newValue
+                                            }
+                                        }
+                                    }
+
+                                    SpinBox {
+                                        id: radiusSpin
+                                        from: 0
+                                        to: 100
+                                        value: cornerRadiusRow.radiusValue
+
+                                        onValueChanged: {
+                                            if (cornerRadiusRow.radiusValue !== value) {
+                                                cornerRadiusRow.radiusValue = value
+                                                radiusSlider.value = value
+                                                if (cornerRadiusRow.initialized)
+                                                    settingsMenu.appearancePendingRadius = value
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Column {
                                 id: switches
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 spacing: LayoutMetrics.spacing.xxs
@@ -422,8 +511,8 @@ Item {
                                 spacing: LayoutMetrics.spacing.md
 
                                 Shortcut {
-                                    sequence: Shortcuts.apply
-                                    enabled: tabBar.currentIndex === 1
+                                    sequence: Shortcuts.primary("applyChanges")
+                                    enabled: tabBar.currentIndex === 1 && !Shortcuts.capturing
                                     onActivated: applyAppearanceChanges()
                                 }
 
@@ -439,42 +528,81 @@ Item {
 
                         // ---- Advanced Tab ----
                         Column {
+                            id: advancedColumn
                             visible: tabBar.currentIndex === 2
-                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            width: parent.width
                             spacing: LayoutMetrics.spacing.md
 
                             Label {
+                                width: parent.width
                                 text: Lang.labels.keyboard
                                 style_2: true
+                                horizontalAlignment: Text.AlignHCenter
                             }
 
                             Repeater {
                                 model: Shortcuts.list
 
-                                delegate: Row {
+                                delegate: Item {
                                     id: shortcutRow
                                     required property var modelData
-                                    spacing: LayoutMetrics.spacing.lg
 
-                                    Label {
-                                        text: Lang.shortcuts[shortcutRow.modelData.action]
-                                        width: LayoutMetrics.size.shortcutLabelWidth
-                                        elide: Text.ElideRight
-                                    }
+                                    width: advancedColumn.width
+                                    height: rowContent.implicitHeight
 
-                                    Label {
-                                        text: shortcutRow.modelData.sequence
-                                        style_2: true
-                                        font.family: Typography.fontRegular
-                                        font.weight: Font.Normal
+                                    Row {
+                                        id: rowContent
+                                        spacing: LayoutMetrics.spacing.sm
+
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        anchors.verticalCenter: parent.verticalCenter
+
+                                        Label {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            text: Lang.shortcuts[shortcutRow.modelData.id]
+                                                  || shortcutRow.modelData.label
+                                            width: LayoutMetrics.size.shortcutLabelWidth
+                                            horizontalAlignment: Text.AlignRight
+                                            elide: Text.ElideRight
+                                        }
+
+                                        ShortcutButton {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            actionId: shortcutRow.modelData.id
+                                        }
+
+                                        IconButton {
+                                            id: resetButton
+
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            opacity: shortcutRow.modelData.custom ? 1 : 0
+                                            enabled: shortcutRow.modelData.custom
+                                            iconPath: SVGLibrary.reset
+                                            buttonWidth: LayoutMetrics.size.iconM
+                                            buttonHeight: LayoutMetrics.size.iconM
+
+                                            onPressed: Shortcuts.reset(shortcutRow.modelData.id)
+
+                                            ToolTip {
+                                                text: Lang.labels.resetShortcut
+                                                visible: resetButton.hovered
+                                                         && shortcutRow.modelData.custom
+                                                delay: 600
+                                            }
+                                        }
                                     }
                                 }
                             }
 
-                            Label {
-                                text: Lang.labels.advancedPlaceholder
-                                style_2: true
-                                topPadding: LayoutMetrics.spacing.md
+                            Button {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                buttonText: Lang.labels.resetAllShortcuts
+                                primary: true
+                                heightMultiplier: 1.3
+                                width: LayoutMetrics.size.buttonWidth * 1.4
+
+                                onPressed: Shortcuts.resetAll()
                             }
                         }
                     }
@@ -484,23 +612,21 @@ Item {
     }
 
     Shortcut {
-        sequence: Shortcuts.zoomIn
+        sequences: Shortcuts.chords("zoomIn")
         context: Qt.ApplicationShortcut
+        enabled: !Shortcuts.capturing
         onActivated: settingsMenu.nudgeScale(1)
     }
     Shortcut {
-        sequence: Shortcuts.zoomInShifted
+        sequence: Shortcuts.primary("zoomOut")
         context: Qt.ApplicationShortcut
-        onActivated: settingsMenu.nudgeScale(1)
-    }
-    Shortcut {
-        sequence: Shortcuts.zoomOut
-        context: Qt.ApplicationShortcut
+        enabled: !Shortcuts.capturing
         onActivated: settingsMenu.nudgeScale(-1)
     }
     Shortcut {
-        sequence: Shortcuts.openSettings
+        sequence: Shortcuts.primary("openSettings")
         context: Qt.ApplicationShortcut
+        enabled: !Shortcuts.capturing
         onActivated: settingsMenu.toggleSettings()
     }
 }

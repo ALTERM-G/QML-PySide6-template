@@ -19,7 +19,11 @@
         "keyboard": "Tastiera",
         "apply": "Applica",
         "responsiveScaling": "Scala adattiva",
-        "advancedPlaceholder": "Aggiungi qui le impostazioni avanzate dell'app"
+        "cornerRadius": "Raggio degli angoli",
+        "pressShortcut": "Premi i tasti…",
+        "shortcutInUse": "Già in uso",
+        "resetShortcut": "Ripristina",
+        "resetAllShortcuts": "Ripristina tutto"
     },
     "shortcuts": {
         "openSettings": "Apri impostazioni",

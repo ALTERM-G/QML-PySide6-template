@@ -19,7 +19,11 @@
         "keyboard": "Clavier",
         "apply": "Appliquer",
         "responsiveScaling": "Échelle adaptative",
-        "advancedPlaceholder": "Ajoutez ici vos paramètres avancés"
+        "cornerRadius": "Arrondi des coins",
+        "pressShortcut": "Appuyez sur les touches…",
+        "shortcutInUse": "Déjà utilisé",
+        "resetShortcut": "Réinitialiser",
+        "resetAllShortcuts": "Tout réinitialiser"
     },
     "shortcuts": {
         "openSettings": "Ouvrir les paramètres",

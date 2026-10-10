@@ -19,7 +19,11 @@
         "keyboard": "Tastatur",
         "apply": "Übernehmen",
         "responsiveScaling": "Anpassbare Skalierung",
-        "advancedPlaceholder": "Hier können erweiterte App-Einstellungen hinzugefügt werden"
+        "cornerRadius": "Eckenradius",
+        "pressShortcut": "Tasten drücken…",
+        "shortcutInUse": "Belegt",
+        "resetShortcut": "Zurücksetzen",
+        "resetAllShortcuts": "Alle zurücksetzen"
     },
     "shortcuts": {
         "openSettings": "Einstellungen öffnen",

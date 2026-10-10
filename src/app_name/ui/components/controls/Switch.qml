@@ -9,7 +9,7 @@ Switch {
         implicitHeight: LayoutMetrics.size.controlHeight * 1.1
         x: control.leftPadding
         y: parent.height / 2 - height / 2
-        radius: height / 2
+        radius: Math.min(height / 2, LayoutMetrics.radius.m)
         color: control.checked ? Theme.themeColor : Theme.borderColor
         border.color: Theme.borderColor
         border.width: control.checked ? 0 : 1
@@ -25,7 +25,7 @@ Switch {
             x: control.checked ? parent.width - width : 0
             width: parent.height
             height: parent.height
-            radius: width / 2
+            radius: Math.min(width / 2, LayoutMetrics.radius.m)
             color: control.down ? Theme.hoverBackgroundColor : Theme.textColor
             border.color: Theme.borderColor
             border.width: control.checked ? (control.down ? 1 : 0) : 1

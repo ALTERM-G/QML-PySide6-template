@@ -30,7 +30,7 @@ Slider {
         y: parent.height / 2 - height / 2
         width: parent.width - LayoutMetrics.spacing.xs * 2
         height: LayoutMetrics.border.m * 2
-        radius: height / 2
+        radius: Math.min(height / 2, LayoutMetrics.radius.m)
         color: control.enabled ? _trackColor : Theme.textColor
 
         Rectangle {

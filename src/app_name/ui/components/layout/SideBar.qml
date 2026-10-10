@@ -91,16 +91,17 @@ Rectangle {
     }
 
     Shortcut {
-        sequence: Shortcuts.closePanel
-        enabled: sidebar.expanded
+        sequence: Shortcuts.primary("closeSidebar")
+        enabled: sidebar.expanded && !Shortcuts.capturing
         onActivated: sidebar.expanded = false
     }
 
     // App-wide so the sidebar can be toggled from anywhere, including
     // while the settings popup has focus.
     Shortcut {
-        sequence: Shortcuts.toggleSidebar
+        sequence: Shortcuts.primary("toggleSidebar")
         context: Qt.ApplicationShortcut
+        enabled: !Shortcuts.capturing
         onActivated: sidebar.toggle()
     }
 }

@@ -130,6 +130,23 @@ class Controller(QObject):
     def get_scale_factor(self):
         return self._load_settings().get("scaleFactor", 1.0)
 
+    # -------------- Corner Radius --------------
+
+    @Slot(float)
+    def save_corner_radius(self, factor):
+        try:
+            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
+            settings = self._load_settings()
+            settings["cornerRadius"] = factor
+            with open(self._settings_path, "w") as f:
+                json.dump(settings, f, indent=2)
+        except Exception as e:
+            print(f"Error saving corner radius: {e}")
+
+    @Slot(result=float)
+    def get_corner_radius(self):
+        return self._load_settings().get("cornerRadius", 1.0)
+
     # -------------- Scaling Mode --------------
 
     @Slot(bool)
@@ -196,6 +213,24 @@ class Controller(QObject):
         except Exception as e:
             print(f"Error loading language: {e}")
         return {}
+
+    # -------------- Shortcuts --------------
+
+    @Slot(result=dict)
+    def get_shortcuts(self):
+        data = self._load_settings().get("shortcuts", {})
+        return data if isinstance(data, dict) else {}
+
+    @Slot(dict)
+    def save_shortcuts(self, shortcuts):
+        try:
+            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
+            settings = self._load_settings()
+            settings["shortcuts"] = dict(shortcuts)
+            with open(self._settings_path, "w") as f:
+                json.dump(settings, f, indent=2)
+        except Exception as e:
+            print(f"Error saving shortcuts: {e}")
 
     # View Model
     @Property(QObject, constant=True)
