@@ -1,6 +1,5 @@
-from PySide6.QtCore import QObject, Property, Signal
-from pathlib import Path
-import json
+
+from PySide6.QtCore import Property, QObject, Signal
 
 
 class LanguageManager(QObject):

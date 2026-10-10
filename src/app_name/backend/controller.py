@@ -1,15 +1,19 @@
-from PySide6.QtCore import QObject, Property, Signal, Slot
-from pathlib import Path
 import json
+import logging
+from pathlib import Path
+
+from PySide6.QtCore import Property, QIODevice, QObject, QSaveFile, Signal, Slot
+
 from .viewmodels import MainVM, SettingsVM
+
+logger = logging.getLogger(__name__)
 
 
 class Controller(QObject):
-    myPropertyChanged = Signal()
+    languageChanged = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._my_property = "Hello my friend!"
         self._theme_path = (
             Path(__file__).parent.parent / "resources" / "runtime" / "CurrentTheme.json"
         )
@@ -24,15 +28,13 @@ class Controller(QObject):
         self._main_vm = MainVM(self)
         self._settings_vm = SettingsVM(self)
 
-        self._current_language = self.get_language()
+        self._language_files = ["en.json", "fr.json", "de.json", "es.json", "it.json"]
+        self._languages_path = (
+            Path(__file__).parent.parent / "resources" / "assets" / "languages"
+        )
+
         self._load_all_themes()
-
-    _language_files = ["en.json", "fr.json", "de.json", "es.json", "it.json"]
-    _languages_path = (
-        Path(__file__).parent.parent / "resources" / "assets" / "languages"
-    )
-
-    languageChanged = Signal()
+        self._current_language = self.get_language()
 
     def _load_all_themes(self):
         self._base_config = {}
@@ -40,33 +42,22 @@ class Controller(QObject):
 
         base_path = self._themes_path / "base.json"
         if base_path.exists():
-            with open(base_path) as f:
-                self._base_config = json.load(f)
+            try:
+                with open(base_path) as f:
+                    self._base_config = json.load(f)
+            except Exception:
+                self._base_config = {}
 
         for theme_file in self._themes_path.glob("*.json"):
             if theme_file.stem == "base":
                 continue
-            with open(theme_file) as f:
-                data = json.load(f)
+            try:
+                with open(theme_file) as f:
+                    data = json.load(f)
                 if "colors" in data:
                     self._theme_colors[theme_file.stem] = data["colors"]
-
-    @Property(str, notify=myPropertyChanged)
-    def myProperty(self):
-        return self._my_property
-
-    @myProperty.setter
-    def myProperty(self, value):
-        if self._my_property != value:
-            self._my_property = value
-            self.myPropertyChanged.emit()
-
-    @Slot(str, result=str)
-    def mySlot(self, message):
-        print(f"Received message in Python: {message}")
-        return f"Python says: '{message}' received!"
-
-    # -------------- Theme --------------
+            except Exception:
+                continue
 
     def _load_theme(self):
         try:
@@ -78,19 +69,17 @@ class Controller(QObject):
                         self._theme_last_modified = current_mtime
                         return theme_data.get("currentTheme", "Carbon Amber")
         except Exception as e:
-            print(f"Error loading theme: {e}")
-
+            logger.warning("Error loading theme: %s", e)
         return "Carbon Amber"
 
     @Slot(str)
     def save_theme(self, theme_name):
+        self._write_json(self._theme_path, {"currentTheme": theme_name})
         try:
-            theme_data = {"currentTheme": theme_name}
-            with open(self._theme_path, "w") as f:
-                json.dump(theme_data, f, indent=2)
-            print(f"Theme saved to {self._theme_path}: {theme_name}")
-        except Exception as e:
-            print(f"Error saving theme: {e}")
+            if self._theme_path.exists():
+                self._theme_last_modified = self._theme_path.stat().st_mtime
+        except OSError as e:
+            logger.warning("Error stating theme: %s", e)
 
     @Slot(result=str)
     def get_current_theme(self):
@@ -104,119 +93,89 @@ class Controller(QObject):
     def get_theme_colors(self):
         return self._theme_colors
 
-    # -------------- Settings (Scale) --------------
-
     def _load_settings(self):
         try:
             if self._settings_path.exists():
                 with open(self._settings_path) as f:
                     return json.load(f)
         except Exception as e:
-            print(f"Error loading settings: {e}")
+            logger.warning("Error loading settings: %s", e)
         return {"scaleFactor": 1.0}
+
+    @staticmethod
+    def _write_json(path, data):
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            file = QSaveFile(str(path))
+            if not file.open(QIODevice.WriteOnly | QIODevice.Text):
+                raise OSError(file.errorString())
+            file.write(json.dumps(data, indent=2).encode("utf-8"))
+            if not file.commit():
+                raise OSError(file.errorString())
+        except Exception as e:
+            logger.warning("Error writing %s: %s", path.name, e)
+
+    def _save_settings(self, settings):
+        self._write_json(self._settings_path, settings)
+
+    def _update_settings(self, **updates):
+        settings = self._load_settings()
+        settings.update(updates)
+        self._save_settings(settings)
+        return settings
 
     @Slot(float)
     def save_scale_factor(self, factor):
-        try:
-            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
-            settings = self._load_settings()
-            settings["scaleFactor"] = factor
-            with open(self._settings_path, "w") as f:
-                json.dump(settings, f, indent=2)
-        except Exception as e:
-            print(f"Error saving scale factor: {e}")
+        self._update_settings(scaleFactor=factor)
 
     @Slot(result=float)
     def get_scale_factor(self):
         return self._load_settings().get("scaleFactor", 1.0)
 
-    # -------------- Corner Radius --------------
-
     @Slot(float)
     def save_corner_radius(self, factor):
-        try:
-            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
-            settings = self._load_settings()
-            settings["cornerRadius"] = factor
-            with open(self._settings_path, "w") as f:
-                json.dump(settings, f, indent=2)
-        except Exception as e:
-            print(f"Error saving corner radius: {e}")
+        self._update_settings(cornerRadius=factor)
 
     @Slot(result=float)
     def get_corner_radius(self):
         return self._load_settings().get("cornerRadius", 1.0)
 
-    # -------------- Animations --------------
-
     @Slot(bool)
     def save_animations_enabled(self, value):
-        try:
-            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
-            settings = self._load_settings()
-            settings["animationsEnabled"] = bool(value)
-            with open(self._settings_path, "w") as f:
-                json.dump(settings, f, indent=2)
-        except Exception as e:
-            print(f"Error saving animationsEnabled: {e}")
+        self._update_settings(animationsEnabled=bool(value))
 
     @Slot(result=bool)
     def get_animations_enabled(self):
         return self._load_settings().get("animationsEnabled", True)
 
-    # -------------- Scaling Mode --------------
-
     @Slot(bool)
     def save_is_continuous(self, value):
-        try:
-            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
-            settings = self._load_settings()
-            settings["isContinuous"] = value
-            with open(self._settings_path, "w") as f:
-                json.dump(settings, f, indent=2)
-        except Exception as e:
-            print(f"Error saving isContinuous: {e}")
+        self._update_settings(isContinuous=value)
 
     @Slot(result=bool)
     def get_is_continuous(self):
         return self._load_settings().get("isContinuous", True)
 
-    # -------------- Font Family --------------
-
     @Slot(str)
     def save_font_family(self, family):
-        try:
-            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
-            settings = self._load_settings()
-            settings["fontFamily"] = family
-            with open(self._settings_path, "w") as f:
-                json.dump(settings, f, indent=2)
-        except Exception as e:
-            print(f"Error saving font family: {e}")
+        self._update_settings(fontFamily=family)
 
     @Slot(result=str)
     def get_font_family(self):
         return self._load_settings().get("fontFamily", "JetBrains Mono")
 
-    # -------------- Language --------------
-
     @Slot(int)
     def save_language(self, index):
-        try:
-            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
-            settings = self._load_settings()
-            settings["language"] = index
-            with open(self._settings_path, "w") as f:
-                json.dump(settings, f, indent=2)
-            self._current_language = index
-            self.languageChanged.emit()
-        except Exception as e:
-            print(f"Error saving language: {e}")
+        self._update_settings(language=index)
+        self._current_language = index
+        self.languageChanged.emit()
 
     @Slot(result=int)
     def get_language(self):
         idx = self._load_settings().get("language", 0)
-        return idx if 0 <= idx < len(self._language_files) else 0
+        if 0 <= idx < len(self._language_files):
+            return idx
+        return 0
 
     @Slot(result=dict)
     def get_language_data(self):
@@ -228,10 +187,8 @@ class Controller(QObject):
                     with open(path) as f:
                         return json.load(f)
         except Exception as e:
-            print(f"Error loading language: {e}")
+            logger.warning("Error loading language: %s", e)
         return {}
-
-    # -------------- Shortcuts --------------
 
     @Slot(result=dict)
     def get_shortcuts(self):
@@ -240,16 +197,8 @@ class Controller(QObject):
 
     @Slot(dict)
     def save_shortcuts(self, shortcuts):
-        try:
-            self._settings_path.parent.mkdir(parents=True, exist_ok=True)
-            settings = self._load_settings()
-            settings["shortcuts"] = dict(shortcuts)
-            with open(self._settings_path, "w") as f:
-                json.dump(settings, f, indent=2)
-        except Exception as e:
-            print(f"Error saving shortcuts: {e}")
+        self._update_settings(shortcuts=dict(shortcuts))
 
-    # View Model
     @Property(QObject, constant=True)
     def mainVM(self):
         return self._main_vm

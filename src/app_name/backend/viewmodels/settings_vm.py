@@ -8,8 +8,8 @@ class SettingsVM(BaseVM):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._theme = "dark"
         self._controller = parent
+        self._theme = "Carbon Amber"
 
     @Property(str, notify=theme_changed)
     def theme(self):
@@ -20,13 +20,11 @@ class SettingsVM(BaseVM):
         if self._theme != value:
             self._theme = value
             self.theme_changed.emit()
-            # Save theme via controller
             if self._controller:
                 self._controller.save_theme(value)
 
     @Slot(result=str)
     def getCurrentTheme(self):
-        """Load current theme from controller"""
         if self._controller:
             current_theme = self._controller.get_current_theme()
             if current_theme and current_theme != self._theme:

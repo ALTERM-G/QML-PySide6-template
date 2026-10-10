@@ -1,19 +1,33 @@
 # Python cache
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 
-# Runtime / user files
-resources/runtime/
+# Ruff/Lint caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 
 # Virtual environments
+.venv/
 venv/
 env/
 *.env
 
+# Runtime / user files
+src/app_name/resources/runtime/
+**/resources/runtime/
+
 # Qt / QML generated files
 *.qmlc
 *.rcc
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
 
 # OS files
 .DS_Store

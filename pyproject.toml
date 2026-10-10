@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "qml-pyside6-template"
 version = "0.1.0"
-description = "Add your description here"
+description = "QML + PySide6 application template with design system, theming and i18n"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -15,8 +15,41 @@ dependencies = [
 [project.scripts]
 qml-app = "run:main"
 
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-qt>=4.4", "ruff>=0.6"]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-qt>=4.4", "ruff>=0.6"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-dir]
 "" = "src"
+
+[tool.setuptools.package-data]
+"app_name" = [
+    "resources/**/*.qml",
+    "resources/**/*.json",
+    "resources/**/*.ttf",
+    "resources/**/*.otf",
+    "resources/**/*.ttc",
+    "resources/**/*.svg",
+    "resources/**/*.rtf",
+    "resources/**/*.png",
+    "resources/**/*.jpg",
+    "resources/**/*.ico",
+    "ui/**/*.qml",
+    "ui/components/**/*.qml",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]

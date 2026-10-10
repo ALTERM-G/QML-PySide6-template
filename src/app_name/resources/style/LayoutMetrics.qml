@@ -2,6 +2,7 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    id: lm
     property var window
     property real w: window ? window.width : 1280
     property real h: window ? window.height : 720
@@ -47,49 +48,47 @@ QtObject {
 
     //--- Spacing ---
     property QtObject spacing: QtObject {
-        property real xxs: unit * 0.25
-        property real xs: unit * 0.5
-        property real sm: unit
-        property real md: unit * 1.5
-        property real lg: unit * 2
-        property real xl: unit * 3
-        property real xxl: unit * 4
+        property real xxs: lm.unit * 0.25
+        property real xs: lm.unit * 0.5
+        property real sm: lm.unit
+        property real md: lm.unit * 1.5
+        property real lg: lm.unit * 2
+        property real xl: lm.unit * 3
+        property real xxl: lm.unit * 4
     }
 
     //--- Sizes ---
     property QtObject size: QtObject {
-        property real topBarHeight: unit * 7
-        property real sideBarWidth: sideBarWidthOverride > 0 ? sideBarWidthOverride : unit * 50
-        property real controlHeightHuge: unit * 4.5
-        property real controlHeight: unit * 2.5
-        property real controlHeightCompact: unit * 2
-        property real buttonWidth: unit * 15
-        property real comboBoxWidth: unit * 40
-        property real sliderWidth: unit * 25
-        property real spinBoxWidth: unit * 10
-        property real tabBarWidth: unit * 50
-        // Wide enough for the longest translated action name at h6 (~49 units)
-        property real shortcutLabelWidth: unit * 24
-        // Chord capture field in the keyboard editor
-        property real shortcutControlWidth: unit * 18
+        property real topBarHeight: lm.unit * 7
+        property real sideBarWidth: sideBarWidthOverride > 0 ? sideBarWidthOverride : lm.unit * 50
+        property real controlHeightHuge: lm.unit * 4.5
+        property real controlHeight: lm.unit * 2.5
+        property real controlHeightCompact: lm.unit * 2
+        property real buttonWidth: lm.unit * 15
+        property real comboBoxWidth: lm.unit * 40
+        property real sliderWidth: lm.unit * 25
+        property real spinBoxWidth: lm.unit * 10
+        property real tabBarWidth: lm.unit * 50
+        property real shortcutLabelWidth: lm.unit * 24
+        property real shortcutControlWidth: lm.unit * 18
 
-        property real iconS: unit * 2
-        property real iconM: unit * 3
-        property real iconL: unit * 4
-        property real iconXl: unit * 5
+        property real iconS: lm.unit * 2
+        property real iconM: lm.unit * 3
+        property real iconL: lm.unit * 4
+        property real iconXl: lm.unit * 5
     }
 
     //--- Radius ---
     property QtObject radius: QtObject {
-        property real s: unit * 0.5 * cornerRadiusFactor
-        property real m: unit * cornerRadiusFactor
-        property real xl: unit * 2 * cornerRadiusFactor
+        property real s: lm.unit * 0.5 * cornerRadiusFactor
+        property real m: lm.unit * cornerRadiusFactor
+        property real xl: lm.unit * 2 * cornerRadiusFactor
     }
 
     //--- Borders ---
     property QtObject border: QtObject {
-        property real s: unit * 0.125
-        property real m: unit * 0.25
-        property real l: unit * 0.375
+        property real s: lm.unit * 0.125
+        property real m: lm.unit * 0.25
+        property real l: lm.unit * 0.375
     }
 }

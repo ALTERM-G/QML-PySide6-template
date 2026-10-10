@@ -1,51 +1,39 @@
-import os
+import json
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QUrl, QTimer
+from PySide6.QtCore import QUrl
 from PySide6.QtGui import QFont, QFontDatabase, QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
+
 from app_name.backend.controller import Controller
 from app_name.backend.language_manager import LanguageManager
 
-_qml_objects = []
-_data_object = None
 _language_manager = None
 
 
-def main():
-    app = QGuiApplication(sys.argv)
-    src_path = Path(__file__).parent / "src" / "app_name"
-
-    # ---------------- Components module -----------------
-    engine = QQmlApplicationEngine()
-    engine.addImportPath(str(src_path / "ui"))
-
-    def load_qml(engine, filename, context_name, callback=None):
-        path = src_path / "resources" / filename
-        if path.exists():
-            component = QQmlComponent(engine, QUrl.fromLocalFile(str(path)))
-            obj = component.create()
-            if obj:
-                engine.rootContext().setContextProperty(context_name, obj)
-                if callback:
-                    callback(obj)
-                return obj
-            else:
-                print(
-                    f"Error: Failed to create QML object from {filename}",
-                    file=sys.stderr,
-                )
-                for error in component.errors():
-                    print(f"  - {error.toString()}", file=sys.stderr)
-                return None
-        else:
-            print(f"Error: QML file not found at {path}", file=sys.stderr)
+def _load_singleton(engine, src_path, filename, context_name, callback=None):
+    path = src_path / "resources" / filename
+    if not path.exists():
+        print(f"Error: QML file not found at {path}", file=sys.stderr)
         return None
 
-    # ---------------- Fonts ----------------
-    assets_path = src_path / "resources" / "assets"
-    font_dir = assets_path / "fonts"
+    component = QQmlComponent(engine, QUrl.fromLocalFile(str(path)))
+    obj = component.create()
+    if obj is None:
+        print(f"Error: Failed to create QML object from {filename}", file=sys.stderr)
+        for error in component.errors():
+            print(f"  - {error.toString()}", file=sys.stderr)
+        return None
+
+    engine.rootContext().setContextProperty(context_name, obj)
+    if callback:
+        callback(obj)
+    return obj
+
+
+def _load_fonts(app, src_path):
+    font_dir = src_path / "resources" / "assets" / "fonts"
     loaded_fonts = {}
 
     if font_dir.exists():
@@ -59,63 +47,63 @@ def main():
                 if not families:
                     print(f"No families found for font '{font_path.name}'", file=sys.stderr)
                     continue
-                family_name = families[0]
-                loaded_fonts[font_path.name] = family_name
-                print(f"Loaded font '{font_path.name}' with family '{family_name}'")
+                loaded_fonts[font_path.name] = families[0]
 
-    engine.rootContext().setContextProperty("LoadedFonts", loaded_fonts)
+    all_families = set(loaded_fonts.values())
+    font_family = next(iter(all_families), "sans-serif")
 
-    all_loaded_families = set(loaded_fonts.values())
-    engine.rootContext().setContextProperty("FontFamilies", list(all_loaded_families))
-
-    font_family = "sans-serif"
-    if all_loaded_families:
-        font_family = list(all_loaded_families)[0]
-    font_config_path = font_dir / "fonts.json" if font_dir.exists() else None
-    if font_config_path and font_config_path.exists():
-        import json
+    config_path = font_dir / "fonts.json"
+    if config_path.exists():
         try:
-            with open(font_config_path) as f:
-                cfg = json.load(f)
-            preferred = cfg.get("defaultFamily", "")
-            if preferred in all_loaded_families:
+            with open(config_path) as f:
+                preferred = json.load(f).get("defaultFamily", "")
+            if preferred in all_families:
                 font_family = preferred
         except Exception:
             pass
 
-    # ---------------- Icons ----------------
-    icon_path = src_path / "resources" / "icons"
-    QIcon.setThemeSearchPaths([str(icon_path)])
+    return loaded_fonts, all_families, font_family
+
+
+def build_engine(src_path=None):
+    """Build and populate the QML engine. Requires a running QGuiApplication."""
+    if src_path is None:
+        src_path = Path(__file__).parent / "src" / "app_name"
+
+    engine = QQmlApplicationEngine()
+    engine.addImportPath(str(src_path / "ui"))
+
+    app = QGuiApplication.instance()
+
+    loaded_fonts, all_families, font_family = _load_fonts(app, src_path)
+    engine.rootContext().setContextProperty("LoadedFonts", loaded_fonts)
+    engine.rootContext().setContextProperty("FontFamilies", list(all_families))
+
     app.setWindowIcon(
         QIcon(str(src_path / "resources" / "assets" / "icons" / "icon.svg"))
     )
 
-    # ---------------- Create Controller ----------------
     controller = Controller()
     engine.rootContext().setContextProperty("controller", controller)
     engine.rootContext().setContextProperty("mainVM", controller.mainVM)
     engine.rootContext().setContextProperty("settingsVM", controller.settingsVM)
 
     saved_family = controller.get_font_family()
-    if saved_family and saved_family in all_loaded_families:
+    if saved_family and saved_family in all_families:
         font_family = saved_family
-
     if font_family != "sans-serif":
         app.setFont(QFont(font_family))
     engine.rootContext().setContextProperty("FontFamily", font_family)
 
-    # ---------------- Language ----------------
     global _language_manager
     _language_manager = LanguageManager(controller)
     engine.rootContext().setContextProperty("Lang", _language_manager)
 
-    # ---------------- Load scale factor ----------------
     scale_factor = controller.get_scale_factor()
     corner_radius = controller.get_corner_radius()
     animations_enabled = controller.get_animations_enabled()
 
-    # ---------------- Load QML files ----------------
-    qml_singletons = [
+    singletons = [
         (
             "LayoutMetrics",
             "style/LayoutMetrics.qml",
@@ -138,30 +126,29 @@ def main():
         ("Shortcuts", "data/Shortcuts.qml", lambda obj: obj.load(controller.get_shortcuts())),
         ("Theme", "style/Theme.qml", lambda obj: obj.initializeTheme()),
     ]
-    qml_objects = {}
+    for name, path, callback in singletons:
+        _load_singleton(engine, src_path, path, name, callback)
 
-    for name, path, callback in qml_singletons:
-        qml_objects[name] = load_qml(engine, path, name, callback)
+    return engine
 
-    # ---------------- Load main.qml -----------------
+
+def main():
+    app = QGuiApplication(sys.argv)
+    src_path = Path(__file__).parent / "src" / "app_name"
+
+    engine = build_engine(src_path)
+
     main_qml = src_path / "ui" / "main.qml"
-
     if not main_qml.exists():
         print(f"Error: main.qml not found at {main_qml}", file=sys.stderr)
         sys.exit(-1)
 
-    try:
-        engine.load(QUrl.fromLocalFile(str(main_qml)))
-    except Exception as e:
-        print(f"Error loading QML: {e}", file=sys.stderr)
-        sys.exit(-1)
-
+    engine.load(QUrl.fromLocalFile(str(main_qml)))
     if not engine.rootObjects():
-        print(f"Error: Failed to load main.qml", file=sys.stderr)
+        print("Error: Failed to load main.qml", file=sys.stderr)
         sys.exit(-1)
 
-    exit_code = app.exec()
-    sys.exit(exit_code)
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
