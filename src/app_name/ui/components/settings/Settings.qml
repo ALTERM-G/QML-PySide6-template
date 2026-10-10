@@ -21,6 +21,7 @@ import components
     property string appearancePendingFont: Typography.fontFamily
     property string appearanceCommittedFont: Typography.fontFamily
     property int languageCommittedIndex: 0
+    property int prevTabIndex: 0
 
     readonly property int scaleMin: 0
     readonly property int scaleMax: 200
@@ -40,6 +41,25 @@ import components
         LayoutMetrics.scaleFactor = factor
         Typography.scaleFactor = factor
         controller.save_scale_factor(factor)
+    }
+
+    // Swooshes the incoming tab content in from the side, workspace-style.
+    // Snaps instantly when animations are disabled.
+    function slideToTab(newIndex) {
+        var dir = newIndex > prevTabIndex ? 1 : -1
+        prevTabIndex = newIndex
+        if (!LayoutMetrics.animationsEnabled) {
+            tabStage.x = 0
+            tabStage.opacity = 1
+            return
+        }
+        tabStage.x = dir * tabStage.width
+        tabStage.opacity = 0
+        tabSlideX.from = dir * tabStage.width
+        tabSlideX.to = 0
+        tabSlideOpacity.from = 0
+        tabSlideOpacity.to = 1
+        tabSlide.start()
     }
 
     function nudgeScale(direction) {
@@ -127,6 +147,31 @@ import components
             settingsPopup.close()
         } else {
             settingsPopup.open()
+        }
+    }
+
+    ParallelAnimation {
+        id: tabSlide
+        NumberAnimation {
+            id: tabSlideX
+            target: tabStage
+            property: "x"
+            duration: 220
+            easing.type: Easing.OutCubic
+        }
+        NumberAnimation {
+            id: tabSlideOpacity
+            target: tabStage
+            property: "opacity"
+            duration: 220
+            easing.type: Easing.OutQuad
+        }
+    }
+
+    Connections {
+        target: tabBar
+        function onCurrentIndexChanged() {
+            settingsMenu.slideToTab(tabBar.currentIndex)
         }
     }
 
@@ -293,16 +338,23 @@ import components
                            - (scrollView.ScrollBar.vertical.visible
                               ? scrollView.ScrollBar.vertical.width : 0)
                     height: LayoutMetrics.spacing.xxl
-                            + contentColumn.height
+                            + tabStage.height
                             + LayoutMetrics.spacing.xl * 3
 
-                    Column {
-                        id: contentColumn
+                    Item {
+                        id: tabStage
+                        anchors.top: parent.top
                         x: 0
                         width: parent.width
-                        anchors.top: parent.top
-                        anchors.topMargin: LayoutMetrics.spacing.xxl
-                        spacing: LayoutMetrics.spacing.lg
+                        height: contentColumn.height
+
+                        Column {
+                            id: contentColumn
+                            x: 0
+                            width: tabStage.width
+                            anchors.top: parent.top
+                            anchors.topMargin: LayoutMetrics.spacing.xxl
+                            spacing: LayoutMetrics.spacing.lg
 
                         // ---- General Tab ----
                         Column {
@@ -546,14 +598,16 @@ import components
                                 id: switches
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 spacing: LayoutMetrics.spacing.xxs
+                                readonly property real labelWidth: Math.max(responsiveLabel.implicitWidth, animationsLabel.implicitWidth)
 
                                 Row {
                                     spacing: LayoutMetrics.spacing.md
 
                                     Label {
+                                        id: responsiveLabel
                                         text: Lang.labels.responsiveScaling
                                         style_2: true
-                                        width: LayoutMetrics.size.switchLabelWidth
+                                        width: switches.labelWidth
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
 
@@ -583,9 +637,10 @@ import components
                                     spacing: LayoutMetrics.spacing.md
 
                                     Label {
+                                        id: animationsLabel
                                         text: Lang.labels.animations
                                         style_2: true
-                                        width: LayoutMetrics.size.switchLabelWidth
+                                        width: switches.labelWidth
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
 
@@ -717,6 +772,7 @@ import components
             }
         }
     }
+}
 
     Shortcut {
         sequences: Shortcuts.chords("zoomIn")
