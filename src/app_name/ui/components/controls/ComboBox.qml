@@ -7,6 +7,7 @@ ComboBox {
     width: LayoutMetrics.size.comboBoxWidth
     height: LayoutMetrics.size.controlHeight * 2
     hoverEnabled: true
+    focusPolicy: Qt.TabFocus
     property int optionHeight: LayoutMetrics.size.controlHeight
     property int popupPadding: 6
 
@@ -187,4 +188,6 @@ ComboBox {
             }
         }
     }
+
+    Components.FocusRing {}
 }

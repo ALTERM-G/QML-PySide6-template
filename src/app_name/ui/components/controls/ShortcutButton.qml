@@ -179,4 +179,6 @@ Rectangle {
 
         return ""
     }
+
+    FocusRing {}
 }

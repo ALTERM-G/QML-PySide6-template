@@ -1,8 +1,10 @@
 import QtQuick
 import QtQuick.Controls
+import components
 
 Switch {
     id: control
+    focusPolicy: Qt.TabFocus
 
     indicator: Rectangle {
         implicitWidth: LayoutMetrics.size.controlHeight * 1.9
@@ -50,5 +52,13 @@ Switch {
         color: Theme.textColor
         verticalAlignment: Text.AlignVCenter
         leftPadding: control.indicator.width + LayoutMetrics.spacing.sm
+    }
+
+    FocusRing {
+        x: control.leftPadding - offset
+        width: control.indicator.width + offset * 2
+        height: control.indicator.height + offset * 2
+        y: control.indicator.y - offset
+        cornerRadius: Math.min(control.indicator.height / 2, LayoutMetrics.radius.m)
     }
 }

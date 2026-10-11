@@ -8,6 +8,48 @@ Column {
     anchors.horizontalCenter: parent.horizontalCenter
     spacing: LayoutMetrics.spacing.md
 
+    function setScaleValue(v) {
+        scaleRow.initialized = false
+        scaleRow.scaleValue = v
+        slider.value = v
+        spin.value = v
+        scaleRow.initialized = true
+    }
+
+    function resetControls() {
+        themeComboBox.initialized = false
+        var themeIdx = themeComboBox.model.indexOf(appearanceCommittedTheme)
+        if (themeIdx !== -1)
+            themeComboBox.currentIndex = themeIdx
+        themeComboBox.initialized = true
+
+        scaleRow.initialized = false
+        scaleRow.scaleValue = appearanceCommittedScale
+        slider.value = scaleRow.scaleValue
+        spin.value = scaleRow.scaleValue
+        scaleRow.initialized = true
+
+        cornerRadiusRow.initialized = false
+        cornerRadiusRow.radiusValue = appearanceCommittedRadius
+        radiusSlider.value = cornerRadiusRow.radiusValue
+        radiusSpin.value = cornerRadiusRow.radiusValue
+        cornerRadiusRow.initialized = true
+
+        responsiveSwitch.initialized = false
+        responsiveSwitch.checked = appearanceCommittedResponsive
+        responsiveSwitch.initialized = true
+
+        animationsSwitch.initialized = false
+        animationsSwitch.checked = appearanceCommittedAnimations
+        animationsSwitch.initialized = true
+
+        fontComboBox.initialized = false
+        var fontIdx = fontComboBox.model.indexOf(appearanceCommittedFont)
+        if (fontIdx !== -1)
+            fontComboBox.currentIndex = fontIdx
+        fontComboBox.initialized = true
+    }
+
     Column {
         id: theme
         anchors.horizontalCenter: parent.horizontalCenter

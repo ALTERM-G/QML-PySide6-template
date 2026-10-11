@@ -8,6 +8,7 @@ SpinBox {
     height: LayoutMetrics.size.controlHeightHuge
     stepSize: 10
     wheelEnabled: false
+    focusPolicy: Qt.TabFocus
 
     function setFrom(newFrom) { spinBox.from = newFrom }
     function setTo(newTo) { spinBox.to = newTo }
@@ -15,6 +16,7 @@ SpinBox {
 
     contentItem: TextInput {
         text: spinBox.value.toString()
+        activeFocusOnPress: false
         font.pixelSize: Typography.h4
         font.family: Typography.fontBold
         font.weight: Font.Bold
@@ -104,4 +106,6 @@ SpinBox {
             onClicked: spinBox.value = Math.max(spinBox.from, spinBox.value - spinBox.stepSize)
         }
     }
+
+    FocusRing {}
 }

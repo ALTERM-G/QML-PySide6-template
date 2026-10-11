@@ -8,6 +8,12 @@ Column {
     anchors.horizontalCenter: parent.horizontalCenter
     spacing: LayoutMetrics.spacing.md
 
+    function resetControls() {
+        languageCombo.initialized = false
+        languageCombo.currentIndex = languageCommittedIndex
+        languageCombo.initialized = true
+    }
+
     Label { text: Lang.labels.language; style_2: true }
 
     ComboBox {

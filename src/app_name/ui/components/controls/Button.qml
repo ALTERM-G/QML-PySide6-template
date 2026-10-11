@@ -78,4 +78,6 @@ Rectangle {
         cursorShape: Qt.PointingHandCursor
         onClicked: root.doPress()
     }
+
+    FocusRing {}
 }

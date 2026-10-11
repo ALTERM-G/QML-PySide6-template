@@ -2,7 +2,7 @@ import json
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QUrl
+from PySide6.QtCore import Property, QEvent, QObject, QUrl, Signal
 from PySide6.QtGui import QFont, QFontDatabase, QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
 
@@ -10,6 +10,38 @@ from app_name.backend.controller import Controller
 from app_name.backend.language_manager import LanguageManager
 
 _language_manager = None
+
+
+class InputTracker(QObject):
+    keyboardChanged = Signal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._keyboard = False
+
+    def _get_keyboard(self):
+        return self._keyboard
+
+    def _set_keyboard(self, value):
+        if value != self._keyboard:
+            self._keyboard = value
+            self.keyboardChanged.emit()
+
+    keyboard = Property(bool, _get_keyboard, _set_keyboard, notify=keyboardChanged)
+
+    def eventFilter(self, obj, event):
+        event_type = event.type()
+        if event_type == QEvent.Type.KeyPress:
+            self._set_keyboard(True)
+        elif event_type in (
+            QEvent.Type.MouseMove,
+            QEvent.Type.MouseButtonPress,
+            QEvent.Type.MouseButtonDblClick,
+            QEvent.Type.Wheel,
+        ):
+            self._set_keyboard(False)
+        return False
+
 
 
 def _load_singleton(engine, src_path, filename, context_name, callback=None):
@@ -66,7 +98,6 @@ def _load_fonts(app, src_path):
 
 
 def build_engine(src_path=None):
-    """Build and populate the QML engine. Requires a running QGuiApplication."""
     if src_path is None:
         src_path = Path(__file__).parent / "src" / "app_name"
 
@@ -74,6 +105,10 @@ def build_engine(src_path=None):
     engine.addImportPath(str(src_path / "ui"))
 
     app = QGuiApplication.instance()
+
+    input_tracker = InputTracker(app)
+    app.installEventFilter(input_tracker)
+    engine.rootContext().setContextProperty("InputState", input_tracker)
 
     loaded_fonts, all_families, font_family = _load_fonts(app, src_path)
     engine.rootContext().setContextProperty("LoadedFonts", loaded_fonts)

@@ -7,11 +7,23 @@ Slider {
 
     implicitWidth: LayoutMetrics.size.sliderWidth
     implicitHeight: LayoutMetrics.size.controlHeight
+    focusPolicy: Qt.TabFocus
 
     property bool discrete: false
     property real step: 1
     stepSize: discrete ? step : 0
     snapMode: Slider.SnapAlways
+
+    readonly property real keyStep: (discrete && step > 0) ? step : Math.max(1, (to - from) / 50)
+
+    function stepBy(direction) {
+        var amount = (discrete && step > 0) ? step : keyStep
+        var next = Math.max(from, Math.min(to, value + direction * amount))
+        if (next !== value) {
+            value = next
+            moved()
+        }
+    }
 
     property color _trackColor: Theme.borderColor
     property color _progressColor: Theme.themeColor
@@ -47,7 +59,7 @@ Slider {
         y: parent.height / 2 - height / 2
         width: (control.hovered || control.pressed) ? LayoutMetrics.size.iconS : LayoutMetrics.size.iconS - 4
         height: (control.hovered || control.pressed) ? LayoutMetrics.size.iconS : LayoutMetrics.size.iconS - 4
-        radius: width / 2
+        radius: Math.min(width / 2, LayoutMetrics.radius.m)
         color: (control.hovered || control.pressed) ? _handleHoverColor : _handleColor
         opacity: control.enabled ? 1.0 : 0.3
 
@@ -62,8 +74,10 @@ Slider {
         cursorShape: Qt.PointingHandCursor
     }
 
-    Keys.onUpPressed: increment()
-    Keys.onDownPressed: decrement()
-    Keys.onLeftPressed: decrement()
-    Keys.onRightPressed: increment()
+    Keys.onUpPressed: stepBy(1)
+    Keys.onDownPressed: stepBy(-1)
+    Keys.onLeftPressed: stepBy(-1)
+    Keys.onRightPressed: stepBy(1)
+
+    FocusRing {}
 }

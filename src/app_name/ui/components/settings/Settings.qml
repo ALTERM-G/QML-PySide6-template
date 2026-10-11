@@ -69,13 +69,8 @@ import "tabs"
         appearancePendingScale = next
         appearanceCommittedScale = next
         applyScale(next)
-        if (settingsPopup.opened) {
-            scaleRow.initialized = false
-            scaleRow.scaleValue = next
-            slider.value = next
-            spin.value = next
-            scaleRow.initialized = true
-        }
+        if (settingsPopup.opened)
+            appearanceTab.setScaleValue(next)
     }
 
     function applyAppearanceChanges() {
@@ -103,36 +98,11 @@ import "tabs"
         appearancePendingResponsive = appearanceCommittedResponsive
         appearancePendingAnimations = appearanceCommittedAnimations
         appearancePendingFont = appearanceCommittedFont
-        themeComboBox.initialized = false
-        var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
-        if (idx !== -1) themeComboBox.currentIndex = idx
-        themeComboBox.initialized = true
-        scaleRow.initialized = false
-        scaleRow.scaleValue = appearanceCommittedScale
-        slider.value = scaleRow.scaleValue
-        spin.value = scaleRow.scaleValue
-        scaleRow.initialized = true
-        cornerRadiusRow.initialized = false
-        cornerRadiusRow.radiusValue = appearanceCommittedRadius
-        radiusSlider.value = cornerRadiusRow.radiusValue
-        radiusSpin.value = cornerRadiusRow.radiusValue
-        cornerRadiusRow.initialized = true
-        applyRadius(appearanceCommittedRadius)
-        responsiveSwitch.initialized = false
-        responsiveSwitch.checked = appearanceCommittedResponsive
-        responsiveSwitch.initialized = true
-        animationsSwitch.initialized = false
-        animationsSwitch.checked = appearanceCommittedAnimations
-        animationsSwitch.initialized = true
-        fontComboBox.initialized = false
-        fontComboBox.initialized = false
-        var fontIdx = fontComboBox.model.indexOf(appearanceCommittedFont)
-        if (fontIdx !== -1) fontComboBox.currentIndex = fontIdx
-        fontComboBox.initialized = true
-        languageCombo.initialized = false
-        languageCombo.currentIndex = languageCommittedIndex
+        appearancePendingRadius = appearanceCommittedRadius
+        appearanceTab.resetControls()
+        generalTab.resetControls()
         controller.save_language(languageCommittedIndex)
-        languageCombo.initialized = true
+        applyRadius(appearanceCommittedRadius)
         Theme.setTheme(appearanceCommittedTheme)
         applyScale(appearanceCommittedScale)
         LayoutMetrics.isContinuous = appearanceCommittedResponsive
@@ -355,9 +325,9 @@ import "tabs"
                             anchors.topMargin: LayoutMetrics.spacing.xxl
                             spacing: LayoutMetrics.spacing.lg
 
-                            GeneralTab { }
-                            AppearanceTab { }
-                            AdvancedTab { }
+                            GeneralTab { id: generalTab }
+                            AppearanceTab { id: appearanceTab }
+                            AdvancedTab { id: advancedTab }
                         }
                 }
             }

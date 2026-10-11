@@ -12,6 +12,7 @@ Rectangle {
     color: "transparent"
     property bool hovered: mouseArea.containsMouse
     signal pressed
+    activeFocusOnTab: true
     Keys.onReturnPressed: doPress()
     Keys.onEnterPressed: doPress()
     function doPress() { pressed(); }
@@ -42,5 +43,9 @@ Rectangle {
     Behavior on scale {
         enabled: LayoutMetrics.animationsEnabled
         NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+    }
+
+    FocusRing {
+        cornerRadius: LayoutMetrics.radius.s
     }
 }
