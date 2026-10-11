@@ -12,13 +12,18 @@ SpinBox {
 
     Component.onCompleted: contentItem.activeFocusOnTab = false
 
+    onActiveFocusChanged: {
+        if (activeFocus && !contentItem.activeFocus)
+            contentItem.forceActiveFocus()
+    }
+
     function setFrom(newFrom) { spinBox.from = newFrom }
     function setTo(newTo) { spinBox.to = newTo }
     function setValue(newValue) { spinBox.value = newValue }
 
     contentItem: TextInput {
         text: spinBox.value.toString()
-        activeFocusOnPress: false
+        activeFocusOnPress: true
         activeFocusOnTab: false
         font.pixelSize: Typography.h4
         font.family: Typography.fontBold
@@ -33,6 +38,20 @@ SpinBox {
             bottom: spinBox.from
             top: spinBox.to
         }
+
+        onActiveFocusChanged: {
+            if (activeFocus)
+                selectAll()
+        }
+
+        onEditingFinished: {
+            var v = parseInt(text, 10)
+            if (isNaN(v))
+                v = spinBox.value
+            spinBox.value = Math.min(Math.max(v, spinBox.from), spinBox.to)
+            text = Qt.binding(function() { return spinBox.value.toString() })
+        }
+
         onTextChanged: {
             if (text !== "" && !isNaN(parseInt(text, 10))) {
                 var newValue = Math.min(Math.max(parseInt(text, 10), spinBox.from), spinBox.to)
