@@ -1,10 +1,9 @@
-pragma Singleton
 import QtQuick
 import QtQuick.Controls
 
 QtObject {
     id: theme
-    property string currentTheme: "System"
+    property string currentTheme: "Carbon Amber"
     property SystemPalette sysPalette: SystemPalette {
         colorGroup: SystemPalette.Active
     }

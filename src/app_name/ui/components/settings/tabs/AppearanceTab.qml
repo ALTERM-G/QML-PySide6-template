@@ -4,7 +4,13 @@ import QtQuick.Layouts
 import components
 
 Column {
-    visible: tabBar.currentIndex === 1
+    id: appearanceTab
+
+    required property QtObject settingsMenu
+    required property QtObject settingsPopup
+    required property QtObject settingsTabBar
+
+    visible: settingsTabBar.currentIndex === 1
     anchors.horizontalCenter: parent.horizontalCenter
     spacing: LayoutMetrics.spacing.md
 
@@ -18,33 +24,33 @@ Column {
 
     function resetControls() {
         themeComboBox.initialized = false
-        var themeIdx = themeComboBox.model.indexOf(appearanceCommittedTheme)
+        var themeIdx = themeComboBox.model.indexOf(settingsMenu.appearanceCommittedTheme)
         if (themeIdx !== -1)
             themeComboBox.currentIndex = themeIdx
         themeComboBox.initialized = true
 
         scaleRow.initialized = false
-        scaleRow.scaleValue = appearanceCommittedScale
+        scaleRow.scaleValue = settingsMenu.appearanceCommittedScale
         slider.value = scaleRow.scaleValue
         spin.value = scaleRow.scaleValue
         scaleRow.initialized = true
 
         cornerRadiusRow.initialized = false
-        cornerRadiusRow.radiusValue = appearanceCommittedRadius
+        cornerRadiusRow.radiusValue = settingsMenu.appearanceCommittedRadius
         radiusSlider.value = cornerRadiusRow.radiusValue
         radiusSpin.value = cornerRadiusRow.radiusValue
         cornerRadiusRow.initialized = true
 
         responsiveSwitch.initialized = false
-        responsiveSwitch.checked = appearanceCommittedResponsive
+        responsiveSwitch.checked = settingsMenu.appearanceCommittedResponsive
         responsiveSwitch.initialized = true
 
         animationsSwitch.initialized = false
-        animationsSwitch.checked = appearanceCommittedAnimations
+        animationsSwitch.checked = settingsMenu.appearanceCommittedAnimations
         animationsSwitch.initialized = true
 
         fontComboBox.initialized = false
-        var fontIdx = fontComboBox.model.indexOf(appearanceCommittedFont)
+        var fontIdx = fontComboBox.model.indexOf(settingsMenu.appearanceCommittedFont)
         if (fontIdx !== -1)
             fontComboBox.currentIndex = fontIdx
         fontComboBox.initialized = true
@@ -77,10 +83,11 @@ Column {
             Connections {
                 target: settingsPopup
                 function onOpened() {
-                    loadAppearance()
+                    settingsMenu.loadAppearance()
                     themeComboBox.initialized = false
-                    var idx = themeComboBox.model.indexOf(appearanceCommittedTheme)
-                    if (idx !== -1) themeComboBox.currentIndex = idx
+                    var idx = themeComboBox.model.indexOf(settingsMenu.appearanceCommittedTheme)
+                    if (idx !== -1)
+                        themeComboBox.currentIndex = idx
                     themeComboBox.initialized = true
                 }
             }
@@ -114,10 +121,11 @@ Column {
             Connections {
                 target: settingsPopup
                 function onOpened() {
-                    loadAppearance()
+                    settingsMenu.loadAppearance()
                     fontComboBox.initialized = false
-                    var idx = fontComboBox.model.indexOf(appearanceCommittedFont)
-                    if (idx !== -1) fontComboBox.currentIndex = idx
+                    var idx = fontComboBox.model.indexOf(settingsMenu.appearanceCommittedFont)
+                    if (idx !== -1)
+                        fontComboBox.currentIndex = idx
                     fontComboBox.initialized = true
                 }
             }
@@ -143,9 +151,9 @@ Column {
             Connections {
                 target: settingsPopup
                 function onOpened() {
-                    loadAppearance()
+                    settingsMenu.loadAppearance()
                     scaleRow.initialized = false
-                    scaleRow.scaleValue = appearanceCommittedScale
+                    scaleRow.scaleValue = settingsMenu.appearanceCommittedScale
                     slider.value = scaleRow.scaleValue
                     spin.value = scaleRow.scaleValue
                     scaleRow.initialized = true
@@ -156,6 +164,7 @@ Column {
                 id: slider
                 from: 0
                 to: 200
+
                 value: scaleRow.scaleValue
 
                 onMoved: {
@@ -206,9 +215,9 @@ Column {
             Connections {
                 target: settingsPopup
                 function onOpened() {
-                    loadAppearance()
+                    settingsMenu.loadAppearance()
                     cornerRadiusRow.initialized = false
-                    cornerRadiusRow.radiusValue = appearanceCommittedRadius
+                    cornerRadiusRow.radiusValue = settingsMenu.appearanceCommittedRadius
                     radiusSlider.value = cornerRadiusRow.radiusValue
                     radiusSpin.value = cornerRadiusRow.radiusValue
                     cornerRadiusRow.initialized = true
@@ -280,7 +289,7 @@ Column {
                 Connections {
                     target: settingsPopup
                     function onOpened() {
-                        loadAppearance()
+                        settingsMenu.loadAppearance()
                         responsiveSwitch.initialized = false
                         responsiveSwitch.checked = settingsMenu.appearanceCommittedResponsive
                         responsiveSwitch.initialized = true
@@ -313,7 +322,7 @@ Column {
                 Connections {
                     target: settingsPopup
                     function onOpened() {
-                        loadAppearance()
+                        settingsMenu.loadAppearance()
                         animationsSwitch.initialized = false
                         animationsSwitch.checked = settingsMenu.appearanceCommittedAnimations
                         animationsSwitch.initialized = true
@@ -330,8 +339,8 @@ Column {
 
         Shortcut {
             sequence: Shortcuts.primary("applyChanges")
-            enabled: tabBar.currentIndex === 1 && !Shortcuts.capturing
-            onActivated: applyAppearanceChanges()
+            enabled: settingsTabBar.currentIndex === 1 && !Shortcuts.capturing
+            onActivated: settingsMenu.applyAppearanceChanges()
         }
 
         Button {
@@ -339,7 +348,7 @@ Column {
             primary: true
             heightMultiplier: 1.3
             width: LayoutMetrics.size.buttonWidth * 1.4
-            onPressed: applyAppearanceChanges()
+            onPressed: settingsMenu.applyAppearanceChanges()
         }
     }
 }

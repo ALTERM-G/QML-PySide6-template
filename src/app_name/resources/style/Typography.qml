@@ -1,4 +1,3 @@
-pragma Singleton
 import QtQuick
 
 QtObject {
@@ -16,9 +15,9 @@ QtObject {
     readonly property int smallFontSize: 11
 
     property var windowRef
-    property real scaleFactor: LayoutMetrics ? LayoutMetrics.scaleFactor : 1.0
-    property bool isContinuous: LayoutMetrics ? LayoutMetrics.isContinuous : true
-    property real unit: LayoutMetrics ? LayoutMetrics.unit : ((windowRef ? (isContinuous ? Math.min(windowRef.width, windowRef.height) / 100 : 7.2) : 7.2) * scaleFactor)
+    property real scaleFactor: 1.0
+    property bool isContinuous: true
+    property real unit: (windowRef ? (isContinuous ? Math.min(windowRef.width, windowRef.height) / 100 : 7.2) : 7.2) * scaleFactor
 
     function round(value) {
         return Math.round(value * baseSize)
@@ -40,20 +39,14 @@ QtObject {
     }
 
     function setScaleFactor(factor) {
-        if (!LayoutMetrics) {
-            scaleFactor = factor
-        }
+        scaleFactor = factor
     }
 
     function setIsContinuous(value) {
-        if (!LayoutMetrics) {
-            isContinuous = value
-        }
+        isContinuous = value
     }
 
     function initialize(factor) {
-        if (!LayoutMetrics) {
-            scaleFactor = factor
-        }
+        scaleFactor = factor
     }
 }

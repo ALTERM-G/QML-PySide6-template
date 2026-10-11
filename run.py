@@ -1,5 +1,6 @@
 import json
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 from PySide6.QtCore import Property, QEvent, QObject, QUrl, Signal
@@ -9,27 +10,25 @@ from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
 from app_name.backend.controller import Controller
 from app_name.backend.language_manager import LanguageManager
 
-_language_manager = None
-
 
 class InputTracker(QObject):
     keyboardChanged = Signal()
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QObject | None = None) -> None:
         super().__init__(parent)
         self._keyboard = False
 
-    def _get_keyboard(self):
+    def _get_keyboard(self) -> bool:
         return self._keyboard
 
-    def _set_keyboard(self, value):
+    def _set_keyboard(self, value: bool) -> None:
         if value != self._keyboard:
             self._keyboard = value
             self.keyboardChanged.emit()
 
     keyboard = Property(bool, _get_keyboard, _set_keyboard, notify=keyboardChanged)
 
-    def eventFilter(self, obj, event):
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
         event_type = event.type()
         if event_type == QEvent.Type.KeyPress:
             self._set_keyboard(True)
@@ -43,8 +42,13 @@ class InputTracker(QObject):
         return False
 
 
-
-def _load_singleton(engine, src_path, filename, context_name, callback=None):
+def _load_singleton(
+    engine: QQmlApplicationEngine,
+    src_path: Path,
+    filename: str,
+    context_name: str,
+    callback: Callable[[QObject], None] | None = None,
+) -> QObject | None:
     path = src_path / "resources" / filename
     if not path.exists():
         print(f"Error: QML file not found at {path}", file=sys.stderr)
@@ -64,9 +68,11 @@ def _load_singleton(engine, src_path, filename, context_name, callback=None):
     return obj
 
 
-def _load_fonts(app, src_path):
+def _load_fonts(
+    app: QGuiApplication, src_path: Path
+) -> tuple[dict[str, str], set[str], str]:
     font_dir = src_path / "resources" / "assets" / "fonts"
-    loaded_fonts = {}
+    loaded_fonts: dict[str, str] = {}
 
     if font_dir.exists():
         for pattern in ("*.ttf", "*.otf", "*.ttc"):
@@ -82,7 +88,7 @@ def _load_fonts(app, src_path):
                 loaded_fonts[font_path.name] = families[0]
 
     all_families = set(loaded_fonts.values())
-    font_family = next(iter(all_families), "sans-serif")
+    font_family: str = next(iter(all_families), "sans-serif")
 
     config_path = font_dir / "fonts.json"
     if config_path.exists():
@@ -97,7 +103,7 @@ def _load_fonts(app, src_path):
     return loaded_fonts, all_families, font_family
 
 
-def build_engine(src_path=None):
+def build_engine(src_path: Path | None = None) -> QQmlApplicationEngine:
     if src_path is None:
         src_path = Path(__file__).parent / "src" / "app_name"
 
@@ -118,7 +124,7 @@ def build_engine(src_path=None):
         QIcon(str(src_path / "resources" / "assets" / "icons" / "icon.svg"))
     )
 
-    controller = Controller()
+    controller = Controller(app)
     engine.rootContext().setContextProperty("controller", controller)
     engine.rootContext().setContextProperty("mainVM", controller.mainVM)
     engine.rootContext().setContextProperty("settingsVM", controller.settingsVM)
@@ -130,9 +136,8 @@ def build_engine(src_path=None):
         app.setFont(QFont(font_family))
     engine.rootContext().setContextProperty("FontFamily", font_family)
 
-    global _language_manager
-    _language_manager = LanguageManager(controller)
-    engine.rootContext().setContextProperty("Lang", _language_manager)
+    language_manager = LanguageManager(controller, controller)
+    engine.rootContext().setContextProperty("Lang", language_manager)
 
     scale_factor = controller.get_scale_factor()
     corner_radius = controller.get_corner_radius()
@@ -167,7 +172,7 @@ def build_engine(src_path=None):
     return engine
 
 
-def main():
+def main() -> None:
     app = QGuiApplication(sys.argv)
     src_path = Path(__file__).parent / "src" / "app_name"
 

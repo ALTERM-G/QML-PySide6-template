@@ -16,7 +16,7 @@
         "font": "Fuente",
         "scale": "Escala",
         "language": "Idioma",
-        "keyboard": "Teclado",
+        "shortcutEditor": "Editor de atajos",
         "apply": "Aplicar",
         "responsiveScaling": "Escala adaptable",
         "cornerRadius": "Radio de esquinas",

@@ -19,3 +19,5 @@ FocusRing 1.0 indicators/FocusRing.qml
 Switch 1.0 controls/Switch.qml
 ShortcutButton 1.0 controls/ShortcutButton.qml
 Title 1.0 indicators/Title.qml
+LineEdit 1.0 controls/LineEdit.qml
+TextEdit 1.0 controls/TextEdit.qml

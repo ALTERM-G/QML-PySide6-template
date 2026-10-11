@@ -2,5 +2,5 @@ from PySide6.QtCore import QObject
 
 
 class BaseVM(QObject):
-    def __init__(self, parent=None):
+    def __init__(self, parent: QObject | None = None) -> None:
         super().__init__(parent)

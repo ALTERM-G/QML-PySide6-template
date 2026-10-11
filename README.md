@@ -18,9 +18,9 @@ A clean, extensible Qt Quick (QML) + PySide6 template with a small design system
 ## Installation
 
 ```bash
-pip install -e .
+pip install -e ".[dev]"
 # or
-uv sync
+uv sync --extra dev
 ```
 
 ## Running

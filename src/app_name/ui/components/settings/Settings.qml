@@ -325,9 +325,22 @@ import "tabs"
                             anchors.topMargin: LayoutMetrics.spacing.xxl
                             spacing: LayoutMetrics.spacing.lg
 
-                            GeneralTab { id: generalTab }
-                            AppearanceTab { id: appearanceTab }
-                            AdvancedTab { id: advancedTab }
+                            GeneralTab {
+                                id: generalTab
+                                settingsMenu: settingsMenu
+                                settingsPopup: settingsPopup
+                                settingsTabBar: tabBar
+                            }
+                            AppearanceTab {
+                                id: appearanceTab
+                                settingsMenu: settingsMenu
+                                settingsPopup: settingsPopup
+                                settingsTabBar: tabBar
+                            }
+                            AdvancedTab {
+                                id: advancedTab
+                                settingsTabBar: tabBar
+                            }
                         }
                 }
             }

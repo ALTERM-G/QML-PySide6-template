@@ -16,7 +16,7 @@
         "font": "Police",
         "scale": "Échelle",
         "language": "Langue",
-        "keyboard": "Clavier",
+        "shortcutEditor": "Éditeur de raccourcis",
         "apply": "Appliquer",
         "responsiveScaling": "Échelle adaptative",
         "cornerRadius": "Arrondi des coins",

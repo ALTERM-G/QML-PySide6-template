@@ -16,7 +16,7 @@
         "font": "Font",
         "scale": "Scale",
         "language": "Language",
-        "keyboard": "Keyboard",
+        "shortcutEditor": "Shortcut Editor",
         "apply": "Apply",
         "responsiveScaling": "Responsive scaling",
         "cornerRadius": "Corner radius",

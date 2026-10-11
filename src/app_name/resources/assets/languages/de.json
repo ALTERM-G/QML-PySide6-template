@@ -16,7 +16,7 @@
         "font": "Schriftart",
         "scale": "Skalierung",
         "language": "Sprache",
-        "keyboard": "Tastatur",
+        "shortcutEditor": "Shortcut-Editor",
         "apply": "Übernehmen",
         "responsiveScaling": "Anpassbare Skalierung",
         "cornerRadius": "Eckenradius",

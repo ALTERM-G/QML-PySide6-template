@@ -10,6 +10,8 @@ SpinBox {
     wheelEnabled: false
     focusPolicy: Qt.TabFocus
 
+    Component.onCompleted: contentItem.activeFocusOnTab = false
+
     function setFrom(newFrom) { spinBox.from = newFrom }
     function setTo(newTo) { spinBox.to = newTo }
     function setValue(newValue) { spinBox.value = newValue }
@@ -17,6 +19,7 @@ SpinBox {
     contentItem: TextInput {
         text: spinBox.value.toString()
         activeFocusOnPress: false
+        activeFocusOnTab: false
         font.pixelSize: Typography.h4
         font.family: Typography.fontBold
         font.weight: Font.Bold

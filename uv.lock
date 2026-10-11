@@ -140,13 +140,6 @@ dev = [
     { name = "ruff" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-    { name = "pytest-qt" },
-    { name = "ruff" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "pyside6", specifier = ">=6.10.1" },
@@ -155,13 +148,6 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6" },
 ]
 provides-extras = ["dev"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "pytest", specifier = ">=8" },
-    { name = "pytest-qt", specifier = ">=4.4" },
-    { name = "ruff", specifier = ">=0.6" },
-]
 
 [[package]]
 name = "ruff"

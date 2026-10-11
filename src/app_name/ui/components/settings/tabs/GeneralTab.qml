@@ -4,22 +4,31 @@ import QtQuick.Layouts
 import components
 
 Column {
-    visible: tabBar.currentIndex === 0
+    id: generalTab
+
+    required property QtObject settingsMenu
+    required property QtObject settingsPopup
+    required property QtObject settingsTabBar
+
+    visible: settingsTabBar.currentIndex === 0
     anchors.horizontalCenter: parent.horizontalCenter
     spacing: LayoutMetrics.spacing.md
 
     function resetControls() {
         languageCombo.initialized = false
-        languageCombo.currentIndex = languageCommittedIndex
+        languageCombo.currentIndex = settingsMenu.languageCommittedIndex
         languageCombo.initialized = true
     }
 
-    Label { text: Lang.labels.language; style_2: true }
+    Label {
+        text: Lang.labels.language
+        style_2: true
+    }
 
     ComboBox {
         id: languageCombo
         anchors.horizontalCenter: parent.horizontalCenter
-        model: ["English", "Français", "Deutsch", "Español", "Italiano"]
+        model: controller.get_languages()
 
         property bool initialized: false
 

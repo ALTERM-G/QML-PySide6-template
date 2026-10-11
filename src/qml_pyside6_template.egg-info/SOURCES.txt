@@ -64,6 +64,7 @@ src/app_name/ui/components/controls/SpinBox.qml
 src/app_name/ui/components/controls/Switch.qml
 src/app_name/ui/components/controls/TabBar.qml
 src/app_name/ui/components/controls/TextEdit.qml
+src/app_name/ui/components/indicators/FocusRing.qml
 src/app_name/ui/components/indicators/Label.qml
 src/app_name/ui/components/indicators/SVGObject.qml
 src/app_name/ui/components/indicators/Title.qml
@@ -84,4 +85,6 @@ src/qml_pyside6_template.egg-info/dependency_links.txt
 src/qml_pyside6_template.egg-info/entry_points.txt
 src/qml_pyside6_template.egg-info/requires.txt
 src/qml_pyside6_template.egg-info/top_level.txt
+tests/test_settings.py
+tests/test_slider_kbd.py
 tests/test_smoke.py

@@ -4,15 +4,18 @@ import QtQuick.Layouts
 import components
 
 Column {
-    id: advancedColumn
-    visible: tabBar.currentIndex === 2
+    id: advancedTab
+
+    required property QtObject settingsTabBar
+
+    visible: settingsTabBar.currentIndex === 2
 
     width: parent.width
     spacing: LayoutMetrics.spacing.md
 
     Label {
         width: parent.width
-        text: Lang.labels.keyboard
+        text: Lang.labels.shortcutEditor
         style_2: true
         horizontalAlignment: Text.AlignHCenter
     }
@@ -24,7 +27,7 @@ Column {
             id: shortcutRow
             required property var modelData
 
-            width: advancedColumn.width
+            width: advancedTab.width
             height: rowContent.implicitHeight
 
             Row {
