@@ -301,6 +301,16 @@ import "tabs"
                 clip: true
                 ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
+                Binding {
+                    target: scrollView.contentItem
+                    property: "boundsBehavior"
+                    value: LayoutMetrics.animationsEnabled
+                           ? Flickable.DragAndOvershootBounds
+                           : Flickable.StopAtBounds
+                    when: scrollView.contentItem !== null
+                    restoreMode: Binding.RestoreNone
+                }
+
                 Item {
                     id: scrollContent
                     width: scrollView.width

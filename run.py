@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from collections.abc import Callable
 from pathlib import Path
@@ -94,11 +95,16 @@ def _load_fonts(
     if config_path.exists():
         try:
             with open(config_path) as f:
-                preferred = json.load(f).get("defaultFamily", "")
+                config = json.load(f)
+        except (OSError, ValueError) as e:
+            print(
+                f"Warning: could not read font config {config_path}: {e}",
+                file=sys.stderr,
+            )
+        else:
+            preferred = config.get("defaultFamily", "")
             if preferred in all_families:
                 font_family = preferred
-        except Exception:
-            pass
 
     return loaded_fonts, all_families, font_family
 
@@ -173,6 +179,10 @@ def build_engine(src_path: Path | None = None) -> QQmlApplicationEngine:
 
 
 def main() -> None:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
     app = QGuiApplication(sys.argv)
     src_path = Path(__file__).parent / "src" / "app_name"
 

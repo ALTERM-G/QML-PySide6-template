@@ -13,6 +13,7 @@ DEFAULT_THEME = "Carbon Amber"
 
 class Controller(QObject):
     languageChanged = Signal()
+    storageError = Signal(str)
 
     def __init__(self, parent: QObject | None = None) -> None:
         super().__init__(parent)
@@ -39,52 +40,82 @@ class Controller(QObject):
         self._load_all_themes()
         self._current_language = self.get_language()
 
+    def _read_json(self, path: Path, context: str) -> dict | None:
+        if not path.exists():
+            return None
+        try:
+            with open(path) as f:
+                data = json.load(f)
+        except (OSError, ValueError) as e:
+            logger.warning("Could not read %s at %s: %s", context, path, e)
+            return None
+        if not isinstance(data, dict):
+            logger.warning("Ignoring %s at %s: expected a JSON object", context, path)
+            return None
+        return data
+
+    def _write_json(self, path: Path, data: dict, context: str) -> bool:
+        try:
+            payload = json.dumps(data, indent=2).encode("utf-8")
+        except (TypeError, ValueError) as e:
+            logger.error("Could not serialise %s: %s", context, e)
+            self.storageError.emit(f"Could not save {context}: {e}")
+            return False
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            out = QSaveFile(str(path))
+            if not out.open(QIODevice.WriteOnly):
+                raise OSError(out.errorString())
+            if out.write(payload) == -1:
+                raise OSError(out.errorString())
+            if not out.commit():
+                raise OSError(out.errorString())
+        except OSError as e:
+            logger.error("Could not write %s at %s: %s", context, path, e)
+            self.storageError.emit(f"Could not save {context}: {e}")
+            return False
+        return True
+
     def _load_all_themes(self) -> None:
         self._base_config: dict = {}
         self._theme_colors: dict = {}
 
-        base_path = self._themes_path / "base.json"
-        if base_path.exists():
-            try:
-                with open(base_path) as f:
-                    self._base_config = json.load(f)
-            except Exception:
-                self._base_config = {}
+        base = self._read_json(self._themes_path / "base.json", "theme base")
+        if base is not None:
+            self._base_config = base
 
-        for theme_file in self._themes_path.glob("*.json"):
-            if theme_file.stem == "base":
+        for theme_path in sorted(self._themes_path.glob("*.json")):
+            if theme_path.stem == "base":
                 continue
-            try:
-                with open(theme_file) as f:
-                    data = json.load(f)
-                if "colors" in data:
-                    self._theme_colors[theme_file.stem] = data["colors"]
-            except Exception:
-                continue
+            data = self._read_json(theme_path, f"theme '{theme_path.stem}'")
+            if data is not None and "colors" in data:
+                self._theme_colors[theme_path.stem] = data["colors"]
 
     def _load_theme(self) -> str:
         try:
             if self._theme_path.exists():
                 current_mtime = self._theme_path.stat().st_mtime
                 if current_mtime > self._theme_last_modified:
-                    with open(self._theme_path) as f:
-                        theme_data = json.load(f)
+                    data = self._read_json(self._theme_path, "current theme")
+                    if data is not None:
+                        self._theme_cache = data.get("currentTheme", DEFAULT_THEME)
                     self._theme_last_modified = current_mtime
-                    self._theme_cache = theme_data.get("currentTheme", DEFAULT_THEME)
-                return self._theme_cache
-        except Exception as e:
-            logger.warning("Error loading theme: %s", e)
+        except OSError as e:
+            logger.warning("Could not stat current theme at %s: %s", self._theme_path, e)
         return self._theme_cache
 
     @Slot(str)
     def save_theme(self, theme_name: str) -> None:
-        self._write_json(self._theme_path, {"currentTheme": theme_name})
         self._theme_cache = theme_name
-        try:
-            if self._theme_path.exists():
+        if self._write_json(
+            self._theme_path, {"currentTheme": theme_name}, "current theme"
+        ):
+            try:
                 self._theme_last_modified = self._theme_path.stat().st_mtime
-        except OSError as e:
-            logger.warning("Error stating theme: %s", e)
+            except OSError as e:
+                logger.warning(
+                    "Could not stat current theme at %s: %s", self._theme_path, e
+                )
 
     @Slot(result=str)
     def get_current_theme(self) -> str:
@@ -99,29 +130,11 @@ class Controller(QObject):
         return self._theme_colors
 
     def _load_settings(self) -> dict:
-        try:
-            if self._settings_path.exists():
-                with open(self._settings_path) as f:
-                    return json.load(f)
-        except Exception as e:
-            logger.warning("Error loading settings: %s", e)
-        return {"scaleFactor": 1.0}
-
-    @staticmethod
-    def _write_json(path: Path, data: dict) -> None:
-        try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            file = QSaveFile(str(path))
-            if not file.open(QIODevice.WriteOnly | QIODevice.Text):
-                raise OSError(file.errorString())
-            file.write(json.dumps(data, indent=2).encode("utf-8"))
-            if not file.commit():
-                raise OSError(file.errorString())
-        except Exception as e:
-            logger.warning("Error writing %s: %s", path.name, e)
+        data = self._read_json(self._settings_path, "settings")
+        return data if data is not None else {}
 
     def _save_settings(self, settings: dict) -> None:
-        self._write_json(self._settings_path, settings)
+        self._write_json(self._settings_path, settings, "settings")
 
     def _update_settings(self, **updates: object) -> dict:
         settings = self._load_settings()
@@ -186,26 +199,21 @@ class Controller(QObject):
     def get_languages(self) -> list[str]:
         names: list[str] = []
         for filename in self._language_files:
-            path = self._languages_path / filename
-            try:
-                with open(path) as f:
-                    names.append(json.load(f).get("language", filename))
-            except Exception as e:
-                logger.warning("Error loading language name from %s: %s", filename, e)
-                names.append(filename)
+            data = self._read_json(
+                self._languages_path / filename, f"language '{filename}'"
+            )
+            names.append(data.get("language", filename) if data else filename)
         return names
 
     @Slot(result=dict)
     def get_language_data(self) -> dict:
-        try:
-            idx = self.get_language()
-            if 0 <= idx < len(self._language_files):
-                path = self._languages_path / self._language_files[idx]
-                if path.exists():
-                    with open(path) as f:
-                        return json.load(f)
-        except Exception as e:
-            logger.warning("Error loading language: %s", e)
+        idx = self.get_language()
+        if 0 <= idx < len(self._language_files):
+            data = self._read_json(
+                self._languages_path / self._language_files[idx], "language data"
+            )
+            if data is not None:
+                return data
         return {}
 
     @Slot(result=dict)

@@ -70,6 +70,8 @@ ComboBox {
 
     popup: Popup {
         id: dropdownPopup
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
         property int horizontalMargin: 8
         property int excludedIndex: control.currentIndex
         readonly property real delegateHeight: control.optionHeight * 1.4
