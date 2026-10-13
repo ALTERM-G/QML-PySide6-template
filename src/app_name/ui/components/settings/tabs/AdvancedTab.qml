@@ -78,8 +78,9 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
         buttonText: Lang.labels.resetAllShortcuts
         primary: true
+        isometric: true
         heightMultiplier: 1.3
-        width: LayoutMetrics.size.buttonWidth * 1.4
+        width: implicitWidth
 
         onPressed: Shortcuts.resetAll()
     }

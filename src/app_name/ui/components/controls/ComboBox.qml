@@ -62,7 +62,9 @@ ComboBox {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: {
-                if (control.count - (control.currentIndex >= 0 ? 1 : 0) > 0)
+                if (control.popup.opened)
+                    control.popup.close()
+                else if (control.count - (control.currentIndex >= 0 ? 1 : 0) > 0)
                     control.open()
             }
         }
@@ -71,7 +73,7 @@ ComboBox {
     popup: Popup {
         id: dropdownPopup
         focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
         property int horizontalMargin: 8
         property int excludedIndex: control.currentIndex
         readonly property real delegateHeight: control.optionHeight * 1.4
