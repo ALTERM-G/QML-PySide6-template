@@ -10,11 +10,16 @@ Window {
     height: 720
     readonly property bool animationsEnabled: LayoutMetrics.animationsEnabled
     onAnimationsEnabledChanged: Theme.animationsEnabled = animationsEnabled
+    readonly property var crossfade: fontCrossfade
     title: Lang.titles.appName + " - " + Lang.titles.settings
     Component.onCompleted: {
         LayoutMetrics.bindToWindow(window)
         Typography.setWindow(window)
         Theme.animationsEnabled = animationsEnabled
+    }
+
+    FontCrossfade {
+        id: fontCrossfade
     }
 
     TopBar {

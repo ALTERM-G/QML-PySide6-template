@@ -44,6 +44,20 @@ import "tabs"
         controller.save_scale_factor(factor)
     }
 
+    function applyFont(family) {
+        if (family === Typography.fontFamily)
+            return
+        var crossfade = LayoutMetrics.window ? LayoutMetrics.window.crossfade : null
+        var commit = function () {
+            Typography.fontFamily = family
+            controller.save_font_family(family)
+        }
+        if (crossfade && LayoutMetrics.animationsEnabled)
+            crossfade.run(commit)
+        else
+            commit()
+    }
+
     function slideToTab(newIndex) {
         var dir = newIndex > prevTabIndex ? 1 : -1
         prevTabIndex = newIndex
@@ -79,8 +93,7 @@ import "tabs"
         LayoutMetrics.isContinuous = appearancePendingResponsive
         Typography.isContinuous = appearancePendingResponsive
         controller.save_is_continuous(appearancePendingResponsive)
-        Typography.fontFamily = appearancePendingFont
-        controller.save_font_family(appearancePendingFont)
+        applyFont(appearancePendingFont)
         applyRadius(appearancePendingRadius)
         LayoutMetrics.setAnimationsEnabled(appearancePendingAnimations)
         controller.save_animations_enabled(appearancePendingAnimations)
@@ -107,7 +120,7 @@ import "tabs"
         applyScale(appearanceCommittedScale)
         LayoutMetrics.isContinuous = appearanceCommittedResponsive
         Typography.isContinuous = appearanceCommittedResponsive
-        Typography.fontFamily = appearanceCommittedFont
+        applyFont(appearanceCommittedFont)
     }
 
     function toggleSettings() {

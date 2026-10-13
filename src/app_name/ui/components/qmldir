@@ -21,3 +21,4 @@ ShortcutButton 1.0 controls/ShortcutButton.qml
 Title 1.0 indicators/Title.qml
 LineEdit 1.0 controls/LineEdit.qml
 TextEdit 1.0 controls/TextEdit.qml
+FontCrossfade 1.0 effects/FontCrossfade.qml

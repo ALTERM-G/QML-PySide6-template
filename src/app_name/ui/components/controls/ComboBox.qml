@@ -79,6 +79,44 @@ ComboBox {
             0,
             control.count - (excludedIndex >= 0 ? 1 : 0)
         )
+        property int highlightedIndex: -1
+
+        function firstVisible() {
+            for (var i = 0; i < control.count; ++i) {
+                if (i !== excludedIndex)
+                    return i
+            }
+            return -1
+        }
+
+        function lastVisible() {
+            for (var i = control.count - 1; i >= 0; --i) {
+                if (i !== excludedIndex)
+                    return i
+            }
+            return -1
+        }
+
+        function stepVisible(from, dir) {
+            if (control.count <= 0)
+                return -1
+            var i = from
+            for (var n = 0; n < control.count; ++n) {
+                if (i < 0)
+                    i = dir > 0 ? 0 : control.count - 1
+                else
+                    i = (i + dir + control.count) % control.count
+                if (i !== excludedIndex)
+                    return i
+            }
+            return -1
+        }
+
+        function acceptHighlighted() {
+            if (highlightedIndex >= 0)
+                control.currentIndex = highlightedIndex
+            dropdownPopup.close()
+        }
 
         width: control.width - horizontalMargin * 2
         implicitHeight: visibleOptionCount * delegateHeight + control.popupPadding * 2
@@ -88,8 +126,10 @@ ComboBox {
         clip: true
 
         onVisibleChanged: {
-            if (visible)
+            if (visible) {
                 excludedIndex = control.currentIndex
+                highlightedIndex = firstVisible()
+            }
         }
 
         enter: LayoutMetrics.animationsEnabled ? dropdownFadeEnter : dropdownInstantEnter
@@ -144,47 +184,68 @@ ComboBox {
             border.width: LayoutMetrics.border.l
         }
 
-        Column {
-            anchors.fill: parent
-            anchors.margins: control.popupPadding
-            spacing: 0
+        contentItem: Item {
+            id: dropdownContent
+            focus: true
 
-            Repeater {
-                model: control.model
+            Keys.onUpPressed: dropdownPopup.highlightedIndex = dropdownPopup.stepVisible(dropdownPopup.highlightedIndex, -1)
+            Keys.onDownPressed: dropdownPopup.highlightedIndex = dropdownPopup.stepVisible(dropdownPopup.highlightedIndex, 1)
+            Keys.onPressed: (event) => {
+                if (event.key === Qt.Key_Home) {
+                    dropdownPopup.highlightedIndex = dropdownPopup.firstVisible()
+                    event.accepted = true
+                } else if (event.key === Qt.Key_End) {
+                    dropdownPopup.highlightedIndex = dropdownPopup.lastVisible()
+                    event.accepted = true
+                }
+            }
+            Keys.onReturnPressed: dropdownPopup.acceptHighlighted()
+            Keys.onEnterPressed: dropdownPopup.acceptHighlighted()
+            Keys.onSpacePressed: dropdownPopup.acceptHighlighted()
+            Keys.onShortcutOverride: (event) => {
+                if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key === Qt.Key_Space)
+                    event.accepted = true
+            }
 
-                delegate: Rectangle {
-                    visible: index !== dropdownPopup.excludedIndex
-                    enabled: visible
-                    width: parent.width
-                    height: visible ? dropdownPopup.delegateHeight : 0
-                    radius: LayoutMetrics.radius.m
-                    color: hovered
-                           ? Theme.hoverBackgroundColor
-                           : "transparent"
+            Column {
+                anchors.fill: parent
+                anchors.margins: control.popupPadding
+                spacing: 0
 
-                    property bool hovered: false
+                Repeater {
+                    model: control.model
 
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onEntered: parent.hovered = true
-                        onExited: parent.hovered = false
-                        onClicked: {
-                            control.currentIndex = index
-                            dropdownPopup.close()
+                    delegate: Rectangle {
+                        visible: index !== dropdownPopup.excludedIndex
+                        enabled: visible
+                        width: parent.width
+                        height: visible ? dropdownPopup.delegateHeight : 0
+                        radius: LayoutMetrics.radius.m
+                        color: index === dropdownPopup.highlightedIndex
+                               ? Theme.hoverBackgroundColor
+                               : "transparent"
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onEntered: dropdownPopup.highlightedIndex = index
+                            onClicked: {
+                                control.currentIndex = index
+                                dropdownPopup.close()
+                            }
                         }
-                    }
 
-                    Text {
-                        anchors.fill: parent
-                        text: control.textRole ? model[control.textRole] : modelData
-                        font.pixelSize: Typography.h4
-                        font.family: Typography.fontBold
-                        font.weight: Font.Bold
-                        color: hovered ? Theme.hoverTextColor : Theme.textColor
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                        Text {
+                            anchors.fill: parent
+                            text: control.textRole ? model[control.textRole] : modelData
+                            font.pixelSize: Typography.h4
+                            font.family: Typography.fontBold
+                            font.weight: Font.Bold
+                            color: index === dropdownPopup.highlightedIndex ? Theme.hoverTextColor : Theme.textColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
                     }
                 }
             }
