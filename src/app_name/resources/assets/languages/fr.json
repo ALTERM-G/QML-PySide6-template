@@ -32,6 +32,7 @@
         "zoomIn": "Zoom avant",
         "zoomOut": "Zoom arrière",
         "nextTab": "Onglet suivant",
+        "prevTab": "Onglet précédent",
         "applyChanges": "Appliquer les modifications",
         "closeSidebar": "Fermer la barre latérale"
     },

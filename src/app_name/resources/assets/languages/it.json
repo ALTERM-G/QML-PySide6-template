@@ -32,6 +32,7 @@
         "zoomIn": "Ingrandisci",
         "zoomOut": "Riduci",
         "nextTab": "Scheda successiva",
+        "prevTab": "Scheda precedente",
         "applyChanges": "Applica modifiche",
         "closeSidebar": "Chiudi barra laterale"
     },

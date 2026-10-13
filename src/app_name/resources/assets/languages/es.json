@@ -32,6 +32,7 @@
         "zoomIn": "Acercar",
         "zoomOut": "Alejar",
         "nextTab": "Pestaña siguiente",
+        "prevTab": "Pestaña anterior",
         "applyChanges": "Aplicar cambios",
         "closeSidebar": "Cerrar barra lateral"
     },

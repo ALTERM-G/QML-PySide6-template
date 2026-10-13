@@ -250,6 +250,12 @@ import "tabs"
             onActivated: tabBar.currentIndex = (tabBar.currentIndex + 1) % tabBar.tabData.length
         }
 
+        Shortcut {
+            sequence: Shortcuts.primary("prevTab")
+            enabled: settingsPopup.opened && !Shortcuts.capturing
+            onActivated: tabBar.currentIndex = (tabBar.currentIndex - 1 + tabBar.tabData.length) % tabBar.tabData.length
+        }
+
         Surface {
             anchors.fill: parent
 

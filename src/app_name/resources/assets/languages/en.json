@@ -32,6 +32,7 @@
         "zoomIn": "Zoom in",
         "zoomOut": "Zoom out",
         "nextTab": "Next tab",
+        "prevTab": "Previous tab",
         "applyChanges": "Apply changes",
         "closeSidebar": "Close sidebar"
     },

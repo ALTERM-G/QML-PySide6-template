@@ -10,7 +10,8 @@ QtObject {
         { id: "toggleSidebar", def: ["Ctrl+B"],            label: "Toggle sidebar", scope: "app" },
         { id: "zoomIn",        def: ["Ctrl+=", "Ctrl++"],  label: "Zoom in",        scope: "app" },
         { id: "zoomOut",       def: ["Ctrl+-"],            label: "Zoom out",       scope: "app" },
-        { id: "nextTab",       def: ["Ctrl+Tab"],          label: "Next tab",       scope: "settings" },
+        { id: "nextTab", def: ["Ctrl+Tab"], label: "Next tab", scope: "settings" },
+        { id: "prevTab", def: ["Ctrl+Shift+Tab"], label: "Previous tab", scope: "settings" },
         { id: "applyChanges",  def: ["Return"],            label: "Apply changes",  scope: "settings", editable: false },
         { id: "closeSidebar",  def: ["Escape"],            label: "Close sidebar",  scope: "panel",     editable: false }
     ]
