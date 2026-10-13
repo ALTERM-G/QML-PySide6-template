@@ -8,11 +8,14 @@ Window {
     color: Theme.backgroundColor
     width: 1280
     height: 720
+    readonly property bool animationsEnabled: LayoutMetrics.animationsEnabled
+    onAnimationsEnabledChanged: Theme.animationsEnabled = animationsEnabled
+    title: Lang.titles.appName + " - " + Lang.titles.settings
     Component.onCompleted: {
         LayoutMetrics.bindToWindow(window)
         Typography.setWindow(window)
+        Theme.animationsEnabled = animationsEnabled
     }
-    title: Lang.titles.appName + " - " + Lang.titles.settings
 
     TopBar {
         id: topBar

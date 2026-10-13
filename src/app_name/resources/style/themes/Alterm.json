@@ -1,0 +1,14 @@
+{
+    "name": "Alterm",
+    "colors": {
+        "themeColor": "#B60F20",
+        "appBackgroundColor": "#101010",
+        "topBarColor": "#060606",
+        "backgroundColor": "#000000",
+        "hoverBackgroundColor": "#FFFFFF",
+        "borderColor": "#2B2B2B",
+        "textColor": "#FFFFFF",
+        "hoverTextColor": "#000000",
+        "dividerColor": "#333333"
+    }
+}

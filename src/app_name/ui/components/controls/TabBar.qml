@@ -11,9 +11,6 @@ Rectangle {
     property var tabData: []
     property alias currentIndex: listView.currentIndex
 
-    // True for a short window while the bar is being resized (e.g. the user is
-    // changing the scale). The highlight snaps instead of sliding during this
-    // window, so it never lags behind and spills out of the bar.
     property bool resizing: false
 
     readonly property real tabPadding: LayoutMetrics.spacing.xl
@@ -91,7 +88,7 @@ Rectangle {
                 Label {
                     id: tabText
                     text: root.tabLabel(root.tabData[index])
-                    color: listView.currentIndex === index ? Theme.borderColor : Theme.textColor
+                    color: listView.currentIndex === index ? Theme.hoverTextColor : Theme.textColor
                     pointSize: Typography.body
                     font.bold: true
 

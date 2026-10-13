@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 QtObject {
     id: theme
+    property bool animationsEnabled: true
     property string currentTheme: "Carbon Amber"
     property SystemPalette sysPalette: SystemPalette {
         colorGroup: SystemPalette.Active
@@ -16,9 +17,9 @@ QtObject {
         }
     }
 
-    function getColor(name) {
-        if (currentTheme === "System") {
-            switch(name) {
+    function colorForTheme(name, key) {
+        if (name === "System") {
+            switch(key) {
                 case "themeColor": return sysPalette.highlight
                 case "appBackgroundColor": return sysPalette.window
                 case "topBarColor": return sysPalette.window
@@ -31,19 +32,35 @@ QtObject {
             }
             return sysPalette.text
         }
-        var colors = themeColors[currentTheme]
-        return colors && colors[name] ? colors[name] : sysPalette.text
+        var colors = themeColors[name]
+        return colors && colors[key] ? colors[key] : sysPalette.text
     }
 
-    readonly property color themeColor: getColor("themeColor")
-    readonly property color appBackgroundColor: getColor("appBackgroundColor")
-    readonly property color topBarColor: getColor("topBarColor")
-    readonly property color backgroundColor: getColor("backgroundColor")
-    readonly property color hoverBackgroundColor: getColor("hoverBackgroundColor")
-    readonly property color borderColor: getColor("borderColor")
-    readonly property color textColor: getColor("textColor")
-    readonly property color hoverTextColor: getColor("hoverTextColor")
-    readonly property color dividerColor: getColor("dividerColor")
+    function getColor(key) {
+        return colorForTheme(currentTheme, key)
+    }
+
+    property bool paletteReady: false
+
+    property color themeColor: getColor("themeColor")
+    property color appBackgroundColor: getColor("appBackgroundColor")
+    property color topBarColor: getColor("topBarColor")
+    property color backgroundColor: getColor("backgroundColor")
+    property color hoverBackgroundColor: getColor("hoverBackgroundColor")
+    property color borderColor: getColor("borderColor")
+    property color textColor: getColor("textColor")
+    property color hoverTextColor: getColor("hoverTextColor")
+    property color dividerColor: getColor("dividerColor")
+
+    Behavior on themeColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on appBackgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on topBarColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on backgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on hoverBackgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on borderColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on textColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on hoverTextColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on dividerColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
 
     property var themeNames: Object.keys(themeColors).concat(["System"])
 
@@ -65,5 +82,6 @@ QtObject {
                 currentTheme = loadedTheme
             }
         }
+        paletteReady = true
     }
 }
