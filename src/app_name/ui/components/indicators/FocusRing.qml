@@ -7,6 +7,7 @@ Rectangle {
     property real cornerRadius: LayoutMetrics.radius.m
     property real offset: Math.max(1.5, LayoutMetrics.border.m * 1.5)
     property color ringColor: Theme.themeColor
+    property Item focusItem: parent
 
     x: -offset
     y: -offset
@@ -16,7 +17,7 @@ Rectangle {
     color: "transparent"
     border.width: offset
     border.color: ringColor
-    visible: parent ? (parent.activeFocus && InputState.keyboard) : false
+    visible: focusItem ? (focusItem.activeFocus && InputState.navigating) : false
     z: 999
     enabled: false
 }

@@ -24,6 +24,7 @@ QtObject {
                 case "appBackgroundColor": return sysPalette.window
                 case "topBarColor": return sysPalette.window
                 case "backgroundColor": return sysPalette.base
+                case "inputBackgroundColor": return sysPalette.base
                 case "hoverBackgroundColor": return sysPalette.highlight
                 case "borderColor": return sysPalette.mid
                 case "textColor": return sysPalette.text
@@ -40,27 +41,39 @@ QtObject {
         return colorForTheme(currentTheme, key)
     }
 
+    function getInputBackground() {
+        if (currentTheme === "System")
+            return sysPalette.base
+        var colors = themeColors[currentTheme]
+        if (colors && colors.inputBackgroundColor)
+            return colors.inputBackgroundColor
+        var base = colors && colors.backgroundColor ? colors.backgroundColor : sysPalette.base
+        return base.hsvValue < 0.5 ? Qt.lighter(base, 1.2) : Qt.darker(base, 1.12)
+    }
+
     property bool paletteReady: false
 
     property color themeColor: getColor("themeColor")
     property color appBackgroundColor: getColor("appBackgroundColor")
     property color topBarColor: getColor("topBarColor")
     property color backgroundColor: getColor("backgroundColor")
+    property color inputBackgroundColor: getInputBackground()
     property color hoverBackgroundColor: getColor("hoverBackgroundColor")
     property color borderColor: getColor("borderColor")
     property color textColor: getColor("textColor")
     property color hoverTextColor: getColor("hoverTextColor")
     property color dividerColor: getColor("dividerColor")
 
-    Behavior on themeColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on appBackgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on topBarColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on backgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on hoverBackgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on borderColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on textColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on hoverTextColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
-    Behavior on dividerColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 320; easing.type: Easing.InOutQuad } }
+    Behavior on themeColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on appBackgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on topBarColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on backgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on inputBackgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on hoverBackgroundColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on borderColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on textColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on hoverTextColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on dividerColor { enabled: theme.paletteReady && theme.animationsEnabled; ColorAnimation { duration: 180; easing.type: Easing.OutCubic } }
 
     property var themeNames: Object.keys(themeColors).concat(["System"])
 

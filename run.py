@@ -4,7 +4,7 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 
-from PySide6.QtCore import Property, QEvent, QObject, QUrl, Signal
+from PySide6.QtCore import Property, QEvent, QObject, Qt, QUrl, Signal
 from PySide6.QtGui import QFont, QFontDatabase, QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine, QQmlComponent
 
@@ -14,10 +14,12 @@ from app_name.backend.language_manager import LanguageManager
 
 class InputTracker(QObject):
     keyboardChanged = Signal()
+    navigatingChanged = Signal()
 
     def __init__(self, parent: QObject | None = None) -> None:
         super().__init__(parent)
         self._keyboard = False
+        self._navigating = False
 
     def _get_keyboard(self) -> bool:
         return self._keyboard
@@ -29,10 +31,23 @@ class InputTracker(QObject):
 
     keyboard = Property(bool, _get_keyboard, _set_keyboard, notify=keyboardChanged)
 
+    def _get_navigating(self) -> bool:
+        return self._navigating
+
+    def _set_navigating(self, value: bool) -> None:
+        if value != self._navigating:
+            self._navigating = value
+            self.navigatingChanged.emit()
+
+    navigating = Property(
+        bool, _get_navigating, _set_navigating, notify=navigatingChanged
+    )
+
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:
         event_type = event.type()
         if event_type == QEvent.Type.KeyPress:
             self._set_keyboard(True)
+            self._set_navigating(event.key() in (Qt.Key.Key_Tab, Qt.Key.Key_Backtab))
         elif event_type in (
             QEvent.Type.MouseMove,
             QEvent.Type.MouseButtonPress,
@@ -40,6 +55,7 @@ class InputTracker(QObject):
             QEvent.Type.Wheel,
         ):
             self._set_keyboard(False)
+            self._set_navigating(False)
         return False
 
 

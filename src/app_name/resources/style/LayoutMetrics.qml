@@ -70,6 +70,10 @@ QtObject {
         property real tabBarWidth: lm.unit * 50
         property real shortcutLabelWidth: lm.unit * 24
         property real shortcutControlWidth: lm.unit * 18
+        property real lineEditWidth: lm.unit * 70
+        property real lineEditHeight: lm.unit * 5
+        property real textEditWidth: lm.unit * 70
+        property real textEditHeight: lm.unit * 15
 
         property real iconS: lm.unit * 2
         property real iconM: lm.unit * 3

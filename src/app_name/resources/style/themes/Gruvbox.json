@@ -5,6 +5,7 @@
         "appBackgroundColor": "#282828",
         "topBarColor": "#1D2021",
         "backgroundColor": "#282828",
+        "inputBackgroundColor": "#32302F",
         "hoverBackgroundColor": "#FABD2F",
         "borderColor": "#3C3836",
         "textColor": "#EBDBB2",
