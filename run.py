@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import sys
 from collections.abc import Callable
 from pathlib import Path
@@ -194,11 +195,22 @@ def build_engine(src_path: Path | None = None) -> QQmlApplicationEngine:
     return engine
 
 
+def quiet_textinput_noise() -> None:
+    rules = os.environ.get("QT_LOGGING_RULES", "")
+    if "qt.qpa.wayland.textinput" not in rules:
+        os.environ["QT_LOGGING_RULES"] = (
+            f"{rules};qt.qpa.wayland.textinput=false"
+            if rules
+            else "qt.qpa.wayland.textinput=false"
+        )
+
+
 def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(levelname)s %(name)s: %(message)s",
     )
+    quiet_textinput_noise()
     app = QGuiApplication(sys.argv)
     src_path = Path(__file__).parent / "src" / "app_name"
 

@@ -62,9 +62,14 @@ ComboBox {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: {
+                if (control.count <= 1) {
+                    if (control.count === 1 && control.currentIndex < 0)
+                        control.currentIndex = 0
+                    return
+                }
                 if (control.popup.opened)
                     control.popup.close()
-                else if (control.count - (control.currentIndex >= 0 ? 1 : 0) > 0)
+                else
                     control.open()
             }
         }
@@ -251,6 +256,17 @@ ComboBox {
                     }
                 }
             }
+        }
+    }
+
+    Keys.onPressed: (event) => {
+        if (control.count <= 1
+            && (event.key === Qt.Key_Down || event.key === Qt.Key_Up
+                || event.key === Qt.Key_Return || event.key === Qt.Key_Enter
+                || event.key === Qt.Key_Space)) {
+            if (control.count === 1 && control.currentIndex < 0)
+                control.currentIndex = 0
+            event.accepted = true
         }
     }
 

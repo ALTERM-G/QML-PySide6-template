@@ -65,8 +65,11 @@ Rectangle {
     Text {
         anchors.centerIn: parent
         width: parent.width - LayoutMetrics.spacing.sm * 2
+        height: parent.height - LayoutMetrics.spacing.xs * 2
         horizontalAlignment: Text.AlignHCenter
-        elide: Text.ElideRight
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.WordWrap
+        fontSizeMode: Text.Fit
         text: root.rejected ? Lang.labels.shortcutInUse
                            : (root.recording ? Lang.labels.pressShortcut : root.chordText)
         font.pixelSize: Typography.h6

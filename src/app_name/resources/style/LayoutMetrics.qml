@@ -60,6 +60,7 @@ QtObject {
     property QtObject size: QtObject {
         property real topBarHeight: lm.unit * 7
         property real sideBarWidth: sideBarWidthOverride > 0 ? sideBarWidthOverride : lm.unit * 50
+        property real sideBarItemHeight: lm.unit * 6
         property real controlHeightHuge: lm.unit * 4.5
         property real controlHeight: lm.unit * 2.5
         property real controlHeightCompact: lm.unit * 2

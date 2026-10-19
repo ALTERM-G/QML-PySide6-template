@@ -40,7 +40,7 @@ Rectangle {
     Text {
         id: app_title
         color: Theme.themeColor
-        anchors.left: leftSidebarButton.left
+        anchors.left: parent.left
         anchors.leftMargin: LayoutMetrics.spacing.xxl * 1.5
         anchors.verticalCenter: parent.verticalCenter
         text: Lang.titles.appName

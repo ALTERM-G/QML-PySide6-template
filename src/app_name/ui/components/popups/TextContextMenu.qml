@@ -11,6 +11,7 @@ Menu {
     padding: LayoutMetrics.spacing.xxs
 
     background: Rectangle {
+        implicitWidth: LayoutMetrics.unit * 20
         color: Theme.backgroundColor
         border.color: Theme.borderColor
         border.width: LayoutMetrics.border.l
@@ -34,7 +35,13 @@ Menu {
             mirrored: menuItem.mirrored
             display: menuItem.display
             alignment: Qt.AlignLeft
-            icon: menuItem.icon
+            icon.name: menuItem.icon.name
+            icon.source: menuItem.icon.source
+            icon.width: menuItem.icon.width
+            icon.height: menuItem.icon.height
+            icon.color: menuItem.enabled
+                        ? (menuItem.highlighted || menuItem.down ? Theme.hoverTextColor : Theme.textColor)
+                        : Theme.dividerColor
             text: menuItem.text
             font: menuItem.font
             color: menuItem.enabled
@@ -47,6 +54,10 @@ Menu {
             color: menuItem.enabled && (menuItem.highlighted || menuItem.down)
                    ? Theme.hoverBackgroundColor
                    : "transparent"
+        }
+
+        HoverHandler {
+            cursorShape: menuItem.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         }
     }
 
