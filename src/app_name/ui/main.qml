@@ -11,7 +11,7 @@ Window {
     readonly property bool animationsEnabled: LayoutMetrics.animationsEnabled
     onAnimationsEnabledChanged: Theme.animationsEnabled = animationsEnabled
     readonly property var crossfade: fontCrossfade
-    title: Lang.titles.appName + " - " + Lang.titles.settings
+    title: Lang.titles.appName
     Component.onCompleted: {
         LayoutMetrics.bindToWindow(window)
         Typography.setWindow(window)

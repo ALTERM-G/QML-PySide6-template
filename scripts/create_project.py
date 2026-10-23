@@ -4,11 +4,18 @@ import json
 import keyword
 import os
 import re
+import select
 import shutil
 import subprocess
 import sys
 import unicodedata
 from pathlib import Path
+
+try:
+    import termios
+    import tty
+except ImportError:
+    termios = tty = None
 
 TEMPLATE = Path(__file__).resolve().parent.parent
 
@@ -92,7 +99,174 @@ def ask(prompt: str, default: str | None = None) -> str:
         print("  Please enter a value.")
 
 
+def arrows_available() -> bool:
+    return bool(termios and tty and sys.stdin.isatty() and sys.stdout.isatty())
+
+
+class Keyboard:
+    def __init__(self) -> None:
+        self.fd = sys.stdin.fileno()
+        self.saved = None
+
+    def __enter__(self) -> "Keyboard":
+        self.saved = termios.tcgetattr(self.fd)
+        tty.setcbreak(self.fd)
+        return self
+
+    def __exit__(self, *exc_info) -> None:
+        termios.tcsetattr(self.fd, termios.TCSADRAIN, self.saved)
+
+    def read(self) -> str | None:
+        try:
+            first = os.read(self.fd, 1)
+        except OSError:
+            return None
+        if not first:
+            return None
+        if first == b"\x1b":
+            sequence = b""
+            for _ in range(4):
+                ready, _, _ = select.select([self.fd], [], [], 0.04)
+                if not ready:
+                    break
+                sequence += os.read(self.fd, 1)
+                if sequence in (b"[A", b"[B", b"[C", b"[D", b"[H", b"[F"):
+                    break
+            return {
+                b"[A": "up",
+                b"[B": "down",
+                b"[C": "right",
+                b"[D": "left",
+                b"[H": "home",
+                b"[F": "end",
+            }.get(sequence, "esc")
+        if first in (b"\r", b"\n"):
+            return "enter"
+        if first == b" ":
+            return "space"
+        if first == b"\x03":
+            raise KeyboardInterrupt
+        if first == b"\x7f":
+            return "backspace"
+        try:
+            return first.decode("utf-8")
+        except UnicodeDecodeError:
+            return ""
+
+
+def redraw(lines: list[str], previous: int) -> int:
+    if previous:
+        sys.stdout.write(f"\033[{previous}A")
+    sys.stdout.write("\r\033[J")
+    for line in lines:
+        sys.stdout.write(line + "\n")
+    sys.stdout.flush()
+    return len(lines)
+
+
+def cancel_setup() -> None:
+    print()
+    print("Setup cancelled.")
+    sys.exit(1)
+
+
+def choose_one(prompt: str, options: list[str], default: int = 0) -> str:
+    print(f"? {prompt}")
+    print(f"  {paint('up/down', CYAN)} + Enter, or type a number")
+    selected = min(max(default, 0), len(options) - 1)
+    drawn = 0
+    try:
+        with Keyboard() as keyboard:
+            while True:
+                lines = []
+                for i, option in enumerate(options):
+                    marker = paint(">", CYAN) if i == selected else " "
+                    lines.append(f"  {marker} {paint(str(i + 1), BOLD)}. {option}")
+                drawn = redraw(lines, drawn)
+                key = keyboard.read()
+                if key is None:
+                    raise EOFError
+                if key == "up":
+                    selected = (selected - 1) % len(options)
+                elif key == "down":
+                    selected = (selected + 1) % len(options)
+                elif key == "home":
+                    selected = 0
+                elif key == "end":
+                    selected = len(options) - 1
+                elif key == "enter":
+                    print()
+                    return options[selected]
+                elif key == "esc":
+                    raise KeyboardInterrupt
+                elif key and key.isdigit():
+                    index = int(key) - 1
+                    if 0 <= index < len(options):
+                        selected = index
+    except (KeyboardInterrupt, EOFError):
+        cancel_setup()
+    raise AssertionError("unreachable")
+
+
+def choose_many(prompt: str, options: list[str]) -> list[str]:
+    print(f"? {prompt}")
+    print(
+        f"  {paint('up/down', CYAN)} move · "
+        f"{paint('Space', CYAN)} toggle · "
+        f"{paint('A', CYAN)} all/none · "
+        f"{paint('Enter', CYAN)} confirm"
+    )
+    selected = set(range(len(options)))
+    cursor = 0
+    drawn = 0
+    warning = ""
+    try:
+        with Keyboard() as keyboard:
+            while True:
+                lines = []
+                for i, option in enumerate(options):
+                    marker = paint(">", CYAN) if i == cursor else " "
+                    box = paint("[x]", GREEN) if i in selected else "[ ]"
+                    lines.append(f"  {marker} {box} {i + 1}. {option}")
+                if warning:
+                    lines.append(paint(f"  {warning}", YELLOW))
+                drawn = redraw(lines, drawn)
+                warning = ""
+                key = keyboard.read()
+                if key is None:
+                    raise EOFError
+                if key == "up":
+                    cursor = (cursor - 1) % len(options)
+                elif key == "down":
+                    cursor = (cursor + 1) % len(options)
+                elif key == "home":
+                    cursor = 0
+                elif key == "end":
+                    cursor = len(options) - 1
+                elif key == "space":
+                    selected.symmetric_difference_update({cursor})
+                elif key and key.lower() == "a":
+                    selected = set() if selected else set(range(len(options)))
+                elif key == "enter":
+                    if not selected:
+                        warning = "Select at least one option."
+                        continue
+                    print()
+                    return [options[i] for i in sorted(selected)]
+                elif key == "esc":
+                    raise KeyboardInterrupt
+                elif key and key.isdigit():
+                    index = int(key) - 1
+                    if 0 <= index < len(options):
+                        selected.symmetric_difference_update({index})
+    except (KeyboardInterrupt, EOFError):
+        cancel_setup()
+    raise AssertionError("unreachable")
+
+
 def ask_choice(prompt: str, options: list[str], default: int | None = None) -> str:
+    if arrows_available():
+        return choose_one(prompt, options, default if default is not None else 0)
     print(f"? {prompt}")
     for i, option in enumerate(options, 1):
         tag = "  (default)" if default is not None and i - 1 == default else ""
@@ -110,6 +284,8 @@ def ask_choice(prompt: str, options: list[str], default: int | None = None) -> s
 
 
 def ask_multi(prompt: str, options: list[str]) -> list[str]:
+    if arrows_available():
+        return choose_many(prompt, options)
     print(f"? {prompt} (numbers/ranges like 1 3 5-7, or 'all')")
     for i, option in enumerate(options, 1):
         print(f"  {i}. {option}")
@@ -192,11 +368,21 @@ def remove_lines(text: str, *needles: str) -> str:
     return "".join(line for line in lines if not any(n in line for n in needles))
 
 
-def replace_in_file(path: Path, mapping: list[tuple[str, str]]) -> None:
+def replace_in_file(
+    path: Path, mapping: list[tuple[str, str]], required: bool = True
+) -> None:
     text = path.read_text(encoding="utf-8")
     for old, new in mapping:
+        if required and old not in text:
+            raise RuntimeError(f"{path.name}: pattern not found: {old[:70]!r}")
         text = text.replace(old, new)
     path.write_text(text, encoding="utf-8")
+
+
+def replace_required(text: str, old: str, new: str) -> str:
+    if old not in text:
+        raise RuntimeError(f"pattern not found: {old[:70]!r}")
+    return text.replace(old, new)
 
 
 def patch_settings_tests(path: Path, file_themes: list[str],
@@ -214,17 +400,20 @@ def patch_settings_tests(path: Path, file_themes: list[str],
         '        "Vanilla Light",\n'
         "    ):\n"
     )
-    text = text.replace(old_tuple, f"    for theme in {file_themes!r}:\n")
-    text = text.replace('"Dracula"', f'"{default_theme}"')
-    text = text.replace(
+    text = replace_required(text, old_tuple, f"    for theme in {file_themes!r}:\n")
+    text = replace_required(text, '"Dracula"', f'"{default_theme}"')
+    text = replace_required(
+        text,
         'assert controller.get_font_family() == "JetBrains Mono"',
         f'assert controller.get_font_family() == "{default_font}"',
     )
-    text = text.replace(
+    text = replace_required(
+        text,
         'assert DEFAULT_THEME == "Carbon Amber"',
         f'assert DEFAULT_THEME == "{default_theme}"',
     )
-    text = text.replace(
+    text = replace_required(
+        text,
         "def test_theme_defaults_to_carbon_amber(",
         "def test_theme_defaults(",
     )
@@ -353,10 +542,15 @@ def generate(answers: dict) -> Path:
         pkg_src.rename(dest / "src" / slug)
     pkg = dest / "src" / slug
 
-    python_files = [dest / "run.py", dest / "pyproject.toml"]
+    python_files = [
+        dest / "run.py",
+        dest / "pyproject.toml",
+        pkg / "bootstrap.py",
+        pkg / "__main__.py",
+    ]
     python_files += sorted((dest / "tests").glob("*.py"))
     for path in python_files:
-        replace_in_file(path, [("app_name", slug)])
+        replace_in_file(path, [("app_name", slug)], required=False)
 
     replace_in_file(
         dest / "pyproject.toml",
@@ -364,7 +558,10 @@ def generate(answers: dict) -> Path:
             ('name = "qml-pyside6-template"', f'name = "{slug}"'),
             ('description = "QML + PySide6 application template with design system, '
              'theming and i18n"', f'description = "{display}"'),
-            ('qml-app = "run:main"', f'{slug} = "run:main"'),
+            (
+                f'qml-app = "{slug}.__main__:main"',
+                f'{slug} = "{slug}.__main__:main"',
+            ),
         ],
     )
 
@@ -376,7 +573,7 @@ def generate(answers: dict) -> Path:
         target_ext = icon_path.suffix.lower()
         target = pkg / "resources" / "assets" / "icons" / f"icon{target_ext}"
         shutil.copy2(icon_path, target)
-        replace_in_file(dest / "run.py", [("icon.svg", f"icon{target_ext}")])
+        replace_in_file(pkg / "bootstrap.py", [("icon.svg", f"icon{target_ext}")])
 
     set_language_titles(dest, slug, display)
 
@@ -590,7 +787,18 @@ def collect_answers(args: argparse.Namespace) -> dict:
 
     if args.name:
         answers["name"] = args.name
-        answers["slug"] = args.slug or slugify(args.name)
+        answers["slug"] = (args.slug or slugify(args.name)).lower()
+        if not re.fullmatch(r"[a-z][a-z0-9_]*", answers["slug"]) or keyword.iskeyword(
+            answers["slug"]
+        ):
+            print(
+                paint(
+                    f"Invalid package name '{answers['slug']}' — must be lowercase, "
+                    "start with a letter, use only letters/numbers/underscores, and not be a keyword.",
+                    RED,
+                )
+            )
+            sys.exit(1)
         answers["icon"] = args.icon or "keep"
         answers["themes"] = list(dict.fromkeys(args.theme)) if args.theme else themes
         answers["default_theme"] = args.default_theme or pick_default_theme(
@@ -616,12 +824,33 @@ def collect_answers(args: argparse.Namespace) -> dict:
     else:
         banner()
         answers["name"] = ask("Application name", default=args.name or "My App")
-        derived = args.slug or slugify(answers["name"])
-        if not derived:
-            print(paint("Could not derive a package name from that.", RED))
-            sys.exit(1)
+        derived = slugify(args.slug or answers["name"]).lower()
+        if not derived or not re.fullmatch(r"[a-z][a-z0-9_]*", derived):
+            derived = "app"
+        if keyword.iskeyword(derived):
+            derived = f"{derived}_app"
         print(f"  Package name: {paint(derived, BOLD)}")
-        answers["slug"] = ask("Package name", default=derived)
+        answers["slug"] = ask("Package name", default=derived).lower()
+        if not re.fullmatch(r"[a-z][a-z0-9_]*", answers["slug"]) or keyword.iskeyword(
+            answers["slug"]
+        ):
+            answers["slug"] = slugify(answers["slug"]).lower()
+        while not re.fullmatch(r"[a-z][a-z0-9_]*", answers["slug"]) or keyword.iskeyword(
+            answers["slug"]
+        ):
+            print(
+                paint(
+                    "  Package name must be lowercase letters, numbers, underscores, "
+                    "start with a letter, and not be a Python keyword.",
+                    YELLOW,
+                )
+            )
+            suggested = slugify(answers["slug"]).lower() or derived
+            if not re.fullmatch(r"[a-z][a-z0-9_]*", suggested) or keyword.iskeyword(
+                suggested
+            ):
+                suggested = derived
+            answers["slug"] = ask("Package name", default=suggested).lower()
 
         icon_choice = ask_choice(
             "App icon",

@@ -16,7 +16,7 @@ Column {
 
     function resetControls() {
         languageCombo.initialized = false
-        languageCombo.currentIndex = settingsMenu.languageCommittedIndex
+        languageCombo.currentIndex = controller.get_language()
         languageCombo.initialized = true
     }
 
@@ -35,15 +35,6 @@ Column {
         onCurrentIndexChanged: {
             if (initialized) {
                 controller.save_language(currentIndex)
-            }
-        }
-
-        Connections {
-            target: settingsPopup
-            function onOpened() {
-                languageCombo.initialized = false
-                languageCombo.currentIndex = controller.get_language()
-                languageCombo.initialized = true
             }
         }
     }

@@ -1,6 +1,8 @@
 README.md
 pyproject.toml
 src/app_name/__init__.py
+src/app_name/__main__.py
+src/app_name/bootstrap.py
 src/app_name/backend/__init__.py
 src/app_name/backend/controller.py
 src/app_name/backend/language_manager.py
@@ -11,16 +13,18 @@ src/app_name/backend/viewmodels/main_vm.py
 src/app_name/backend/viewmodels/settings_vm.py
 src/app_name/backend/workers/__init__.py
 src/app_name/resources/assets/fonts/fonts.json
+src/app_name/resources/assets/fonts/Bricolage_Grotesque/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf
+src/app_name/resources/assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf
+src/app_name/resources/assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
 src/app_name/resources/assets/fonts/JetBrainsMono/JetBrainsMono-Regular.ttf
 src/app_name/resources/assets/fonts/Nullify/Nullify-Bold.otf
 src/app_name/resources/assets/fonts/Nullify/Nullify-Light.otf
 src/app_name/resources/assets/fonts/Nullify/Nullify-Regular.otf
 src/app_name/resources/assets/fonts/Nullify/Read me.rtf
-src/app_name/resources/assets/fonts/Roboto/Roboto-Italic-VariableFont_wdth,wght.ttf
-src/app_name/resources/assets/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf
+src/app_name/resources/assets/fonts/Syne/Syne-VariableFont_wght.ttf
+src/app_name/resources/assets/fonts/Unbounded/Unbounded-VariableFont_wght.ttf
 src/app_name/resources/assets/fonts/monocraft/Monocraft.otf
 src/app_name/resources/assets/fonts/monocraft/Monocraft.ttf
-src/app_name/resources/assets/fonts/times-new-roman/times.ttf
 src/app_name/resources/assets/icons/icon.svg
 src/app_name/resources/assets/icons/navigation/back.svg
 src/app_name/resources/assets/icons/navigation/chevron_down.svg
@@ -28,6 +32,8 @@ src/app_name/resources/assets/icons/navigation/chevron_left.svg
 src/app_name/resources/assets/icons/navigation/chevron_right.svg
 src/app_name/resources/assets/icons/navigation/chevron_up.svg
 src/app_name/resources/assets/icons/navigation/drop_down.svg
+src/app_name/resources/assets/icons/navigation/home.svg
+src/app_name/resources/assets/icons/navigation/info.svg
 src/app_name/resources/assets/icons/navigation/left_sidebar.svg
 src/app_name/resources/assets/icons/settings/info.svg
 src/app_name/resources/assets/icons/settings/reset.svg
@@ -44,6 +50,7 @@ src/app_name/resources/style/LayoutMetrics.qml
 src/app_name/resources/style/SVGLibrary.qml
 src/app_name/resources/style/Theme.qml
 src/app_name/resources/style/Typography.qml
+src/app_name/resources/style/themes/Alterm.json
 src/app_name/resources/style/themes/Carbon Amber.json
 src/app_name/resources/style/themes/Catppuccin Mocha.json
 src/app_name/resources/style/themes/Dracula.json
@@ -63,7 +70,9 @@ src/app_name/ui/components/controls/Slider.qml
 src/app_name/ui/components/controls/SpinBox.qml
 src/app_name/ui/components/controls/Switch.qml
 src/app_name/ui/components/controls/TabBar.qml
+src/app_name/ui/components/controls/TextCursor.qml
 src/app_name/ui/components/controls/TextEdit.qml
+src/app_name/ui/components/effects/FontCrossfade.qml
 src/app_name/ui/components/indicators/FocusRing.qml
 src/app_name/ui/components/indicators/Label.qml
 src/app_name/ui/components/indicators/SVGObject.qml
@@ -74,6 +83,7 @@ src/app_name/ui/components/layout/SideBarToggle.qml
 src/app_name/ui/components/layout/Surface.qml
 src/app_name/ui/components/layout/TopBar.qml
 src/app_name/ui/components/popups/Popup.qml
+src/app_name/ui/components/popups/TextContextMenu.qml
 src/app_name/ui/components/popups/ToolTip.qml
 src/app_name/ui/components/settings/Settings.qml
 src/app_name/ui/components/settings/tabs/AdvancedTab.qml
@@ -85,6 +95,7 @@ src/qml_pyside6_template.egg-info/dependency_links.txt
 src/qml_pyside6_template.egg-info/entry_points.txt
 src/qml_pyside6_template.egg-info/requires.txt
 src/qml_pyside6_template.egg-info/top_level.txt
+tests/test_escape_popups.py
 tests/test_settings.py
-tests/test_slider_kbd.py
 tests/test_smoke.py
+tests/test_storage_errors.py

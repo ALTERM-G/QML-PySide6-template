@@ -80,17 +80,6 @@ Column {
                 }
             }
 
-            Connections {
-                target: settingsPopup
-                function onOpened() {
-                    settingsMenu.loadAppearance()
-                    themeComboBox.initialized = false
-                    var idx = themeComboBox.model.indexOf(settingsMenu.appearanceCommittedTheme)
-                    if (idx !== -1)
-                        themeComboBox.currentIndex = idx
-                    themeComboBox.initialized = true
-                }
-            }
         }
     }
 
@@ -118,17 +107,6 @@ Column {
                 }
             }
 
-            Connections {
-                target: settingsPopup
-                function onOpened() {
-                    settingsMenu.loadAppearance()
-                    fontComboBox.initialized = false
-                    var idx = fontComboBox.model.indexOf(settingsMenu.appearanceCommittedFont)
-                    if (idx !== -1)
-                        fontComboBox.currentIndex = idx
-                    fontComboBox.initialized = true
-                }
-            }
         }
     }
 
@@ -148,17 +126,6 @@ Column {
             property int scaleValue: 100
             property bool initialized: false
 
-            Connections {
-                target: settingsPopup
-                function onOpened() {
-                    settingsMenu.loadAppearance()
-                    scaleRow.initialized = false
-                    scaleRow.scaleValue = settingsMenu.appearanceCommittedScale
-                    slider.value = scaleRow.scaleValue
-                    spin.value = scaleRow.scaleValue
-                    scaleRow.initialized = true
-                }
-            }
 
             Slider {
                 id: slider
@@ -212,17 +179,6 @@ Column {
             property int radiusValue: 50
             property bool initialized: false
 
-            Connections {
-                target: settingsPopup
-                function onOpened() {
-                    settingsMenu.loadAppearance()
-                    cornerRadiusRow.initialized = false
-                    cornerRadiusRow.radiusValue = settingsMenu.appearanceCommittedRadius
-                    radiusSlider.value = cornerRadiusRow.radiusValue
-                    radiusSpin.value = cornerRadiusRow.radiusValue
-                    cornerRadiusRow.initialized = true
-                }
-            }
 
             Slider {
                 id: radiusSlider
@@ -286,15 +242,6 @@ Column {
                     }
                 }
 
-                Connections {
-                    target: settingsPopup
-                    function onOpened() {
-                        settingsMenu.loadAppearance()
-                        responsiveSwitch.initialized = false
-                        responsiveSwitch.checked = settingsMenu.appearanceCommittedResponsive
-                        responsiveSwitch.initialized = true
-                    }
-                }
             }
         }
 
@@ -319,15 +266,6 @@ Column {
                     }
                 }
 
-                Connections {
-                    target: settingsPopup
-                    function onOpened() {
-                        settingsMenu.loadAppearance()
-                        animationsSwitch.initialized = false
-                        animationsSwitch.checked = settingsMenu.appearanceCommittedAnimations
-                        animationsSwitch.initialized = true
-                    }
-                }
             }
         }
     }

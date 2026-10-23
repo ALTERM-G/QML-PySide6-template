@@ -43,7 +43,10 @@ QtObject {
 
     function setPrimary(id, sequence) {
         var o = Object.assign({}, overrides)
-        o[id] = [sequence]
+        var current = chords(id).slice()
+        if (current.length > 0) current[0] = sequence
+        else current = [sequence]
+        o[id] = current
         overrides = o
         _persist()
     }

@@ -13,15 +13,14 @@ import "tabs"
     property string appearanceCommittedTheme: Theme.currentTheme
     property int appearanceCommittedScale: Math.round((controller.get_scale_factor() - 0.5) * 200)
     property int appearancePendingScale: Math.round((controller.get_scale_factor() - 0.5) * 200)
-    property bool appearancePendingResponsive: true
-    property bool appearanceCommittedResponsive: true
+    property bool appearancePendingResponsive: controller.get_is_continuous()
+    property bool appearanceCommittedResponsive: controller.get_is_continuous()
     property int appearanceCommittedRadius: Math.round(controller.get_corner_radius() * 50)
     property int appearancePendingRadius: appearanceCommittedRadius
-    property bool appearanceCommittedAnimations: true
-    property bool appearancePendingAnimations: true
+    property bool appearanceCommittedAnimations: controller.get_animations_enabled()
+    property bool appearancePendingAnimations: controller.get_animations_enabled()
     property string appearancePendingFont: Typography.fontFamily
     property string appearanceCommittedFont: Typography.fontFamily
-    property int languageCommittedIndex: 0
     property int prevTabIndex: 0
 
     readonly property int scaleMin: 0
@@ -113,8 +112,6 @@ import "tabs"
         appearancePendingFont = appearanceCommittedFont
         appearancePendingRadius = appearanceCommittedRadius
         appearanceTab.resetControls()
-        generalTab.resetControls()
-        controller.save_language(languageCommittedIndex)
         applyRadius(appearanceCommittedRadius)
         Theme.setTheme(appearanceCommittedTheme)
         applyScale(appearanceCommittedScale)
@@ -157,6 +154,15 @@ import "tabs"
         }
     }
 
+    Connections {
+        target: settingsPopup
+        function onOpened() {
+            settingsMenu.loadAppearance()
+            appearanceTab.resetControls()
+            generalTab.resetControls()
+        }
+    }
+
     function loadAppearance() {
         appearanceCommittedTheme = Theme.currentTheme
         appearancePendingTheme = appearanceCommittedTheme
@@ -171,7 +177,6 @@ import "tabs"
         appearancePendingFont = appearanceCommittedFont
         appearanceCommittedRadius = Math.round(controller.get_corner_radius() * 50)
         appearancePendingRadius = appearanceCommittedRadius
-        languageCommittedIndex = controller.get_language()
     }
 
     IconButton {

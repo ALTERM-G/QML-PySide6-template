@@ -1,2 +1,2 @@
 [console_scripts]
-qml-app = run:main
+qml-app = app_name.__main__:main

@@ -41,6 +41,8 @@ uv sync --extra dev
 qml-app
 # or
 python run.py
+# or
+python -m app_name
 ```
 
 ## Project structure
@@ -58,6 +60,19 @@ src/app_name/
 - Typecheck/format (optional): `ruff check .` / `ruff format .`
 - Run: `PYTHONPATH=src timeout 6 python -u run.py` (clean exit 124 expected in offscreen)
 
-## Renaming the app
+## Creating a new project
 
-Search/replace `app_name` and update `pyproject.toml`/entry points as needed.
+Generate a configured copy instead of renaming by hand:
+
+```bash
+python scripts/create_project.py
+# or non-interactive:
+python scripts/create_project.py --name "My App" --dest ../my_app
+```
+
+The interactive wizard asks for the app name, icon, themes and fonts to keep,
+the default theme/font, and whether to include the sidebar. It then copies the
+template, prunes unused theme/font assets, updates tests and packaging, and can
+run qmllint, pytest, an offscreen boot check, and `git init`.
+
+Run `python scripts/create_project.py --help` for all flags.

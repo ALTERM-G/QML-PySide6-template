@@ -80,6 +80,7 @@ QtObject {
         property real iconM: lm.unit * 3
         property real iconL: lm.unit * 4
         property real iconXl: lm.unit * 5
+        property real iconButton: lm.unit * 3
     }
 
     //--- Radius ---
