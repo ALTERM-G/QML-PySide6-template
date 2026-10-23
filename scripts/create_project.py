@@ -794,7 +794,8 @@ def collect_answers(args: argparse.Namespace) -> dict:
             print(
                 paint(
                     f"Invalid package name '{answers['slug']}' — must be lowercase, "
-                    "start with a letter, use only letters/numbers/underscores, and not be a keyword.",
+                    "start with a letter, use only letters/numbers/underscores, "
+                    "and not be a keyword.",
                     RED,
                 )
             )
